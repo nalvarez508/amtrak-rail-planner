@@ -1,42 +1,16 @@
-import logging
-import signal
 import time
-import os
 
-from selenium.webdriver.remote.remote_connection import LOGGER as seleniumLogger
-seleniumLogger.setLevel(logging.WARNING)
-from selenium import webdriver
+from HelperClasses import Driver
+
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
-from webdriver_manager.chrome import ChromeDriverManager
-
 SEARCH_URL = "https://www.amtrak.com/tickets/departure.html"
-if os.name == 'nt':
-  LOG_PATH = 'NUL'
-elif os.name == 'posix':
-  LOG_PATH = '/dev/null'
 
-# Keyboard interrupts
-def exitHandler(signum, frame):
-  exit(0)
-
-class Driver:
-  def __init__(self, url=SEARCH_URL):
-    # Chrome options to disable logging in terminal
-    signal.signal(signal.SIGINT, exitHandler)
-    chrome_options = Options()
-    #chrome_options.add_argument("--headless")
-    chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
-    self.driver = webdriver.Chrome(ChromeDriverManager().install(),service_log_path=LOG_PATH, options=chrome_options)
-    self.driver.maximize_window()
-    self.driver.get(url)
-
-class Amtrak:
-  def __init__(self, driver, origin="WAS", destination="NYP", departDate="03/29/2022"):
+class AmtrakSearch:
+  def __init__(self, origin="WAS", destination="NYP", departDate="03/29/2022", driver=Driver(SEARCH_URL)):
     self.origin = origin
     self.destination = destination
     self.departDate = departDate
@@ -77,7 +51,8 @@ class Amtrak:
         prices = data.find_element(By.XPATH, ".//div[@class='row col-12 p-0 m-0']")
         coachPrice = self.findPrice(prices, 'jl-0-op-0-coach')
         businessPrice = self.findPrice(prices, 'jl-0-op-0-business')
-        self.thisSearchResults[self.numberTrainsFound] = {"Number":number, "Name":name, "Departure Time":departTime, "Departure Date":self.departDate, "Travel Time":travelTime, "Arrival Time":arrivalTime, "Arrival Date":arrivalDate, "Coach Price":coachPrice, "Business Price":businessPrice}
+        sleeperPrice = self.findPrice(prices, 'jl-0-op-0-sleeper')
+        self.thisSearchResults[self.numberTrainsFound] = {"Number":number, "Name":name, "Origin":self.origin, "Departure Time":departTime, "Departure Date":self.departDate, "Travel Time":travelTime, "Destination":self.destination, "Arrival Time":arrivalTime, "Arrival Date":arrivalDate, "Coach Price":coachPrice, "Business Price":businessPrice, "Sleeper Price":sleeperPrice}
         self.numberTrainsFound += 1
       except:
         pass #Reached end of list but there is a second page
@@ -142,20 +117,16 @@ class Amtrak:
               time.sleep(3)
               potentialError = self.driver.find_element(By.XPATH, "//div[@class='alert-yellow-text']").text
               print(potentialError)
+              return potentialError
 
             # Search has been completed, but we didn't find any trains on that day
             except NoSuchElementException:
               try:
-                #time.sleep(3)
                 potentialError = self.driver.find_element(By.XPATH, "//div[@amt-auto-test-id='am-dialog']")
                 newDate = potentialError.find_element(By.XPATH, ".//div[@class='pb-0 mb-5 ng-star-inserted']").text
                 newDateError = '\n'.join(newDate.split("\n")[0:2])
                 print(newDateError)
-                #if potentialError.text.split("\n")[0] == "No Trips on Your Selected Date":
-                #  print(True)
-                #else:
-                #  print(potentialError.text)
-
+                return newDateError
 
               # Search has been completed, and we found a train(s)
               except NoSuchElementException:
@@ -168,6 +139,7 @@ class Amtrak:
                   print(self.thisSearchResults)
                   for train in self.thisSearchResults:
                     print(self.thisSearchResults[train]["Number"])
+                  return self.thisSearchResults
                 except Exception as e:
                   print("There was an error retrieving the search data.")
                   print(e)
@@ -188,6 +160,5 @@ if __name__ == "__main__":
   origin = input("Origin code: ")
   destination = input("Destination code: ")
   departureDate = input("Depature date (MM/DD/YYYY): ")
-  d = Driver()
-  a = Amtrak(d.driver, origin, destination, departureDate)
+  a = AmtrakSearch(origin, destination, departureDate)
   a.oneWaySearch()
