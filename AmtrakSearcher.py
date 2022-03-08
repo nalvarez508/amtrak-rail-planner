@@ -42,7 +42,6 @@ class Amtrak:
     self.departDate = departDate
 
     self.hasAlreadySearched = False
-    self.selectedTrains = dict()
     self.driver = driver
     self.thisSearchResults = dict()
     self.numberTrainsFound = 0
@@ -82,6 +81,16 @@ class Amtrak:
         self.numberTrainsFound += 1
       except:
         pass #Reached end of list but there is a second page
+
+  def checkEveryPage(self, area, pages):
+    for page in range(1,pages+1):
+      self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+      area.find_element(By.XPATH, f".//*[text()='{page}']").click()
+      #time.sleep(1)
+      #self.driver.execute_script("window.scrollTo(document.body.scrollHeight, 0)")
+      searchResultsTable = self.driver.find_element(By.XPATH, "//div[@class='row ng-tns-c6-1 ng-trigger ng-trigger-searchList ng-star-inserted']")
+      trainList = searchResultsTable.find_elements(By.XPATH, ".//div[@class='col-sm-6 col-lg-12 ng-tns-c6-1 ng-trigger ng-trigger-searchItems ng-star-inserted']")
+      self.findTrainInfo(trainList)
 
   def enterStationInfo(self, area):
     # Entering departure station info
@@ -125,8 +134,8 @@ class Amtrak:
 
             # Wait until "Find Trains" button is enabled, then click it
             WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, "//button[@class='search-btn ng-star-inserted' and @aria-disabled='false']")))
-            searchArea.find_element(By.XPATH, "//div[@class='amtrak-ff-body']").click()
-            searchArea.find_element(by=By.XPATH, value="//button[@class='search-btn ng-star-inserted' and @aria-disabled='false']").click()
+            searchArea.find_element(By.XPATH, "//div[@class='amtrak-ff-body']").click() # Get calendar popup out of the way
+            searchArea.find_element(by=By.XPATH, value="//button[@class='search-btn ng-star-inserted' and @aria-disabled='false']").click() # Click search button
 
             # Search has been completed, but there is no service
             try:
@@ -139,47 +148,46 @@ class Amtrak:
               try:
                 #time.sleep(3)
                 potentialError = self.driver.find_element(By.XPATH, "//div[@amt-auto-test-id='am-dialog']")
-                if potentialError.text.split("\n")[0] == "No Trips on Your Selected Date":
-                  print(True)
-                else:
-                  print(potentialError.text)
+                newDate = potentialError.find_element(By.XPATH, ".//div[@class='pb-0 mb-5 ng-star-inserted']").text
+                newDateError = '\n'.join(newDate.split("\n")[0:2])
+                print(newDateError)
+                #if potentialError.text.split("\n")[0] == "No Trips on Your Selected Date":
+                #  print(True)
+                #else:
+                #  print(potentialError.text)
+
 
               # Search has been completed, and we found a train(s)
               except NoSuchElementException:
-                WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, "//div[@class='row ng-tns-c6-1 ng-trigger ng-trigger-searchList ng-star-inserted']")))
-                searchResultsTable = self.driver.find_element(By.XPATH, "//div[@class='row ng-tns-c6-1 ng-trigger ng-trigger-searchList ng-star-inserted']")
-                #trainList = searchResultsTable.find_elements(By.XPATH, ".//div[@class='col-sm-6 col-lg-12 ng-tns-c6-1 ng-trigger ng-trigger-searchItems ng-star-inserted']")
-                nextPage = searchResultsTable.find_element(By.XPATH, ".//ul[@class='pagination paginator__pagination ng-tns-c6-1']")
-                numberSearchPages = int((len(nextPage.find_elements(By.XPATH, ".//*"))-4)/2)
-                #self.findTrainInfo(trainList)
-                #if numberSearchPages > 1:
-                for page in range(1,numberSearchPages+1):
-                  self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
-                  nextPage.find_element(By.XPATH, f".//*[text()='{page}']").click()
-                  #time.sleep(1)
-                  #self.driver.execute_script("window.scrollTo(document.body.scrollHeight, 0)")
-                  searchResultsTable = self.driver.find_element(By.XPATH, "//div[@class='row ng-tns-c6-1 ng-trigger ng-trigger-searchList ng-star-inserted']")
-                  trainList = searchResultsTable.find_elements(By.XPATH, ".//div[@class='col-sm-6 col-lg-12 ng-tns-c6-1 ng-trigger ng-trigger-searchItems ng-star-inserted']")
-                  self.findTrainInfo(trainList)
-                #self.findTrainInfo(trainList)
-                print(self.thisSearchResults)
-                for train in self.thisSearchResults:
-                  print(self.thisSearchResults[train]["Number"])
-                #self.selectedTrains #Add to selected dict
-              except Exception as e:
-                print(e)
-          except Exception as e:
+                try:
+                  WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, "//div[@class='row ng-tns-c6-1 ng-trigger ng-trigger-searchList ng-star-inserted']")))
+                  searchResultsTable = self.driver.find_element(By.XPATH, "//div[@class='row ng-tns-c6-1 ng-trigger ng-trigger-searchList ng-star-inserted']") # Table of results
+                  nextPage = searchResultsTable.find_element(By.XPATH, ".//ul[@class='pagination paginator__pagination ng-tns-c6-1']") # Page links area
+                  numberSearchPages = int((len(nextPage.find_elements(By.XPATH, ".//*"))-4)/2) # Find out how many pages exist
+                  self.checkEveryPage(nextPage, numberSearchPages)
+                  print(self.thisSearchResults)
+                  for train in self.thisSearchResults:
+                    print(self.thisSearchResults[train]["Number"])
+                except Exception as e:
+                  print("There was an error retrieving the search data.")
+                  print(e)
+          except Exception as e: # Entering departure date
+            print("There was an error entering the departure date.")
             print(e)
-
-          print()
-        except:
-          pass
-      except:
-        pass
-    except IOError as e:
+        except Exception as e: # Entering to/from stations
+          print("There was an error entering in station info.")
+          print(e)
+      except Exception as e: # Clicking the new search button
+        print("There was an error clicking the search button.")
+        print(e)
+    except IOError as e: # Loading the page
+      print("There was an issue with loading the search page.")
       print(e)
 
 if __name__ == "__main__":
+  origin = input("Origin code: ")
+  destination = input("Destination code: ")
+  departureDate = input("Depature date (MM/DD/YYYY): ")
   d = Driver()
-  a = Amtrak(d.driver)
+  a = Amtrak(d.driver, origin, destination, departureDate)
   a.oneWaySearch()
