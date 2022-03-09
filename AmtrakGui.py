@@ -3,6 +3,7 @@ from tkinter import ttk, font
 import os
 import random
 import sys
+from threading import Thread, Event, Lock
 
 from HelperClasses import Train, RailPass, Driver, UserSelections, Stations
 from DriverHelper import ImageSearch
@@ -66,15 +67,17 @@ class StationsArea(tk.Frame):
     self.searchButton = tk.Button(self, text="Find Trains", command=self.startSearch)
     self.searchButton.grid(row=0, column=1, padx=4)
 
-    self.selectionChangedCallback(self.origin, 1)
-    self.selectionChangedCallback(self.destination, 2)
-  
+    self.parent.doRefresh(self.stations.returnCityState(self.origin.get()), 1)
+    self.parent.doRefresh(self.stations.returnCityState(self.destination.get()), 2)
+
   def startSearch(self):
     pass
 
   def selectionChangedCallback(self, widget, side, e=None):
     city = self.stations.returnCityState(widget.get())
-    self.parent.doRefresh(city, side)
+    self.parent.us.setOrigin(self.origin.get())
+    self.parent.us.setDestination(self.destination.get())
+    self.parent.startThread(self.parent.doRefresh, [city, side, self.parent.imageDriverLock])
 
 class MainWindow(tk.Tk):
   def __init__(self):
@@ -82,6 +85,7 @@ class MainWindow(tk.Tk):
     self.title("Rail Pass Planner")
     self.iconbitmap("Amtrak_square.ico")
     self.us = UserSelections()
+    self.imageDriverLock = Lock()
 
     self.titleArea = TitleArea(self)
     self.imageArea = ImageArea(self)
@@ -91,16 +95,23 @@ class MainWindow(tk.Tk):
     self.imageArea.pack()
     self.stationsArea.pack()
 
+  def startThread(self, function, args=[None]):
+    t1 = Thread(target=function, args=args)
+    t1.start()
+
   def onClose(self):
-    print("I'm gonna close!!!!")
     self.imageArea.imageCatcher.driver.close()
     self.imageArea.imageCatcher.driver.quit()
     self.destroy()
     sys.exit()
 
-  def doRefresh(self, city, side):
+  def doRefresh(self, city, side, lock=None):
     if city != self.imageArea.imageCatcher.getCityName(side):
-      self.imageArea.imageCatcher.loadImage(city, side, IMAGE_DIMENSIONS)
+      try:
+        with lock:
+          self.imageArea.imageCatcher.loadImage(city, side, IMAGE_DIMENSIONS)
+      except AttributeError:
+        self.imageArea.imageCatcher.loadImage(city, side, IMAGE_DIMENSIONS)
       self.imageArea.updateImage(side)
       self.update_idletasks()
 
