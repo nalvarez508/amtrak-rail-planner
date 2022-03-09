@@ -79,6 +79,8 @@ class StationsArea(tk.Frame):
 class MainWindow(tk.Tk):
   def __init__(self):
     super().__init__()
+    self.title("Rail Pass Planner")
+    self.iconbitmap("Amtrak_square.ico")
     self.us = UserSelections()
 
     self.titleArea = TitleArea(self)
@@ -90,19 +92,19 @@ class MainWindow(tk.Tk):
     self.stationsArea.pack()
 
   def onClose(self):
+    print("I'm gonna close!!!!")
+    self.imageArea.imageCatcher.driver.close()
     self.imageArea.imageCatcher.driver.quit()
     self.destroy()
     sys.exit()
 
   def doRefresh(self, city, side):
-    self.imageArea.imageCatcher.loadImage(city, side, IMAGE_DIMENSIONS)
-    self.imageArea.updateImage(side)
-    self.update_idletasks()
+    if city != self.imageArea.imageCatcher.getCityName(side):
+      self.imageArea.imageCatcher.loadImage(city, side, IMAGE_DIMENSIONS)
+      self.imageArea.updateImage(side)
+      self.update_idletasks()
 
 if __name__ == "__main__":
   app = MainWindow()
-  #app.option_add("*Font", font.nametofont("TkDefaultFont").configure(family="Comic Sans MS"))
-  app.title("Rail Pass Planner")
-  app.iconbitmap("Amtrak_square.ico")
-  app.protocol("WM_WINDOW_DELETE", app.onClose)
+  app.wm_protocol("WM_DELETE_WINDOW", app.onClose)
   app.mainloop()
