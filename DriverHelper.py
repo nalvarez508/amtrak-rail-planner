@@ -1,7 +1,3 @@
-import requests
-import json
-from bs4 import BeautifulSoup
-
 import PIL.Image, PIL.ImageTk, PIL.ImageFile
 from io import BytesIO
 import base64, gc
@@ -29,6 +25,8 @@ class ImageSearch:
 
     self.photo_city1 = None
     self.photo_city2 = None
+    self.name_city1 = None
+    self.name_city2 = None
 
   def returnCityPhoto(self, c): #c=city
     URL = f"https://www.google.com/search?tbm=isch&q={urllib.parse.quote(c)}"
@@ -90,9 +88,22 @@ class ImageSearch:
       img.thumbnail((dims), PIL.Image.ANTIALIAS)
       render = PIL.ImageTk.PhotoImage(image=img)
       self.setCityPhoto(no, render)
+      self.setCityName(no, c)
       print(img.size)
     except TclError:
       pass
+
+  def setCityName(self, cityNo, data):
+    if cityNo == 1:
+      self.name_city1 = data
+    elif cityNo == 2:
+      self.name_city2 = data
+  
+  def getCityName(self, cityNo):
+    if cityNo == 1:
+      return self.name_city1
+    elif cityNo == 2:
+      return self.name_city2
 
   def setCityPhoto(self, cityNo, data):
     if cityNo == 1:
