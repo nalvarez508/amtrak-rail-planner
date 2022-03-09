@@ -1,4 +1,5 @@
 import time
+import json
 
 from HelperClasses import Driver
 
@@ -10,7 +11,7 @@ from selenium.webdriver.common.by import By
 SEARCH_URL = "https://www.amtrak.com/tickets/departure.html"
 
 class AmtrakSearch:
-  def __init__(self, origin="WAS", destination="NYP", departDate="03/29/2022", driver=Driver(SEARCH_URL)):
+  def __init__(self, driver, origin="WAS", destination="NYP", departDate="03/29/2022"):
     self.origin = origin
     self.destination = destination
     self.departDate = departDate
@@ -38,22 +39,26 @@ class AmtrakSearch:
         except:
           name = 0
           number = data.find_element(By.XPATH, ".//div[@amt-auto-test-id='search-result-train-name']").text.split("\n")[0]
-        depart= data.find_element(By.XPATH, ".//div[@class='departure-inner']")
+        depart = data.find_element(By.XPATH, ".//div[@class='departure-inner']")
         departTime = depart.find_element(By.XPATH, ".//div[@class='time mt-2 pt-1 d-flex align-items-baseline']").text.replace("\n","")
-        travelTime = data.find_element(By.XPATH, ".//div[@class='travel-time d-flex flex-grow-1']").text.split("\n")[1]
-        arrive = data.find_element(By.XPATH, ".//div[@class='arrival-inner']")
-        arrivalTime = arrive.find_element(By.XPATH, ".//div[@class='time mt-2 pt-1 d-flex align-items-baseline']").text.replace("\n", "")
+        potentialDelay = depart.find_element(By.XPATH, ".//div[@class='delay-alerts']")
         try:
-          arrivalInfo = arrive.find_element(By.XPATH, ".//div[@class='travel-next-day']").text
-          if arrivalInfo == '': arrivalDate = self.departDate
-        except NoSuchElementException:
-          arrivalDate = self.departDate
-        prices = data.find_element(By.XPATH, ".//div[@class='row col-12 p-0 m-0']")
-        coachPrice = self.findPrice(prices, 'jl-0-op-0-coach')
-        businessPrice = self.findPrice(prices, 'jl-0-op-0-business')
-        sleeperPrice = self.findPrice(prices, 'jl-0-op-0-sleeper')
-        self.thisSearchResults[self.numberTrainsFound] = {"Number":number, "Name":name, "Origin":self.origin, "Departure Time":departTime, "Departure Date":self.departDate, "Travel Time":travelTime, "Destination":self.destination, "Arrival Time":arrivalTime, "Arrival Date":arrivalDate, "Coach Price":coachPrice, "Business Price":businessPrice, "Sleeper Price":sleeperPrice}
-        self.numberTrainsFound += 1
+          potentialDelay.find_element(By.XPATH, ".//span[@class='ng-star-inserted']").text # Train is canceled or delayed
+        except:
+          travelTime = data.find_element(By.XPATH, ".//div[@class='travel-time d-flex flex-grow-1']").text.split("\n")[1]
+          arrive = data.find_element(By.XPATH, ".//div[@class='arrival-inner']")
+          arrivalTime = arrive.find_element(By.XPATH, ".//div[@class='time mt-2 pt-1 d-flex align-items-baseline']").text.replace("\n", "")
+          try:
+            arrivalInfo = arrive.find_element(By.XPATH, ".//div[@class='travel-next-day']").text
+            if arrivalInfo == '': arrivalDate = self.departDate
+          except NoSuchElementException:
+            arrivalDate = self.departDate
+          prices = data.find_element(By.XPATH, ".//div[@class='row col-12 p-0 m-0']")
+          coachPrice = self.findPrice(prices, 'jl-0-op-0-coach')
+          businessPrice = self.findPrice(prices, 'jl-0-op-0-business')
+          sleeperPrice = self.findPrice(prices, 'jl-0-op-0-sleeper')
+          self.thisSearchResults[self.numberTrainsFound] = {"Number":number, "Name":name, "Origin":self.origin, "Departure Time":departTime, "Departure Date":self.departDate, "Travel Time":travelTime, "Destination":self.destination, "Arrival Time":arrivalTime, "Arrival Date":arrivalDate, "Coach Price":coachPrice, "Business Price":businessPrice, "Sleeper Price":sleeperPrice}
+          self.numberTrainsFound += 1
       except:
         pass #Reached end of list but there is a second page
 
@@ -61,8 +66,9 @@ class AmtrakSearch:
     for page in range(1,pages+1):
       self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
       area.find_element(By.XPATH, f".//*[text()='{page}']").click()
-      #time.sleep(1)
-      #self.driver.execute_script("window.scrollTo(document.body.scrollHeight, 0)")
+      if page > 1:
+        WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, f".//a[text()='{page}']//ancestor::li[@class='pagination-page page-item active ng-star-inserted']")))
+        time.sleep(0.5)
       searchResultsTable = self.driver.find_element(By.XPATH, "//div[@class='row ng-tns-c6-1 ng-trigger ng-trigger-searchList ng-star-inserted']")
       trainList = searchResultsTable.find_elements(By.XPATH, ".//div[@class='col-sm-6 col-lg-12 ng-tns-c6-1 ng-trigger ng-trigger-searchItems ng-star-inserted']")
       self.findTrainInfo(trainList)
@@ -136,9 +142,7 @@ class AmtrakSearch:
                   nextPage = searchResultsTable.find_element(By.XPATH, ".//ul[@class='pagination paginator__pagination ng-tns-c6-1']") # Page links area
                   numberSearchPages = int((len(nextPage.find_elements(By.XPATH, ".//*"))-4)/2) # Find out how many pages exist
                   self.checkEveryPage(nextPage, numberSearchPages)
-                  print(self.thisSearchResults)
-                  for train in self.thisSearchResults:
-                    print(self.thisSearchResults[train]["Number"])
+                  print(json.dumps(self.thisSearchResults, indent=4))
                   return self.thisSearchResults
                 except Exception as e:
                   print("There was an error retrieving the search data.")
@@ -160,5 +164,6 @@ if __name__ == "__main__":
   origin = input("Origin code: ")
   destination = input("Destination code: ")
   departureDate = input("Depature date (MM/DD/YYYY): ")
-  a = AmtrakSearch(origin, destination, departureDate)
+  d = Driver(SEARCH_URL)
+  a = AmtrakSearch(d.driver, origin, destination, departureDate)
   a.oneWaySearch()
