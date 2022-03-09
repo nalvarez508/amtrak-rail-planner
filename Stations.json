@@ -1,0 +1,2652 @@
+{
+    "ABE": {
+        "Name": "Aberdeen",
+        "City": "Aberdeen",
+        "State": "MD"
+    },
+    "ALY": {
+        "Name": "Albany",
+        "City": "Albany",
+        "State": "OR"
+    },
+    "ALB": {
+        "Name": "Albany-Rensselaer",
+        "City": "Rensselaer",
+        "State": "NY"
+    },
+    "ALI": {
+        "Name": "Albion",
+        "City": "Albion",
+        "State": "MI"
+    },
+    "ABQ": {
+        "Name": "Albuquerque",
+        "City": "Albuquerque",
+        "State": "NM"
+    },
+    "AST": {
+        "Name": "Aldershot",
+        "City": "Aldershot",
+        "State": "ON"
+    },
+    "ALD": {
+        "Name": "Alderson",
+        "City": "Alderson",
+        "State": "WV"
+    },
+    "ALX": {
+        "Name": "Alexandria",
+        "City": "Alexandria",
+        "State": "VA"
+    },
+    "CNL": {
+        "Name": "Allensworth State Park",
+        "City": "Allensworth",
+        "State": "CA"
+    },
+    "ALC": {
+        "Name": "Alliance",
+        "City": "Alliance",
+        "State": "OH"
+    },
+    "ALP": {
+        "Name": "Alpine",
+        "City": "Alpine",
+        "State": "TX"
+    },
+    "ALN": {
+        "Name": "Alton",
+        "City": "Alton",
+        "State": "IL"
+    },
+    "ALT": {
+        "Name": "Altoona",
+        "City": "Altoona",
+        "State": "PA"
+    },
+    "AMS": {
+        "Name": "Amsterdam",
+        "City": "Amsterdam",
+        "State": "NY"
+    },
+    "ANA": {
+        "Name": "Anaheim",
+        "City": "Anaheim",
+        "State": "CA"
+    },
+    "ARB": {
+        "Name": "Ann Arbor",
+        "City": "Ann Arbor",
+        "State": "MI"
+    },
+    "ATN": {
+        "Name": "Anniston",
+        "City": "Anniston",
+        "State": "AL"
+    },
+    "ACA": {
+        "Name": "Antioch-Pittsburg",
+        "City": "Antioch",
+        "State": "CA"
+    },
+    "ACD": {
+        "Name": "Arcadia Valley",
+        "City": "Ironton",
+        "State": "MO"
+    },
+    "ADM": {
+        "Name": "Ardmore",
+        "City": "Ardmore",
+        "State": "OK"
+    },
+    "ARD": {
+        "Name": "Ardmore",
+        "City": "Ardmore",
+        "State": "PA"
+    },
+    "ARK": {
+        "Name": "Arkadelphia",
+        "City": "Arkadelphia",
+        "State": "AR"
+    },
+    "AKY": {
+        "Name": "Ashland",
+        "City": "Ashland",
+        "State": "KY"
+    },
+    "ASD": {
+        "Name": "Ashland",
+        "City": "Ashland",
+        "State": "VA"
+    },
+    "ATL": {
+        "Name": "Atlanta Peachtree",
+        "City": "Atlanta",
+        "State": "GA"
+    },
+    "ARN": {
+        "Name": "Auburn",
+        "City": "Auburn",
+        "State": "CA"
+    },
+    "AUS": {
+        "Name": "Austin",
+        "City": "Austin",
+        "State": "TX"
+    },
+    "BFD": {
+        "Name": "Bakersfield",
+        "City": "Bakersfield",
+        "State": "CA"
+    },
+    "BAL": {
+        "Name": "Baltimore Penn",
+        "City": "Baltimore",
+        "State": "MD"
+    },
+    "BAM": {
+        "Name": "Bangor",
+        "City": "Bangor",
+        "State": "MI"
+    },
+    "BAR": {
+        "Name": "Barstow",
+        "City": "Barstow",
+        "State": "CA"
+    },
+    "BTL": {
+        "Name": "Battle Creek",
+        "City": "Battle Creek",
+        "State": "MI"
+    },
+    "BMT": {
+        "Name": "Beaumont",
+        "City": "Beaumont",
+        "State": "TX"
+    },
+    "BEL": {
+        "Name": "Bellingham Fairhaven",
+        "City": "Bellingham",
+        "State": "WA"
+    },
+    "BLF": {
+        "Name": "Bellows Falls",
+        "City": "Bellows Falls",
+        "State": "VT"
+    },
+    "BEN": {
+        "Name": "Benson",
+        "City": "Benson",
+        "State": "AZ"
+    },
+    "BKY": {
+        "Name": "Berkeley",
+        "City": "Berkeley",
+        "State": "CA"
+    },
+    "BER": {
+        "Name": "Berlin",
+        "City": "Berlin",
+        "State": "CT"
+    },
+    "BNG": {
+        "Name": "Bingen-White Salmon",
+        "City": "Bingen",
+        "State": "WA"
+    },
+    "BHM": {
+        "Name": "Birmingham",
+        "City": "Birmingham",
+        "State": "AL"
+    },
+    "BNL": {
+        "Name": "Bloomington-Normal",
+        "City": "Normal",
+        "State": "IL"
+    },
+    "BBY": {
+        "Name": "Boston Back Bay",
+        "City": "Boston",
+        "State": "MA"
+    },
+    "BON": {
+        "Name": "Boston North",
+        "City": "Boston",
+        "State": "MA"
+    },
+    "BOS": {
+        "Name": "Boston South",
+        "City": "Boston",
+        "State": "MA"
+    },
+    "BRA": {
+        "Name": "Brattleboro",
+        "City": "Brattleboro",
+        "State": "VT"
+    },
+    "BRP": {
+        "Name": "Bridgeport",
+        "City": "Bridgeport",
+        "State": "CT"
+    },
+    "BRH": {
+        "Name": "Brookhaven",
+        "City": "Brookhaven",
+        "State": "MS"
+    },
+    "BRO": {
+        "Name": "Browning",
+        "City": "Browning",
+        "State": "MT"
+    },
+    "BRK": {
+        "Name": "Brunswick",
+        "City": "Brunswick",
+        "State": "ME"
+    },
+    "BYN": {
+        "Name": "Bryan",
+        "City": "Bryan",
+        "State": "OH"
+    },
+    "BUF": {
+        "Name": "Buffalo-Depew",
+        "City": "Depew",
+        "State": "NY"
+    },
+    "BFX": {
+        "Name": "Buffalo-Exchange Street",
+        "City": "Buffalo",
+        "State": "NY"
+    },
+    "BUR": {
+        "Name": "Burbank Airport",
+        "City": "Burbank",
+        "State": "CA"
+    },
+    "BCV": {
+        "Name": "Burke Centre",
+        "City": "Burke",
+        "State": "VA"
+    },
+    "BRL": {
+        "Name": "Burlington",
+        "City": "Burlington",
+        "State": "IA"
+    },
+    "BNC": {
+        "Name": "Burlington",
+        "City": "Burlington",
+        "State": "NC"
+    },
+    "BWI": {
+        "Name": "BWI Thurgood Marshall Airport",
+        "City": "Linthicum",
+        "State": "MD"
+    },
+    "CML": {
+        "Name": "Camarillo",
+        "City": "Camarillo",
+        "State": "CA"
+    },
+    "CAM": {
+        "Name": "Camden",
+        "City": "Camden",
+        "State": "SC"
+    },
+    "CDL": {
+        "Name": "Carbondale",
+        "City": "Carbondale",
+        "State": "IL"
+    },
+    "CRV": {
+        "Name": "Carlinville",
+        "City": "Carlinville",
+        "State": "IL"
+    },
+    "CPN": {
+        "Name": "Carpinteria",
+        "City": "Carpinteria",
+        "State": "CA"
+    },
+    "CYN": {
+        "Name": "Cary",
+        "City": "Cary",
+        "State": "NC"
+    },
+    "CNV": {
+        "Name": "Castleton",
+        "City": "Castleton",
+        "State": "VT"
+    },
+    "CEN": {
+        "Name": "Centralia",
+        "City": "Centralia",
+        "State": "IL"
+    },
+    "CTL": {
+        "Name": "Centralia",
+        "City": "Centralia",
+        "State": "WA"
+    },
+    "CHM": {
+        "Name": "Champaign-Urbana",
+        "City": "Champaign",
+        "State": "IL"
+    },
+    "CHS": {
+        "Name": "Charleston",
+        "City": "North Charleston",
+        "State": "SC"
+    },
+    "CHW": {
+        "Name": "Charleston",
+        "City": "Charleston",
+        "State": "WV"
+    },
+    "CLT": {
+        "Name": "Charlotte",
+        "City": "Charlotte",
+        "State": "NC"
+    },
+    "CVS": {
+        "Name": "Charlottesville",
+        "City": "Charlottesville",
+        "State": "VA"
+    },
+    "CWT": {
+        "Name": "Chatsworth",
+        "City": "Chatsworth",
+        "State": "CA"
+    },
+    "CMO": {
+        "Name": "Chemult",
+        "City": "Chemult",
+        "State": "OR"
+    },
+    "CHI": {
+        "Name": "Chicago Union",
+        "City": "Chicago",
+        "State": "IL"
+    },
+    "CIC": {
+        "Name": "Chico",
+        "City": "Chico",
+        "State": "CA"
+    },
+    "CIN": {
+        "Name": "Cincinnati",
+        "City": "Cincinnati",
+        "State": "OH"
+    },
+    "CLA": {
+        "Name": "Claremont",
+        "City": "Claremont",
+        "State": "NH"
+    },
+    "CBR": {
+        "Name": "Cleburne",
+        "City": "Cleburne",
+        "State": "TX"
+    },
+    "CSN": {
+        "Name": "Clemson",
+        "City": "Clemson",
+        "State": "SC"
+    },
+    "CLE": {
+        "Name": "Cleveland",
+        "City": "Cleveland",
+        "State": "OH"
+    },
+    "CLF": {
+        "Name": "Clifton Forge",
+        "City": "Clifton Forge",
+        "State": "VA"
+    },
+    "COT": {
+        "Name": "Coatesville",
+        "City": "Coatesville",
+        "State": "PA"
+    },
+    "COX": {
+        "Name": "Colfax",
+        "City": "Colfax",
+        "State": "CA"
+    },
+    "CLB": {
+        "Name": "Columbia",
+        "City": "Columbia",
+        "State": "SC"
+    },
+    "CBS": {
+        "Name": "Columbus",
+        "City": "Columbus",
+        "State": "WI"
+    },
+    "COV": {
+        "Name": "Connellsville",
+        "City": "Connellsville",
+        "State": "PA"
+    },
+    "COI": {
+        "Name": "Connersville",
+        "City": "Connersville",
+        "State": "IN"
+    },
+    "COC": {
+        "Name": "Corcoran",
+        "City": "Corcoran",
+        "State": "CA"
+    },
+    "CWH": {
+        "Name": "Cornwells Heights",
+        "City": "Cornwells Heights",
+        "State": "PA"
+    },
+    "CRF": {
+        "Name": "Crawfordsville",
+        "City": "Crawfordsville",
+        "State": "IN"
+    },
+    "CRN": {
+        "Name": "Creston",
+        "City": "Creston",
+        "State": "IA"
+    },
+    "CRT": {
+        "Name": "Croton-Harmon",
+        "City": "Croton-on-Hudson",
+        "State": "NY"
+    },
+    "CLP": {
+        "Name": "Culpeper",
+        "City": "Culpeper",
+        "State": "VA"
+    },
+    "CUM": {
+        "Name": "Cumberland",
+        "City": "Cumberland",
+        "State": "MD"
+    },
+    "CUT": {
+        "Name": "Cut Bank",
+        "City": "Cut Bank",
+        "State": "MT"
+    },
+    "DAL": {
+        "Name": "Dallas",
+        "City": "Dallas",
+        "State": "TX"
+    },
+    "DAN": {
+        "Name": "Danville",
+        "City": "Danville",
+        "State": "VA"
+    },
+    "DAV": {
+        "Name": "Davis",
+        "City": "Davis",
+        "State": "CA"
+    },
+    "DER": {
+        "Name": "Dearborn",
+        "City": "Dearborn",
+        "State": "MI"
+    },
+    "DFB": {
+        "Name": "Deerfield Beach",
+        "City": "Deerfield Beach",
+        "State": "FL"
+    },
+    "DRT": {
+        "Name": "Del Rio",
+        "City": "Del Rio",
+        "State": "TX"
+    },
+    "DLD": {
+        "Name": "DeLand",
+        "City": "DeLand",
+        "State": "FL"
+    },
+    "DLB": {
+        "Name": "Delray Beach",
+        "City": "Delray Beach",
+        "State": "FL"
+    },
+    "DEM": {
+        "Name": "Deming",
+        "City": "Deming",
+        "State": "NM"
+    },
+    "DNK": {
+        "Name": "Denmark",
+        "City": "Denmark",
+        "State": "SC"
+    },
+    "DEN": {
+        "Name": "Denver",
+        "City": "Denver",
+        "State": "CO"
+    },
+    "DET": {
+        "Name": "Detroit",
+        "City": "Detroit",
+        "State": "MI"
+    },
+    "DLK": {
+        "Name": "Detroit Lakes",
+        "City": "Detroit Lakes",
+        "State": "MN"
+    },
+    "DVL": {
+        "Name": "Devils Lake",
+        "City": "Devils Lake",
+        "State": "ND"
+    },
+    "DIL": {
+        "Name": "Dillon",
+        "City": "Dillon",
+        "State": "SC"
+    },
+    "DDG": {
+        "Name": "Dodge City",
+        "City": "Dodge City",
+        "State": "KS"
+    },
+    "DOV": {
+        "Name": "Dover",
+        "City": "Dover",
+        "State": "NH"
+    },
+    "DOA": {
+        "Name": "Dowagiac",
+        "City": "Dowagiac",
+        "State": "MI"
+    },
+    "DOW": {
+        "Name": "Downingtown",
+        "City": "Downingtown",
+        "State": "PA"
+    },
+    "DQN": {
+        "Name": "Du Quoin",
+        "City": "Du Quoin",
+        "State": "IL"
+    },
+    "DUN": {
+        "Name": "Dunsmuir",
+        "City": "Dunsmuir",
+        "State": "CA"
+    },
+    "DRD": {
+        "Name": "Durand",
+        "City": "Durand",
+        "State": "MI"
+    },
+    "DNC": {
+        "Name": "Durham",
+        "City": "Durham",
+        "State": "NC"
+    },
+    "DHM": {
+        "Name": "Durham-UNH",
+        "City": "Durham",
+        "State": "NH"
+    },
+    "DWT": {
+        "Name": "Dwight",
+        "City": "Dwight",
+        "State": "IL"
+    },
+    "DYE": {
+        "Name": "Dyer",
+        "City": "Dyer",
+        "State": "IN"
+    },
+    "GPK": {
+        "Name": "East Glacier Park",
+        "City": "East Glacier Park",
+        "State": "MT"
+    },
+    "LNS": {
+        "Name": "East Lansing",
+        "City": "East Lansing",
+        "State": "MI"
+    },
+    "EDM": {
+        "Name": "Edmonds",
+        "City": "Edmonds",
+        "State": "WA"
+    },
+    "EFG": {
+        "Name": "Effingham",
+        "City": "Effingham",
+        "State": "IL"
+    },
+    "ELP": {
+        "Name": "El Paso",
+        "City": "El Paso",
+        "State": "TX"
+    },
+    "EKH": {
+        "Name": "Elkhart",
+        "City": "Elkhart",
+        "State": "IN"
+    },
+    "ELT": {
+        "Name": "Elizabethtown",
+        "City": "Elizabethtown",
+        "State": "PA"
+    },
+    "ELK": {
+        "Name": "Elko",
+        "City": "Elko",
+        "State": "NV"
+    },
+    "ELY": {
+        "Name": "Elyria",
+        "City": "Elyria",
+        "State": "OH"
+    },
+    "EMY": {
+        "Name": "Emeryville",
+        "City": "Emeryville",
+        "State": "CA"
+    },
+    "EPH": {
+        "Name": "Ephrata",
+        "City": "Ephrata",
+        "State": "WA"
+    },
+    "ERI": {
+        "Name": "Erie",
+        "City": "Erie",
+        "State": "PA"
+    },
+    "ESM": {
+        "Name": "Essex",
+        "City": "Essex",
+        "State": "MT"
+    },
+    "ESX": {
+        "Name": "Essex Junction",
+        "City": "Essex Junction",
+        "State": "VT"
+    },
+    "EUG": {
+        "Name": "Eugene-Springfield",
+        "City": "Eugene",
+        "State": "OR"
+    },
+    "EVR": {
+        "Name": "Everett",
+        "City": "Everett",
+        "State": "WA"
+    },
+    "EXR": {
+        "Name": "Exeter",
+        "City": "Exeter",
+        "State": "NH"
+    },
+    "EXT": {
+        "Name": "Exton",
+        "City": "Exton",
+        "State": "PA"
+    },
+    "FFV": {
+        "Name": "Fairfield-Vacaville",
+        "City": "Fairfield",
+        "State": "CA"
+    },
+    "FAR": {
+        "Name": "Fargo",
+        "City": "Fargo",
+        "State": "ND"
+    },
+    "FAY": {
+        "Name": "Fayetteville",
+        "City": "Fayetteville",
+        "State": "NC"
+    },
+    "FLG": {
+        "Name": "Flagstaff",
+        "City": "Flagstaff",
+        "State": "AZ"
+    },
+    "FLN": {
+        "Name": "Flint",
+        "City": "Flint",
+        "State": "MI"
+    },
+    "FLO": {
+        "Name": "Florence",
+        "City": "Florence",
+        "State": "SC"
+    },
+    "FED": {
+        "Name": "Fort Edward",
+        "City": "Fort Edward",
+        "State": "NY"
+    },
+    "FTL": {
+        "Name": "Fort Lauderdale",
+        "City": "Fort Lauderdale",
+        "State": "FL"
+    },
+    "FMD": {
+        "Name": "Fort Madison",
+        "City": "Fort Madison",
+        "State": "IA"
+    },
+    "FMG": {
+        "Name": "Fort Morgan",
+        "City": "Fort Morgan",
+        "State": "CO"
+    },
+    "FTW": {
+        "Name": "Fort Worth",
+        "City": "Fort Worth",
+        "State": "TX"
+    },
+    "FRA": {
+        "Name": "Framingham",
+        "City": "Framingham",
+        "State": "MA"
+    },
+    "WIP": {
+        "Name": "Fraser-Winter Park",
+        "City": "Fraser",
+        "State": "CO"
+    },
+    "FBG": {
+        "Name": "Fredericksburg",
+        "City": "Fredericksburg",
+        "State": "VA"
+    },
+    "FRE": {
+        "Name": "Freeport",
+        "City": "Freeport",
+        "State": "ME"
+    },
+    "FMT": {
+        "Name": "Fremont",
+        "City": "Fremont",
+        "State": "CA"
+    },
+    "FNO": {
+        "Name": "Fresno",
+        "City": "Fresno",
+        "State": "CA"
+    },
+    "FUL": {
+        "Name": "Fullerton",
+        "City": "Fullerton",
+        "State": "CA"
+    },
+    "FTN": {
+        "Name": "Fulton",
+        "City": "Fulton",
+        "State": "KY"
+    },
+    "GNS": {
+        "Name": "Gainesville",
+        "City": "Gainesville",
+        "State": "GA"
+    },
+    "GLE": {
+        "Name": "Gainesville",
+        "City": "Gainesville",
+        "State": "TX"
+    },
+    "GBB": {
+        "Name": "Galesburg",
+        "City": "Galesburg",
+        "State": "IL"
+    },
+    "GLP": {
+        "Name": "Gallup",
+        "City": "Gallup",
+        "State": "NM"
+    },
+    "GCK": {
+        "Name": "Garden City",
+        "City": "Garden City",
+        "State": "KS"
+    },
+    "GAS": {
+        "Name": "Gastonia",
+        "City": "Gastonia",
+        "State": "NC"
+    },
+    "GLM": {
+        "Name": "Gilman",
+        "City": "Gilman",
+        "State": "IL"
+    },
+    "GGW": {
+        "Name": "Glasgow",
+        "City": "Glasgow",
+        "State": "MT"
+    },
+    "GDL": {
+        "Name": "Glendale",
+        "City": "Glendale",
+        "State": "CA"
+    },
+    "GLN": {
+        "Name": "Glenview",
+        "City": "Glenview",
+        "State": "IL"
+    },
+    "GSC": {
+        "Name": "Glenwood Springs",
+        "City": "Glenwood Springs",
+        "State": "CO"
+    },
+    "GTA": {
+        "Name": "Goleta",
+        "City": "Goleta",
+        "State": "CA"
+    },
+    "GRA": {
+        "Name": "Granby",
+        "City": "Granby",
+        "State": "CO"
+    },
+    "GFK": {
+        "Name": "Grand Forks",
+        "City": "Grand Forks",
+        "State": "ND"
+    },
+    "GJT": {
+        "Name": "Grand Junction",
+        "City": "Grand Junction",
+        "State": "CO"
+    },
+    "GRR": {
+        "Name": "Grand Rapids",
+        "City": "Grand Rapids",
+        "State": "MI"
+    },
+    "GRI": {
+        "Name": "Green River",
+        "City": "Green River",
+        "State": "UT"
+    },
+    "GFD": {
+        "Name": "Greenfield",
+        "City": "Greenfield",
+        "State": "MA"
+    },
+    "GRO": {
+        "Name": "Greensboro",
+        "City": "Greensboro",
+        "State": "NC"
+    },
+    "GNB": {
+        "Name": "Greensburg",
+        "City": "Greensburg",
+        "State": "PA"
+    },
+    "GRV": {
+        "Name": "Greenville",
+        "City": "Greenville",
+        "State": "SC"
+    },
+    "GWD": {
+        "Name": "Greenwood",
+        "City": "Greenwood",
+        "State": "MS"
+    },
+    "GMS": {
+        "Name": "Grimsby",
+        "City": "Grimsby",
+        "State": "ON"
+    },
+    "GVB": {
+        "Name": "Grover Beach",
+        "City": "Grover Beach",
+        "State": "CA"
+    },
+    "GUA": {
+        "Name": "Guadalupe",
+        "City": "Guadalupe",
+        "State": "CA"
+    },
+    "HAM": {
+        "Name": "Hamlet",
+        "City": "Hamlet",
+        "State": "NC"
+    },
+    "HMD": {
+        "Name": "Hammond",
+        "City": "Hammond",
+        "State": "LA"
+    },
+    "HMI": {
+        "Name": "Hammond/Whiting",
+        "City": "Hammond",
+        "State": "IN"
+    },
+    "HNF": {
+        "Name": "Hanford",
+        "City": "Hanford",
+        "State": "CA"
+    },
+    "HFY": {
+        "Name": "Harpers Ferry",
+        "City": "Harpers Ferry",
+        "State": "WV"
+    },
+    "HAR": {
+        "Name": "Harrisburg",
+        "City": "Harrisburg",
+        "State": "PA"
+    },
+    "HFD": {
+        "Name": "Hartford",
+        "City": "Hartford",
+        "State": "CT"
+    },
+    "HAS": {
+        "Name": "Hastings",
+        "City": "Hastings",
+        "State": "NE"
+    },
+    "HBG": {
+        "Name": "Hattiesburg",
+        "City": "Hattiesburg",
+        "State": "MS"
+    },
+    "HHL": {
+        "Name": "Haverhill",
+        "City": "Haverhill",
+        "State": "MA"
+    },
+    "HAV": {
+        "Name": "Havre",
+        "City": "Havre",
+        "State": "MT"
+    },
+    "HAY": {
+        "Name": "Hayward",
+        "City": "Hayward",
+        "State": "CA"
+    },
+    "HAZ": {
+        "Name": "Hazlehurst",
+        "City": "Hazlehurst",
+        "State": "MS"
+    },
+    "HER": {
+        "Name": "Helper",
+        "City": "Helper",
+        "State": "UT"
+    },
+    "HEM": {
+        "Name": "Hermann",
+        "City": "Hermann",
+        "State": "MO"
+    },
+    "HPT": {
+        "Name": "High Point",
+        "City": "High Point",
+        "State": "NC"
+    },
+    "HIN": {
+        "Name": "Hinton",
+        "City": "Hinton",
+        "State": "WV"
+    },
+    "HLD": {
+        "Name": "Holdrege",
+        "City": "Holdrege",
+        "State": "NE"
+    },
+    "HOM": {
+        "Name": "Holland",
+        "City": "Holland",
+        "State": "MI"
+    },
+    "HOL": {
+        "Name": "Hollywood",
+        "City": "Hollywood",
+        "State": "FL"
+    },
+    "HLK": {
+        "Name": "Holyoke",
+        "City": "Holyoke",
+        "State": "MA"
+    },
+    "HMW": {
+        "Name": "Homewood",
+        "City": "Homewood",
+        "State": "IL"
+    },
+    "HOP": {
+        "Name": "Hope",
+        "City": "Hope",
+        "State": "AR"
+    },
+    "HOS": {
+        "Name": "Houston",
+        "City": "Houston",
+        "State": "TX"
+    },
+    "HUD": {
+        "Name": "Hudson",
+        "City": "Hudson",
+        "State": "NY"
+    },
+    "HGD": {
+        "Name": "Huntingdon",
+        "City": "Huntingdon",
+        "State": "PA"
+    },
+    "HUN": {
+        "Name": "Huntington",
+        "City": "Huntington",
+        "State": "WV"
+    },
+    "HUT": {
+        "Name": "Hutchinson",
+        "City": "Hutchinson",
+        "State": "KS"
+    },
+    "IDP": {
+        "Name": "Independence",
+        "City": "Independence",
+        "State": "MO"
+    },
+    "IND": {
+        "Name": "Indianapolis",
+        "City": "Indianapolis",
+        "State": "IN"
+    },
+    "IRV": {
+        "Name": "Irvine",
+        "City": "Irvine",
+        "State": "CA"
+    },
+    "JXN": {
+        "Name": "Jackson",
+        "City": "Jackson",
+        "State": "MI"
+    },
+    "JAN": {
+        "Name": "Jackson",
+        "City": "Jackson",
+        "State": "MS"
+    },
+    "JAX": {
+        "Name": "Jacksonville",
+        "City": "Jacksonville",
+        "State": "FL"
+    },
+    "JEF": {
+        "Name": "Jefferson City",
+        "City": "Jefferson City",
+        "State": "MO"
+    },
+    "JSP": {
+        "Name": "Jesup",
+        "City": "Jesup",
+        "State": "GA"
+    },
+    "JST": {
+        "Name": "Johnstown",
+        "City": "Johnstown",
+        "State": "PA"
+    },
+    "JOL": {
+        "Name": "Joliet",
+        "City": "Joliet",
+        "State": "IL"
+    },
+    "KAL": {
+        "Name": "Kalamazoo",
+        "City": "Kalamazoo",
+        "State": "MI"
+    },
+    "KKI": {
+        "Name": "Kankakee",
+        "City": "Kankakee",
+        "State": "IL"
+    },
+    "KAN": {
+        "Name": "Kannapolis",
+        "City": "Kannapolis",
+        "State": "NC"
+    },
+    "KCY": {
+        "Name": "Kansas City",
+        "City": "Kansas City",
+        "State": "MO"
+    },
+    "KEL": {
+        "Name": "Kelso",
+        "City": "Kelso",
+        "State": "WA"
+    },
+    "KEE": {
+        "Name": "Kewanee",
+        "City": "Kewanee",
+        "State": "IL"
+    },
+    "KNG": {
+        "Name": "Kingman",
+        "City": "Kingman",
+        "State": "AZ"
+    },
+    "KIN": {
+        "Name": "Kingston",
+        "City": "Kingston",
+        "State": "RI"
+    },
+    "KTR": {
+        "Name": "Kingstree",
+        "City": "Kingstree",
+        "State": "SC"
+    },
+    "KWD": {
+        "Name": "Kirkwood",
+        "City": "Kirkwood",
+        "State": "MO"
+    },
+    "KIS": {
+        "Name": "Kissimmee",
+        "City": "Kissimmee",
+        "State": "FL"
+    },
+    "KFS": {
+        "Name": "Klamath Falls",
+        "City": "Klamath Falls",
+        "State": "OR"
+    },
+    "LSE": {
+        "Name": "La Crosse",
+        "City": "La Crosse",
+        "State": "WI"
+    },
+    "LAG": {
+        "Name": "La Grange Road",
+        "City": "La Grange",
+        "State": "IL"
+    },
+    "LAJ": {
+        "Name": "La Junta",
+        "City": "La Junta",
+        "State": "CO"
+    },
+    "LAP": {
+        "Name": "La Plata",
+        "City": "La Plata",
+        "State": "MO"
+    },
+    "LAF": {
+        "Name": "Lafayette",
+        "City": "Lafayette",
+        "State": "IN"
+    },
+    "LFT": {
+        "Name": "Lafayette",
+        "City": "Lafayette",
+        "State": "LA"
+    },
+    "LCH": {
+        "Name": "Lake Charles",
+        "City": "Lake Charles",
+        "State": "LA"
+    },
+    "LAK/LKL": {
+        "Name": "Lakeland",
+        "City": "Lakeland",
+        "State": "FL"
+    },
+    "LMR": {
+        "Name": "Lamar",
+        "City": "Lamar",
+        "State": "CO"
+    },
+    "LMY": {
+        "Name": "Lamy",
+        "City": "Lamy",
+        "State": "NM"
+    },
+    "LNC": {
+        "Name": "Lancaster",
+        "City": "Lancaster",
+        "State": "PA"
+    },
+    "LPE": {
+        "Name": "Lapeer",
+        "City": "Lapeer",
+        "State": "MI"
+    },
+    "LSV": {
+        "Name": "Las Vegas",
+        "City": "Las Vegas",
+        "State": "NM"
+    },
+    "LAB": {
+        "Name": "Latrobe",
+        "City": "Latrobe",
+        "State": "PA"
+    },
+    "LAU": {
+        "Name": "Laurel",
+        "City": "Laurel",
+        "State": "MS"
+    },
+    "LRC": {
+        "Name": "Lawrence",
+        "City": "Lawrence",
+        "State": "KS"
+    },
+    "LWA": {
+        "Name": "Leavenworth",
+        "City": "Leavenworth",
+        "State": "WA"
+    },
+    "LEE": {
+        "Name": "Lee's Summit",
+        "City": "Lee's Summit",
+        "State": "MO"
+    },
+    "LEW": {
+        "Name": "Lewistown",
+        "City": "Lewistown",
+        "State": "PA"
+    },
+    "LEX": {
+        "Name": "Lexington",
+        "City": "Lexington",
+        "State": "NC"
+    },
+    "LIB": {
+        "Name": "Libby",
+        "City": "Libby",
+        "State": "MT"
+    },
+    "LCN": {
+        "Name": "Lincoln",
+        "City": "Lincoln",
+        "State": "IL"
+    },
+    "LNK": {
+        "Name": "Lincoln",
+        "City": "Lincoln",
+        "State": "NE"
+    },
+    "LRK": {
+        "Name": "Little Rock",
+        "City": "Little Rock",
+        "State": "AR"
+    },
+    "LOD": {
+        "Name": "Lodi",
+        "City": "Lodi",
+        "State": "CA"
+    },
+    "LPS": {
+        "Name": "Lompoc-Surf",
+        "City": "Surf",
+        "State": "CA"
+    },
+    "LVW": {
+        "Name": "Longview",
+        "City": "Longview",
+        "State": "TX"
+    },
+    "LDB": {
+        "Name": "Lordsburg",
+        "City": "Lordsburg",
+        "State": "NM"
+    },
+    "LOR": {
+        "Name": "Lorton",
+        "City": "Lorton",
+        "State": "VA"
+    },
+    "LAX": {
+        "Name": "Los Angeles Union",
+        "City": "Los Angeles",
+        "State": "CA"
+    },
+    "LYH": {
+        "Name": "Lynchburg-Kemper Street",
+        "City": "Lynchburg",
+        "State": "VA"
+    },
+    "MAC": {
+        "Name": "Macomb",
+        "City": "Macomb",
+        "State": "IL"
+    },
+    "MAD": {
+        "Name": "Madera",
+        "City": "Madera",
+        "State": "CA"
+    },
+    "MAL": {
+        "Name": "Malta",
+        "City": "Malta",
+        "State": "MT"
+    },
+    "MVN": {
+        "Name": "Malvern",
+        "City": "Malvern",
+        "State": "AR"
+    },
+    "MSS": {
+        "Name": "Manassas",
+        "City": "Manassas",
+        "State": "VA"
+    },
+    "MRC": {
+        "Name": "Maricopa",
+        "City": "Maricopa",
+        "State": "AZ"
+    },
+    "MKS": {
+        "Name": "Marks",
+        "City": "Marks",
+        "State": "MS"
+    },
+    "MHL": {
+        "Name": "Marshall",
+        "City": "Marshall",
+        "State": "TX"
+    },
+    "MTZ": {
+        "Name": "Martinez",
+        "City": "Martinez",
+        "State": "CA"
+    },
+    "MRB": {
+        "Name": "Martinsburg",
+        "City": "Martinsburg",
+        "State": "WV"
+    },
+    "MAT": {
+        "Name": "Mattoon",
+        "City": "Mattoon",
+        "State": "IL"
+    },
+    "MAY": {
+        "Name": "Maysville",
+        "City": "Maysville",
+        "State": "KY"
+    },
+    "MCB": {
+        "Name": "McComb",
+        "City": "McComb",
+        "State": "MS"
+    },
+    "MCK": {
+        "Name": "McCook",
+        "City": "McCook",
+        "State": "NE"
+    },
+    "MCG": {
+        "Name": "McGregor",
+        "City": "McGregor",
+        "State": "TX"
+    },
+    "MEM": {
+        "Name": "Memphis Central",
+        "City": "Memphis",
+        "State": "TN"
+    },
+    "MDT": {
+        "Name": "Mendota",
+        "City": "Mendota",
+        "State": "IL"
+    },
+    "MCD": {
+        "Name": "Merced",
+        "City": "Merced",
+        "State": "CA"
+    },
+    "MDN": {
+        "Name": "Meriden",
+        "City": "Meriden",
+        "State": "CT"
+    },
+    "MEI": {
+        "Name": "Meridian",
+        "City": "Meridian",
+        "State": "MS"
+    },
+    "MET": {
+        "Name": "Metropark",
+        "City": "Iselin",
+        "State": "NJ"
+    },
+    "MIA": {
+        "Name": "Miami",
+        "City": "Miami",
+        "State": "FL"
+    },
+    "MCI": {
+        "Name": "Michigan City",
+        "City": "Michigan City",
+        "State": "IN"
+    },
+    "MID": {
+        "Name": "Middletown",
+        "City": "Middletown",
+        "State": "PA"
+    },
+    "MKE": {
+        "Name": "Milwaukee",
+        "City": "Milwaukee",
+        "State": "WI"
+    },
+    "MKA": {
+        "Name": "Milwaukee Airport",
+        "City": "Milwaukee",
+        "State": "WI"
+    },
+    "MIN": {
+        "Name": "Mineola",
+        "City": "Mineola",
+        "State": "TX"
+    },
+    "MOT": {
+        "Name": "Minot",
+        "City": "Minot",
+        "State": "ND"
+    },
+    "MOD": {
+        "Name": "Modesto",
+        "City": "Modesto",
+        "State": "CA"
+    },
+    "MNG": {
+        "Name": "Montgomery",
+        "City": "Montgomery",
+        "State": "WV"
+    },
+    "MPR": {
+        "Name": "Montpelier",
+        "City": "Montpelier",
+        "State": "VT"
+    },
+    "MTR": {
+        "Name": "Montreal",
+        "City": "Montreal",
+        "State": "QC"
+    },
+    "MPK": {
+        "Name": "Moorpark",
+        "City": "Moorpark",
+        "State": "CA"
+    },
+    "MJY": {
+        "Name": "Mount Joy",
+        "City": "Mount Joy",
+        "State": "PA"
+    },
+    "MTP": {
+        "Name": "Mount Pleasant",
+        "City": "Mount Pleasant",
+        "State": "IA"
+    },
+    "MVW": {
+        "Name": "Mount Vernon",
+        "City": "Mount Vernon",
+        "State": "WA"
+    },
+    "MYS": {
+        "Name": "Mystic",
+        "City": "Mystic",
+        "State": "CT"
+    },
+    "NPV": {
+        "Name": "Naperville",
+        "City": "Naperville",
+        "State": "IL"
+    },
+    "NDL": {
+        "Name": "Needles",
+        "City": "Needles",
+        "State": "CA"
+    },
+    "NBK": {
+        "Name": "New Brunswick",
+        "City": "New Brunswick",
+        "State": "NJ"
+    },
+    "NBU": {
+        "Name": "New Buffalo",
+        "City": "New Buffalo",
+        "State": "MI"
+    },
+    "NCR": {
+        "Name": "New Carrollton",
+        "City": "New Carrollton",
+        "State": "MD"
+    },
+    "NHV": {
+        "Name": "New Haven Union",
+        "City": "New Haven",
+        "State": "CT"
+    },
+    "STS": {
+        "Name": "New Haven State Street",
+        "City": "New Haven",
+        "State": "CT"
+    },
+    "NIB": {
+        "Name": "New Iberia",
+        "City": "New Iberia",
+        "State": "LA"
+    },
+    "NLC": {
+        "Name": "New London",
+        "City": "New London",
+        "State": "CT"
+    },
+    "NOL": {
+        "Name": "New Orleans",
+        "City": "New Orleans",
+        "State": "LA"
+    },
+    "NRO": {
+        "Name": "New Rochelle",
+        "City": "New Rochelle",
+        "State": "NY"
+    },
+    "NYP": {
+        "Name": "New York Penn",
+        "City": "New York",
+        "State": "NY"
+    },
+    "NYF": {
+        "Name": "New York State Fair",
+        "City": "Syracuse",
+        "State": "NY"
+    },
+    "NRK": {
+        "Name": "Newark",
+        "City": "Newark",
+        "State": "DE"
+    },
+    "EWR": {
+        "Name": "Newark Liberty International Airport",
+        "City": "Newark",
+        "State": "NJ"
+    },
+    "NWK": {
+        "Name": "Newark Penn",
+        "City": "Newark",
+        "State": "NJ"
+    },
+    "NBN": {
+        "Name": "Newbern-Dyersburg",
+        "City": "Newbern",
+        "State": "TN"
+    },
+    "NPN": {
+        "Name": "Newport News",
+        "City": "Newport News",
+        "State": "VA"
+    },
+    "NEW": {
+        "Name": "Newton",
+        "City": "Newton",
+        "State": "KS"
+    },
+    "NFL": {
+        "Name": "Niagara Falls",
+        "City": "Niagara Falls",
+        "State": "NY"
+    },
+    "NFS": {
+        "Name": "Niagara Falls",
+        "City": "Niagara Falls",
+        "State": "ON"
+    },
+    "NLS": {
+        "Name": "Niles",
+        "City": "Niles",
+        "State": "MI"
+    },
+    "NFK": {
+        "Name": "Norfolk",
+        "City": "Norfolk",
+        "State": "VA"
+    },
+    "NOR": {
+        "Name": "Norman",
+        "City": "Norman",
+        "State": "OK"
+    },
+    "NSF": {
+        "Name": "North Carolina State Fair",
+        "City": "Raleigh",
+        "State": "NC"
+    },
+    "NHT": {
+        "Name": "Northampton",
+        "City": "Northampton",
+        "State": "MA"
+    },
+    "OAC": {
+        "Name": "Oakland Coliseum",
+        "City": "Oakland",
+        "State": "CA"
+    },
+    "OKJ": {
+        "Name": "Oakland-Jack London Square",
+        "City": "Oakland",
+        "State": "CA"
+    },
+    "OKL": {
+        "Name": "Oakville",
+        "City": "Oakville",
+        "State": "ON"
+    },
+    "OSD": {
+        "Name": "Oceanside",
+        "City": "Oceanside",
+        "State": "CA"
+    },
+    "OKE": {
+        "Name": "Okeechobee",
+        "City": "Okeechobee",
+        "State": "FL"
+    },
+    "OKC": {
+        "Name": "Oklahoma City",
+        "City": "Oklahoma City",
+        "State": "OK"
+    },
+    "ORB": {
+        "Name": "Old Orchard Beach",
+        "City": "Old Orchard Beach",
+        "State": "ME"
+    },
+    "OSB": {
+        "Name": "Old Saybrook",
+        "City": "Old Saybrook",
+        "State": "CT"
+    },
+    "OWL": {
+        "Name": "Olympia-Lacey",
+        "City": "Lacey",
+        "State": "WA"
+    },
+    "OMA": {
+        "Name": "Omaha",
+        "City": "Omaha",
+        "State": "NE"
+    },
+    "ONA": {
+        "Name": "Ontario",
+        "City": "Ontario",
+        "State": "CA"
+    },
+    "ORC": {
+        "Name": "Oregon City",
+        "City": "Oregon City",
+        "State": "OR"
+    },
+    "ORL": {
+        "Name": "Orlando",
+        "City": "Orlando",
+        "State": "FL"
+    },
+    "OSC": {
+        "Name": "Osceola",
+        "City": "Osceola",
+        "State": "IA"
+    },
+    "OTM": {
+        "Name": "Ottumwa",
+        "City": "Ottumwa",
+        "State": "IA"
+    },
+    "OXN": {
+        "Name": "Oxnard",
+        "City": "Oxnard",
+        "State": "CA"
+    },
+    "PAK": {
+        "Name": "Palatka",
+        "City": "Palatka",
+        "State": "FL"
+    },
+    "PSN": {
+        "Name": "Palm Springs",
+        "City": "Palm Springs",
+        "State": "CA"
+    },
+    "PAO": {
+        "Name": "Paoli",
+        "City": "Paoli",
+        "State": "PA"
+    },
+    "PAR": {
+        "Name": "Parkesburg",
+        "City": "Parkesburg",
+        "State": "PA"
+    },
+    "PSC": {
+        "Name": "Pasco",
+        "City": "Pasco",
+        "State": "WA"
+    },
+    "PRB": {
+        "Name": "Paso Robles",
+        "City": "Paso Robles",
+        "State": "CA"
+    },
+    "PTB": {
+        "Name": "Petersburg",
+        "City": "Petersburg",
+        "State": "VA"
+    },
+    "PVL": {
+        "Name": "Pauls Valley",
+        "City": "Pauls Valley",
+        "State": "OK"
+    },
+    "PHL": {
+        "Name": "Philadelphia 30th Street",
+        "City": "Philadelphia",
+        "State": "PA"
+    },
+    "PHN": {
+        "Name": "Philadelphia North",
+        "City": "Philadelphia",
+        "State": "PA"
+    },
+    "PIC": {
+        "Name": "Picayune",
+        "City": "Picayune",
+        "State": "MS"
+    },
+    "PGH": {
+        "Name": "Pittsburgh",
+        "City": "Pittsburgh",
+        "State": "PA"
+    },
+    "PIT": {
+        "Name": "Pittsfield",
+        "City": "Pittsfield",
+        "State": "MA"
+    },
+    "PLO": {
+        "Name": "Plano",
+        "City": "Plano",
+        "State": "IL"
+    },
+    "PLB": {
+        "Name": "Plattsburgh",
+        "City": "Plattsburgh",
+        "State": "NY"
+    },
+    "POS": {
+        "Name": "Pomona",
+        "City": "Pomona",
+        "State": "CA"
+    },
+    "PON": {
+        "Name": "Pontiac",
+        "City": "Pontiac",
+        "State": "IL"
+    },
+    "PNT": {
+        "Name": "Pontiac",
+        "City": "Pontiac",
+        "State": "MI"
+    },
+    "PBF": {
+        "Name": "Poplar Bluff",
+        "City": "Poplar Bluff",
+        "State": "MO"
+    },
+    "POH": {
+        "Name": "Port Henry",
+        "City": "Port Henry",
+        "State": "NY"
+    },
+    "PTH": {
+        "Name": "Port Huron",
+        "City": "Port Huron",
+        "State": "MI"
+    },
+    "PRK": {
+        "Name": "Port Kent",
+        "City": "Port Kent",
+        "State": "NY"
+    },
+    "POG": {
+        "Name": "Portage",
+        "City": "Portage",
+        "State": "WI"
+    },
+    "POR": {
+        "Name": "Portland",
+        "City": "Portland",
+        "State": "ME"
+    },
+    "PDX": {
+        "Name": "Portland",
+        "City": "Portland",
+        "State": "OR"
+    },
+    "POU": {
+        "Name": "Poughkeepsie",
+        "City": "Poughkeepsie",
+        "State": "NY"
+    },
+    "PRC": {
+        "Name": "Prince",
+        "City": "Prince",
+        "State": "WV"
+    },
+    "PCT": {
+        "Name": "Princeton",
+        "City": "Princeton",
+        "State": "IL"
+    },
+    "PJC": {
+        "Name": "Princeton Junction",
+        "City": "West Windsor",
+        "State": "NJ"
+    },
+    "PVD": {
+        "Name": "Providence",
+        "City": "Providence",
+        "State": "RI"
+    },
+    "PRO": {
+        "Name": "Provo",
+        "City": "Provo",
+        "State": "UT"
+    },
+    "PUR": {
+        "Name": "Purcell",
+        "City": "Purcell",
+        "State": "OK"
+    },
+    "QAN": {
+        "Name": "Quantico",
+        "City": "Quantico",
+        "State": "VA"
+    },
+    "QCY": {
+        "Name": "Quincy",
+        "City": "Quincy",
+        "State": "IL"
+    },
+    "RGH": {
+        "Name": "Raleigh Union",
+        "City": "Raleigh",
+        "State": "NC"
+    },
+    "RPH": {
+        "Name": "Randolph",
+        "City": "Randolph",
+        "State": "VT"
+    },
+    "RTL": {
+        "Name": "Rantoul",
+        "City": "Rantoul",
+        "State": "IL"
+    },
+    "RAT": {
+        "Name": "Raton",
+        "City": "Raton",
+        "State": "NM"
+    },
+    "RDW": {
+        "Name": "Red Wing",
+        "City": "Red Wing",
+        "State": "MN"
+    },
+    "RDD": {
+        "Name": "Redding",
+        "City": "Redding",
+        "State": "CA"
+    },
+    "RNO": {
+        "Name": "Reno",
+        "City": "Reno",
+        "State": "NV"
+    },
+    "REN": {
+        "Name": "Rensselaer",
+        "City": "Rensselaer",
+        "State": "IN"
+    },
+    "RHI": {
+        "Name": "Rhinecliff-Kingston",
+        "City": "Rhinecliff",
+        "State": "NY"
+    },
+    "RIC": {
+        "Name": "Richmond",
+        "City": "Richmond",
+        "State": "CA"
+    },
+    "RVR": {
+        "Name": "Richmond Staples Mill Road",
+        "City": "Dumbarton",
+        "State": "VA"
+    },
+    "RVM": {
+        "Name": "Richmond Main Street",
+        "City": "Richmond",
+        "State": "VA"
+    },
+    "RIV": {
+        "Name": "Riverside",
+        "City": "Riverside",
+        "State": "CA"
+    },
+    "RNK": {
+        "Name": "Roanoke",
+        "City": "Roanoke",
+        "State": "VA"
+    },
+    "ROC": {
+        "Name": "Rochester",
+        "City": "Rochester",
+        "State": "NY"
+    },
+    "RLN": {
+        "Name": "Rocklin",
+        "City": "Rocklin",
+        "State": "CA"
+    },
+    "RMT": {
+        "Name": "Rocky Mount",
+        "City": "Rocky Mount",
+        "State": "NC"
+    },
+    "RKV": {
+        "Name": "Rockville",
+        "City": "Rockville",
+        "State": "MD"
+    },
+    "ROM": {
+        "Name": "Rome",
+        "City": "Rome",
+        "State": "NY"
+    },
+    "RSV": {
+        "Name": "Roseville",
+        "City": "Roseville",
+        "State": "CA"
+    },
+    "RSP": {
+        "Name": "Rouses Point",
+        "City": "Rouses Point",
+        "State": "NY"
+    },
+    "ROY": {
+        "Name": "Royal Oak",
+        "City": "Royal Oak",
+        "State": "MI"
+    },
+    "RUG": {
+        "Name": "Rugby",
+        "City": "Rugby",
+        "State": "ND"
+    },
+    "RUD": {
+        "Name": "Rutland",
+        "City": "Rutland",
+        "State": "VT"
+    },
+    "SAO": {
+        "Name": "Saco-Biddeford",
+        "City": "Saco",
+        "State": "ME"
+    },
+    "SAC": {
+        "Name": "Sacramento",
+        "City": "Sacramento",
+        "State": "CA"
+    },
+    "SLM": {
+        "Name": "Salem",
+        "City": "Salem",
+        "State": "OR"
+    },
+    "SNS": {
+        "Name": "Salinas",
+        "City": "Salinas",
+        "State": "CA"
+    },
+    "SAL": {
+        "Name": "Salisbury",
+        "City": "Salisbury",
+        "State": "NC"
+    },
+    "SLC": {
+        "Name": "Salt Lake City",
+        "City": "Salt Lake City",
+        "State": "UT"
+    },
+    "SAS": {
+        "Name": "San Antonio",
+        "City": "San Antonio",
+        "State": "TX"
+    },
+    "SNB": {
+        "Name": "San Bernardino",
+        "City": "San Bernardino",
+        "State": "CA"
+    },
+    "SNP": {
+        "Name": "San Clemente Pier",
+        "City": "San Clemente",
+        "State": "CA"
+    },
+    "OLT": {
+        "Name": "San Diego Old Town",
+        "City": "San Diego",
+        "State": "CA"
+    },
+    "SAN": {
+        "Name": "San Diego Santa Fe Depot",
+        "City": "San Diego",
+        "State": "CA"
+    },
+    "SJC": {
+        "Name": "San Jose Diridon",
+        "City": "San Jose",
+        "State": "CA"
+    },
+    "SNC": {
+        "Name": "San Juan Capistrano",
+        "City": "San Juan Capistrano",
+        "State": "CA"
+    },
+    "SLO": {
+        "Name": "San Luis Obispo",
+        "City": "San Luis Obispo",
+        "State": "CA"
+    },
+    "SMC": {
+        "Name": "San Marcos",
+        "City": "San Marcos",
+        "State": "TX"
+    },
+    "SND": {
+        "Name": "Sanderson",
+        "City": "Sanderson",
+        "State": "TX"
+    },
+    "SPT": {
+        "Name": "Sandpoint",
+        "City": "Sandpoint",
+        "State": "ID"
+    },
+    "SKY": {
+        "Name": "Sandusky",
+        "City": "Sandusky",
+        "State": "OH"
+    },
+    "SFA": {
+        "Name": "Sanford",
+        "City": "Sanford",
+        "State": "FL"
+    },
+    "SNA": {
+        "Name": "Santa Ana",
+        "City": "Santa Ana",
+        "State": "CA"
+    },
+    "SBA": {
+        "Name": "Santa Barbara",
+        "City": "Santa Barbara",
+        "State": "CA"
+    },
+    "GAC": {
+        "Name": "Santa Clara - Great America",
+        "City": "Santa Clara",
+        "State": "CA"
+    },
+    "SCC": {
+        "Name": "Santa Clara",
+        "City": "Santa Clara",
+        "State": "CA"
+    },
+    "SAR": {
+        "Name": "Saratoga Springs",
+        "City": "Saratoga Springs",
+        "State": "NY"
+    },
+    "SAV": {
+        "Name": "Savannah",
+        "City": "Savannah",
+        "State": "GA"
+    },
+    "SDY": {
+        "Name": "Schenectady",
+        "City": "Schenectady",
+        "State": "NY"
+    },
+    "SCH": {
+        "Name": "Schriever",
+        "City": "Schriever",
+        "State": "LA"
+    },
+    "SEA": {
+        "Name": "Seattle King Street",
+        "City": "Seattle",
+        "State": "WA"
+    },
+    "SBG": {
+        "Name": "Sebring",
+        "City": "Sebring",
+        "State": "FL"
+    },
+    "SED": {
+        "Name": "Sedalia",
+        "City": "Sedalia",
+        "State": "MO"
+    },
+    "SSM": {
+        "Name": "Selma",
+        "City": "Selma",
+        "State": "NC"
+    },
+    "SBY": {
+        "Name": "Shelby",
+        "City": "Shelby",
+        "State": "MT"
+    },
+    "SIM": {
+        "Name": "Simi Valley",
+        "City": "Simi Valley",
+        "State": "CA"
+    },
+    "SDL": {
+        "Name": "Slidell",
+        "City": "Slidell",
+        "State": "LA"
+    },
+    "SOL": {
+        "Name": "Solana Beach",
+        "City": "Solana Beach",
+        "State": "CA"
+    },
+    "SOB": {
+        "Name": "South Bend",
+        "City": "South Bend",
+        "State": "IN"
+    },
+    "SPM": {
+        "Name": "South Portsmouth-South Shore",
+        "City": "South Shore",
+        "State": "KY"
+    },
+    "SOP": {
+        "Name": "Southern Pines",
+        "City": "Southern Pines",
+        "State": "NC"
+    },
+    "SPB": {
+        "Name": "Spartanburg",
+        "City": "Spartanburg",
+        "State": "SC"
+    },
+    "SPK": {
+        "Name": "Spokane",
+        "City": "Spokane",
+        "State": "WA"
+    },
+    "SPI": {
+        "Name": "Springfield",
+        "City": "Springfield",
+        "State": "IL"
+    },
+    "SPG": {
+        "Name": "Springfield",
+        "City": "Springfield",
+        "State": "MA"
+    },
+    "SAB": {
+        "Name": "St. Albans",
+        "City": "St. Albans",
+        "State": "VT"
+    },
+    "SCA": {
+        "Name": "St. Catharines",
+        "City": "St. Catherines",
+        "State": "ON"
+    },
+    "SCD": {
+        "Name": "St. Cloud",
+        "City": "St. Cloud",
+        "State": "MN"
+    },
+    "SJM": {
+        "Name": "St. Joseph-Benton Harbor",
+        "City": "St. Joseph",
+        "State": "MI"
+    },
+    "SLQ": {
+        "Name": "Saint-Lambert",
+        "City": "Saint-Lambert",
+        "State": "QC"
+    },
+    "STL": {
+        "Name": "St. Louis Gateway",
+        "City": "St. Louis",
+        "State": "MO"
+    },
+    "MSP": {
+        "Name": "St. Paul - Minneapolis Union",
+        "City": "St. Paul",
+        "State": "MN"
+    },
+    "STM": {
+        "Name": "Stamford",
+        "City": "Stamford",
+        "State": "CT"
+    },
+    "STN": {
+        "Name": "Stanley",
+        "City": "Stanley",
+        "State": "ND"
+    },
+    "STW": {
+        "Name": "Stanwood",
+        "City": "Stanwood",
+        "State": "WA"
+    },
+    "SPL": {
+        "Name": "Staples",
+        "City": "Staples",
+        "State": "MN"
+    },
+    "STA": {
+        "Name": "Staunton",
+        "City": "Staunton",
+        "State": "VA"
+    },
+    "SKT": {
+        "Name": "Stockton Downtown",
+        "City": "Stockton",
+        "State": "CA"
+    },
+    "SKN": {
+        "Name": "Stockton San Joaquin Street",
+        "City": "Stockton",
+        "State": "CA"
+    },
+    "SVT": {
+        "Name": "Sturtevant",
+        "City": "Sturtevant",
+        "State": "WI"
+    },
+    "SUI": {
+        "Name": "Suisun-Fairfield",
+        "City": "Suisun City",
+        "State": "CA"
+    },
+    "SMT": {
+        "Name": "Summit",
+        "City": "Summit",
+        "State": "IL"
+    },
+    "SYR": {
+        "Name": "Syracuse",
+        "City": "Syracuse",
+        "State": "NY"
+    },
+    "TAC": {
+        "Name": "Tacoma Dome",
+        "City": "Tacoma",
+        "State": "WA"
+    },
+    "TPA": {
+        "Name": "Tampa",
+        "City": "Tampa",
+        "State": "FL"
+    },
+    "TAY": {
+        "Name": "Taylor",
+        "City": "Taylor",
+        "State": "TX"
+    },
+    "TPL": {
+        "Name": "Temple",
+        "City": "Temple",
+        "State": "TX"
+    },
+    "TXA": {
+        "Name": "Texarkana",
+        "City": "Texarkana",
+        "State": "AR"
+    },
+    "THN": {
+        "Name": "Thurmond",
+        "City": "Thurmond",
+        "State": "WV"
+    },
+    "FTC": {
+        "Name": "Ticonderoga",
+        "City": "Ticonderoga",
+        "State": "NY"
+    },
+    "TCA": {
+        "Name": "Toccoa",
+        "City": "Toccoa",
+        "State": "GA"
+    },
+    "TOL": {
+        "Name": "Toledo",
+        "City": "Toledo",
+        "State": "OH"
+    },
+    "TOH": {
+        "Name": "Tomah",
+        "City": "Tomah",
+        "State": "WI"
+    },
+    "TOP": {
+        "Name": "Topeka",
+        "City": "Topeka",
+        "State": "KS"
+    },
+    "TWO": {
+        "Name": "Toronto Union",
+        "City": "Toronto",
+        "State": "ON"
+    },
+    "TRE": {
+        "Name": "Trenton",
+        "City": "Trenton",
+        "State": "NJ"
+    },
+    "TRI": {
+        "Name": "Trinidad",
+        "City": "Trinidad",
+        "State": "CO"
+    },
+    "TRM": {
+        "Name": "Troy",
+        "City": "Troy",
+        "State": "MI"
+    },
+    "TRU": {
+        "Name": "Truckee",
+        "City": "Truckee",
+        "State": "CA"
+    },
+    "TUS": {
+        "Name": "Tucson",
+        "City": "Tucson",
+        "State": "AZ"
+    },
+    "TUK": {
+        "Name": "Tukwila",
+        "City": "Tukwila",
+        "State": "WA"
+    },
+    "TRK": {
+        "Name": "Turlock-Denair",
+        "City": "Denair",
+        "State": "CA"
+    },
+    "TCL": {
+        "Name": "Tuscaloosa",
+        "City": "Tuscaloosa",
+        "State": "AL"
+    },
+    "TYR": {
+        "Name": "Tyrone",
+        "City": "Tyrone",
+        "State": "PA"
+    },
+    "UCA": {
+        "Name": "Utica",
+        "City": "Utica",
+        "State": "NY"
+    },
+    "VNC": {
+        "Name": "Van Nuys",
+        "City": "Van Nuys",
+        "State": "CA"
+    },
+    "VAC": {
+        "Name": "Vancouver Pacific Central",
+        "City": "Vancouver",
+        "State": "BC"
+    },
+    "VAN": {
+        "Name": "Vancouver",
+        "City": "Vancouver",
+        "State": "WA"
+    },
+    "VEC": {
+        "Name": "Ventura",
+        "City": "Ventura",
+        "State": "CA"
+    },
+    "VRV": {
+        "Name": "Victorville",
+        "City": "Victorville",
+        "State": "CA"
+    },
+    "WFD": {
+        "Name": "Wallingford",
+        "City": "Wallingford",
+        "State": "CT"
+    },
+    "WNR": {
+        "Name": "Walnut Ridge",
+        "City": "Walnut Ridge",
+        "State": "AR"
+    },
+    "WAR": {
+        "Name": "Warrensburg",
+        "City": "Warrensburg",
+        "State": "MO"
+    },
+    "WAC": {
+        "Name": "Wasco",
+        "City": "Wasco",
+        "State": "CA"
+    },
+    "WAS": {
+        "Name": "Washington Union",
+        "City": "Washington",
+        "State": "DC"
+    },
+    "WAH": {
+        "Name": "Washington",
+        "City": "Washington",
+        "State": "MO"
+    },
+    "WAB": {
+        "Name": "Waterbury-Stowe",
+        "City": "Waterbury",
+        "State": "VT"
+    },
+    "WTI": {
+        "Name": "Waterloo",
+        "City": "Waterloo",
+        "State": "IN"
+    },
+    "WEM": {
+        "Name": "Wells",
+        "City": "Wells",
+        "State": "ME"
+    },
+    "WEN": {
+        "Name": "Wenatchee",
+        "City": "Wenatchee",
+        "State": "WA"
+    },
+    "WGL": {
+        "Name": "West Glacier",
+        "City": "West Glacier",
+        "State": "MT"
+    },
+    "WPB": {
+        "Name": "West Palm Beach",
+        "City": "West Palm Beach",
+        "State": "FL"
+    },
+    "WLY": {
+        "Name": "Westerly",
+        "City": "Westerly",
+        "State": "RI"
+    },
+    "WSP": {
+        "Name": "Westport",
+        "City": "Westport",
+        "State": "NY"
+    },
+    "RTE": {
+        "Name": "Westwood-Route 128",
+        "City": "Westwood",
+        "State": "MA"
+    },
+    "WRJ": {
+        "Name": "White River Junction",
+        "City": "White River Junction",
+        "State": "VT"
+    },
+    "WSS": {
+        "Name": "White Sulphur Springs",
+        "City": "White Sulfur Springs",
+        "State": "WV"
+    },
+    "WFH": {
+        "Name": "Whitefish",
+        "City": "Whitefish",
+        "State": "MT"
+    },
+    "WHL": {
+        "Name": "Whitehall",
+        "City": "Whitehall",
+        "State": "NY"
+    },
+    "WBG": {
+        "Name": "Williamsburg",
+        "City": "Williamsburg",
+        "State": "VA"
+    },
+    "WTN": {
+        "Name": "Williston",
+        "City": "Williston",
+        "State": "ND"
+    },
+    "WIL": {
+        "Name": "Wilmington",
+        "City": "Wilmington",
+        "State": "DE"
+    },
+    "WLN": {
+        "Name": "Wilson",
+        "City": "Wilson",
+        "State": "NC"
+    },
+    "WND": {
+        "Name": "Windsor",
+        "City": "Windsor",
+        "State": "CT"
+    },
+    "WNM": {
+        "Name": "Windsor-Mt. Ascutney",
+        "City": "Windsor",
+        "State": "VT"
+    },
+    "WNL": {
+        "Name": "Windsor Locks",
+        "City": "Windsor Locks",
+        "State": "CT"
+    },
+    "WNN": {
+        "Name": "Winnemucca",
+        "City": "Winnemucca",
+        "State": "NV"
+    },
+    "WIN": {
+        "Name": "Winona",
+        "City": "Winona",
+        "State": "MN"
+    },
+    "WLO": {
+        "Name": "Winslow",
+        "City": "Winslow",
+        "State": "AZ"
+    },
+    "WTH": {
+        "Name": "Winter Haven",
+        "City": "Winter Haven",
+        "State": "FL"
+    },
+    "WPR": {
+        "Name": "Winter Park Resort",
+        "City": "Winter Park",
+        "State": "CO"
+    },
+    "WPK": {
+        "Name": "Winter Park",
+        "City": "Winter Park",
+        "State": "FL"
+    },
+    "WDL": {
+        "Name": "Wisconsin Dells",
+        "City": "Wisconsin Dells",
+        "State": "WI"
+    },
+    "WIH": {
+        "Name": "Wishram",
+        "City": "Wishram",
+        "State": "WA"
+    },
+    "WOB": {
+        "Name": "Woburn-Anderson",
+        "City": "Woburn",
+        "State": "MA"
+    },
+    "WPT": {
+        "Name": "Wolf Point",
+        "City": "Wolf Point",
+        "State": "MT"
+    },
+    "WDB": {
+        "Name": "Woodbridge",
+        "City": "Woodbridge",
+        "State": "VA"
+    },
+    "WOR": {
+        "Name": "Worcester",
+        "City": "Worcester",
+        "State": "MA"
+    },
+    "YAZ": {
+        "Name": "Yazoo City",
+        "City": "Yazoo City",
+        "State": "MS"
+    },
+    "YEM": {
+        "Name": "Yemassee",
+        "City": "Yemassee",
+        "State": "SC"
+    },
+    "YNY": {
+        "Name": "Yonkers",
+        "City": "Yonkers",
+        "State": "NY"
+    },
+    "YUM": {
+        "Name": "Yuma",
+        "City": "Yuma",
+        "State": "AZ"
+    }
+}
