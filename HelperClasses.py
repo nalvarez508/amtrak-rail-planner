@@ -53,7 +53,7 @@ class Train:
     }
   
   def __str__(self):
-    return self.organizationalUnit
+    return f"{self.organizationalUnit}"
   
   def makePrettyDate(self, dt, compare=False):
     def doDayStringPrettification(doDate=""):
@@ -70,11 +70,12 @@ class Train:
       if self.departure.day == self.arrival.day:
         return doDayStringPrettification()
       elif self.departure.day < self.arrival.day:
-        return doDayStringPrettification("%a. %d")
+        return doDayStringPrettification("%a. %-d")
     elif compare == False:
       return doDayStringPrettification()
   
   def makePrettyDates(self):
+    print(self.arrival, self.departure)
     def doDayStringPrettification(dt, doDate=""):
       suffix = ""
       if doDate:
@@ -87,7 +88,7 @@ class Train:
 
     if self.departure.day == self.arrival.day:
       return [doDayStringPrettification(self.departure), doDayStringPrettification(self.arrival)]
-    elif self.departure.day < self.arrival.day:
+    elif self.departure < self.arrival:
       return [doDayStringPrettification(self.departure, "%a. %d"), doDayStringPrettification(self.arrival, "%a. %d")]
 
   def returnSelectedElements(self, cols):
@@ -113,13 +114,27 @@ class Train:
   def convertToDatetime(self, d, t):
     t = t.replace("p", "PM")
     t = t.replace("a", "AM")
-    return datetime.datetime.strptime(f"{d} {t}", "%m/%d/%Y %I:%M%p")
+    try:
+      return datetime.datetime.strptime(f"{d} {t}", "%m/%d/%Y %I:%M%p")
+    except:
+      newObject = datetime.datetime.strptime(f"{d} {t}", "%a, %b %d %I:%M%p")
+      if newObject.year == 1900:
+        try:
+          newObject = newObject.replace(year=self.departure.year)
+        except:
+          newObject = newObject.replace(year=datetime.datetime.now().year)
+      return newObject
 
 # RailPass class objects hold Train objects and will assist with data display
+
 class RailPass:
   def __init__(self):
     self.segments = dict()
+    self.segmentResults = dict()
   
+  def getSegmentResult(self, index):
+    return self.segmentResults[index]
+
   def createCsv(self):
     output = dict()
     for segment, train in enumerate(self.segments):
@@ -205,3 +220,7 @@ class UserSelections:
   
   def addSegment(self, t):
     self.userSelections.createSegment(t)
+
+if __name__ == "__main__":
+  testDict = {'Number': 0, 'Name': 'Multiple Trains', 'Origin': 'NOL', 'Departure Time': '9:15a', 'Departure Date': '03/28/2022', 'Travel Time': '126h 46m', 'Destination': 'SLM', 'Arrival Time': '2:01p', 'Arrival Date': 'Sat, Apr 2', 'Coach Price': '$502', 'Business Price': '$467', 'Sleeper Price': '$2856'}
+  t = Train(testDict)
