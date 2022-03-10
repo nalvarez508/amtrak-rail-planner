@@ -30,10 +30,76 @@ class Train:
     self.arrivalTime = key["Arrival Time"]
     self.arrivalDate = key["Arrival Date"]
     self.arrival = self.convertToDatetime(self.arrivalDate, self.arrivalTime)
+    self.prettyDeparture, self.prettyArrival = self.makePrettyDates()
     self.coachPrice = key["Coach Price"]
     self.businessPrice = key["Business Price"]
     self.sleeperPrice = key["Sleeper Price"]
+
+    self.organizationalUnit = {
+      "Origin":self.origin,
+      "Destination":self.destination,
+      "Number":self.number,
+      "Name":self.name,
+      "Departure Time":self.departureTime,
+      "Departure Date":self.departureDate,
+      "Departs":self.prettyDeparture,
+      "Duration":self.travelTime,
+      "Arrival Time":self.arrivalTime,
+      "Arrival Date":self.arrivalDate,
+      "Arrives":self.prettyArrival,
+      "Coach Price":self.coachPrice,
+      "Business Price":self.businessPrice,
+      "Sleeper Price":self.sleeperPrice
+    }
   
+  def __str__(self):
+    return self.organizationalUnit
+  
+  def makePrettyDate(self, dt, compare=False):
+    def doDayStringPrettification(doDate=""):
+      suffix = ""
+      if doDate:
+        day = dt.day % 10
+        if day == 1: suffix = "st"
+        elif day == 2: suffix = "nd"
+        elif day == 3: suffix = "rd"
+        else: suffix = "th"
+      return datetime.datetime.strftime(dt, f"{doDate}{suffix} %I:%M%p").strip()
+    
+    if compare == True:
+      if self.departure.day == self.arrival.day:
+        return doDayStringPrettification()
+      elif self.departure.day < self.arrival.day:
+        return doDayStringPrettification("%a. %d")
+    elif compare == False:
+      return doDayStringPrettification()
+  
+  def makePrettyDates(self):
+    def doDayStringPrettification(dt, doDate=""):
+      suffix = ""
+      if doDate:
+        day = dt.day % 10
+        if day == 1: suffix = "st"
+        elif day == 2: suffix = "nd"
+        elif day == 3: suffix = "rd"
+        else: suffix = "th"
+      return datetime.datetime.strftime(dt, f"{doDate}{suffix} %I:%M%p").strip()
+
+    if self.departure.day == self.arrival.day:
+      return [doDayStringPrettification(self.departure), doDayStringPrettification(self.arrival)]
+    elif self.departure.day < self.arrival.day:
+      return [doDayStringPrettification(self.departure, "%a. %d"), doDayStringPrettification(self.arrival, "%a. %d")]
+
+  def returnSelectedElements(self, cols):
+    temp = list()
+    for col in cols:
+      try:
+        temp.append(self.organizationalUnit[col])
+      except KeyError:
+        temp.append('')
+        print(f"Attribute {col} is not recognized.")
+    return temp
+
   def convertToCsvRow(self):
     tempDict = dict()
     tempDict["Origin"] = self.origin
@@ -103,6 +169,9 @@ class Stations:
   def returnCityState(self, key):
     return f"{self.stations[key]['City']}, {self.stations[key]['State']}"
   
+  def returnStationNameAndState(self, key):
+    return f"{self.stations[key]['Name']}, {self.stations[key]['State']}"
+  
   def getStationCode(self, key):
     return self.stations[key]["Code"]
 
@@ -131,7 +200,7 @@ class UserSelections:
   
   def setDestination(self, d):
     self.destination = d
-  def getDestination(self, type):
+  def getDestination(self):
     return self.destination
   
   def addSegment(self, t):
