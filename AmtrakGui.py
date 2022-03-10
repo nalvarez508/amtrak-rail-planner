@@ -1,6 +1,6 @@
 import tkinter as tk
-from tkinter import ttk, font, messagebox
-from tkcalendar import Calendar
+from tkinter import StringVar, ttk, font, messagebox
+from tkcalendar import Calendar as Cal
 
 import os
 import random
@@ -8,6 +8,7 @@ import sys
 import time
 import traceback
 from threading import Thread, Event, Lock
+import datetime
 
 from HelperClasses import Train, RailPass, Driver, UserSelections, Stations
 from DriverHelper import ImageSearch
@@ -66,13 +67,19 @@ class StationsArea(tk.Frame):
     self.lengthOfList = len(self.stations.returnStationKeys())
     self.boxWidth = 30
 
+    #self.originVar = tk.StringVar(self)
+    #self.destinationVar = tk.StringVar(self)
+
+    tk.Label(self, text="Origin").grid(row=0, column=0, pady=2)
+    tk.Label(self, text="Destination").grid(row=0, column=2, pady=2)
+
     self.origin = self.createCombobox(1)
-    self.origin.grid(row=0, column=0, padx=4)
+    self.origin.grid(row=1, column=0, padx=4)
     self.destination = self.createCombobox(2)
-    self.destination.grid(row=0, column=2, padx=4)
+    self.destination.grid(row=1, column=2, padx=4)
 
     self.swapButton = ttk.Button(self, text="<- Swap ->", command=self.swapStations)
-    self.swapButton.grid(row=0, column=1, padx=12)
+    self.swapButton.grid(row=1, column=1, padx=12)
 
     self.parent.doRefresh(self.stations.returnCityState(self.origin.get()), 1)
     #self.parent.doRefresh(self.stations.returnCityState(self.destination.get()), 2)
@@ -105,7 +112,70 @@ class StationsArea(tk.Frame):
     city = self.stations.returnCityState(widget.get())
     self.parent.startThread(self.parent.doRefresh, [city, side, isSwap, lock])
 
-#class DateSelectionArea(tk.Frame):
+class DateSelectionArea(tk.Frame):
+  def __init__(self, parent, *args, **kwargs):
+    tk.Frame.__init__(self, parent, *args, **kwargs)
+    self.parent = parent
+    self.isCalendarShown = False
+    self.dateDisplay = tk.StringVar(self, self.parent.us.getPrettyDate())
+    self.incrementButton = ttk.Style()
+    self.incrementButton.configure('inc.TButton', font=(SYSTEM_FONT, 10))
+
+    ttk.Button(self, text="Select Departure Date", command=self.showCalendar).grid(row=0, column=0, padx=4)
+    self.currentDate = tk.Label(self, textvariable=self.dateDisplay, width=25, relief=tk.SUNKEN, cursor="hand2")
+    self.currentDate.grid(row=0, column=1, padx=4)
+    ttk.Button(self, text="-", command=lambda d=-1:self.changeDate(d), width=3, style="inc.TButton").grid(row=0, column=2)
+    ttk.Button(self, text="+", command=lambda d=1:self.changeDate(d), width=3, style="inc.TButton").grid(row=0, column=3)
+    self.calendar = self.createCalendarArea()
+
+    self.currentDate.bind("<Button-1>", lambda e: self.showCalendar())
+
+  def changeDate(self, d):
+    if type(d) == int:
+      self.parent.us.incrementDate(d)
+    elif type(d) == datetime.date:
+      self.parent.us.setDate(d)
+    self.dateDisplay.set(self.parent.us.getPrettyDate())
+    self.update_idletasks()
+  
+  def callbackCalendar(self, e=None):
+    self.changeDate(self.calendar.selection_get())
+    self.removeCal()
+  
+  def removeCal(self):
+    time.sleep(0.15)
+    self.calendar.grid_remove()
+    self.isCalendarShown = False
+    self.update_idletasks()
+
+  def showCalendar(self):
+    if self.isCalendarShown == False:
+      self.calendar.grid(row=1, column=0, columnspan=4, pady=8)
+      self.isCalendarShown = True
+    else:
+      self.removeCal()
+    self.update_idletasks()
+
+  def createCalendarArea(self):
+    rightNow = self.parent.us.getDate()
+    cal = Cal(self, selectmode='day', year=rightNow.year, month=rightNow.month, day=rightNow.day, firstweekday="sunday", mindate=rightNow, date_pattern="m/d/y")
+    cal.bind("<<CalendarSelected>>", self.callbackCalendar)
+    return cal
+
+  def createCalendarPopupWindow(self):
+    def getCalDate():
+      date = cal.selection_get()
+      #date = datetime.datetime.strptime(date, "%m/%d/%Y")
+      #date = datetime.date(year=date.year, month=date.month, day=date.day)
+      self.changeDate(cal.selection_get())
+    calWindow = tk.Toplevel(self.parent)
+    rightNow = self.parent.us.getDate()
+    cal = Cal(calWindow, selectmode='day', year=rightNow.year, month=rightNow.month, day=rightNow.day)
+    cal.pack()
+    tk.Button(cal, text="Select", command=getCalDate).pack()
+    calWindow.wm_protocol("WM_DELETE_WINDOW", calWindow.destroy)
+    calWindow.mainloop()
+
 
 class ResultsHeadingArea(tk.Frame):
   def __init__(self, parent, *args, **kwargs):
@@ -113,13 +183,16 @@ class ResultsHeadingArea(tk.Frame):
     self.parent = parent
 
     self.titleToAndFrom = tk.StringVar(self)
+    self.searchDate = tk.StringVar(self)
     self.background = self.parent.resultsBackground
     self.config(background=self.background)
     self.boldItalic = font.Font(family=SYSTEM_FONT, size=14, weight=font.BOLD, slant=font.ITALIC)
-    self.numberOfTrains = tk.StringVar(self, value="0 trains found")
+    self.numberOfTrains = tk.StringVar(self)
 
     self.titleLabel = tk.Label(self, textvariable=self.titleToAndFrom, font=self.boldItalic, background=self.background)
     self.titleLabel.pack(pady=1)#grid(row=0, column=0, pady=4)
+    self.dateLabel = tk.Label(self, textvariable=self.searchDate, font=(SYSTEM_FONT, 11, font.BOLD), background=self.background)
+    self.dateLabel.pack(pady=1)
     self.numberLabel = tk.Label(self, textvariable=self.numberOfTrains, background=self.background)
     self.numberLabel.pack()#grid(row=1, column=0)
 
@@ -132,16 +205,17 @@ class TrainResultsArea(tk.Frame):
 
     self.inViewSegmentResults = dict()#self.parent.searcher._test_returnSearchData() # AmtrakSearch thisSearchResultsAsTrain
 
-    self.columns = ["Number", "Name", "Departs", "Arrives", "Duration"]
-    self.headerCols = {"#":30, "Train":175, "Departs":120, "Arrives":120, "Duration":65}
+    self.columns = ["Number", "Name", "Departs", "Arrives", "Duration", "Number of Segments"]
+    self.headerCols = {"#":30, "Train":175, "Departs":100, "Arrives":100, "Duration":65, "Segments":65}
     #self.numberOfTrains = tk.StringVar(self, value="0 trains found") # Pass this in to searcher?
-    self.results = ttk.Treeview(self, columns=self.columns, show='headings', cursor="hand1", selectmode='browse')
+    self.results = ttk.Treeview(self, columns=self.columns, show='headings', cursor="hand2", selectmode='browse')
     self.makeHeadings()
 
     self.findTrainsBtn = ttk.Button(self, text="Find Trains", command=self.startSearch)
     self.findTrainsBtn.pack()
+    self.progressBar = ttk.Progressbar(self, orient='horizontal', length=200, maximum=100, mode='determinate')
     self.results.pack(fill=tk.BOTH, expand=True, padx=8, pady=8)
-  
+
   def getSelection(self):
     #self.results.selection()
     item = self.results.focus()
@@ -154,6 +228,12 @@ class TrainResultsArea(tk.Frame):
   def _test_getColInfo(self):
     for col in self.columns:
       print(self.results.column(col))
+
+  def resetWidgets(self):
+    self.progressBar.pack_forget()
+    self.findTrainsBtn.config(state='normal')
+    self.parent.statusMessage.set("Ready")
+    self.parent.update_idletasks()
 
   def clearTree(self):
     for item in self.results.get_children():
@@ -170,17 +250,23 @@ class TrainResultsArea(tk.Frame):
   def startSearch(self):
     self.findTrainsBtn.config(state='disabled')
     self.parent.statusMessage.set("Searching")
+    self.results.pack_forget()
+    self.progressBar.pack()
+    self.progressBar['value'] = 0
+    self.results.pack(fill=tk.BOTH, expand=True, padx=8, pady=8)
     self.clearTree()
     self.parent.resultsHeadingArea.numberOfTrains.set("0 trains found")
 
     origin = self.parent.us.getOrigin()
     dest = self.parent.us.getDestination()
-    date = "03/28/2022"
+    date = self.parent.us.getSearchDate()
+    prettyDate = self.parent.us.getPrettyDate()
 
     self.parent.resultsHeadingArea.titleToAndFrom.set(f"{self.parent.stationsArea.stations.returnStationNameAndState(origin)} to {self.parent.stationsArea.stations.returnStationNameAndState(dest)}")
+    self.parent.resultsHeadingArea.searchDate.set(prettyDate)
     self.update_idletasks()
     try:
-      self.parent.searcher.preSearchSetup(self.parent.stationsArea.stations.getStationCode(origin), self.parent.stationsArea.stations.getStationCode(dest), date)
+      self.parent.searcher.preSearchSetup(self.parent.stationsArea.stations.getStationCode(origin), self.parent.stationsArea.stations.getStationCode(dest), date, self.progressBar)
     
     #fakeResults = self.parent.searcher._test_returnSearchData()
     #time.sleep(1)
@@ -189,20 +275,16 @@ class TrainResultsArea(tk.Frame):
       print(traceback.format_exc())
       print(e)
       tk.messagebox.showerror(APP_NAME, message="Unable to search right now. Try again in just a few seconds.")
-      self.findTrainsBtn.config(state='normal')
-      self.parent.statusMessage.set("Ready")
-    # self.parent.update_idletasks()
+      self.resetWidgets()
 
   def doSearchCall(self):
     response = self.parent.searcher.oneWaySearch()
     if type(response) == dict:
       self.inViewSegmentResults = response
       self.populateTreeview(response)
-    else:
+    elif response != None:
       tk.messagebox.showerror(APP_NAME, message=response)
-    self.findTrainsBtn.config(state='normal')
-    self.parent.statusMessage.set("Ready")
-    self.parent.update_idletasks()
+    self.resetWidgets()
 
   def populateTreeview(self, trains):
     for train in trains:
@@ -214,9 +296,9 @@ class TrainResultsArea(tk.Frame):
         self.parent.resultsHeadingArea.numberOfTrains.set(f"{num} train found")
       else:
         self.parent.resultsHeadingArea.numberOfTrains.set(f"{num} trains found")
-    self.findTrainsBtn.config(state='normal')
-    self.parent.statusMessage.set("Ready")
-    self.parent.update_idletasks()
+    self.resetWidgets()
+
+#class ProgressArea
 
 class DevTools(tk.Toplevel):
   def __init__(self, parent, *args, **kwargs):
@@ -231,7 +313,7 @@ class DevTools(tk.Toplevel):
 class MainWindow(tk.Tk):
   def __init__(self):
     super().__init__()
-    self.geometry("580x700")
+    self.geometry("620x825+50+50")
     self.minsize(580,700)
     
     self.title("Rail Pass Planner")
@@ -246,17 +328,21 @@ class MainWindow(tk.Tk):
     self.titleArea = TitleArea(self)
     self.imageArea = ImageArea(self)
     self.stationsArea = StationsArea(self)
-    self.resultsHeadingArea = ResultsHeadingArea(self)
+    self.dateSelectionArea = DateSelectionArea(self)
+    self.resultsHeadingArea = ResultsHeadingArea(self, pady=8)
     self.trainResultsArea = TrainResultsArea(self)
     self.devTools = DevTools(self)
 
     self.titleArea.pack()
     self.imageArea.pack()
-    self.stationsArea.pack(pady=16)
+    self.stationsArea.pack(pady=4)
+    self.dateSelectionArea.pack(pady=4)
     self.resultsHeadingArea.pack(fill=tk.X)
     self.trainResultsArea.pack(fill=tk.BOTH, expand=True)
 
-    tk.Label(self, textvariable=self.statusMessage, bd=1, relief=tk.SUNKEN, anchor=tk.W).pack(side=tk.BOTTOM, fill=tk.BOTH)
+    self.statusBar = tk.Label(self, textvariable=self.statusMessage, bd=1, relief=tk.SUNKEN, anchor=tk.W)
+    self.statusBar.pack(side=tk.BOTTOM, fill=tk.BOTH)
+    self.statusBar.lift
 
     self.update()
 
