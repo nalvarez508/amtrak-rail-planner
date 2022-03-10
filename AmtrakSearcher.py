@@ -92,8 +92,11 @@ class AmtrakSearch:
             travelTime = tripType.find_element(By.XPATH, ".//span[@class='text-center']").text
             segmentType = tripType.find_element(By.XPATH, ".//span[@class='segment-display text-center font-semi mt-2 d-block ng-star-inserted']").text
           except:
-            travelTime = tripType.text.split("\n")[1]
-            segmentType = 1
+            try:
+              travelTime = tripType.text.split("\n")[1]
+            except IndexError:
+              travelTime = tripType.text.split("\n")[0]
+            segmentType = "1"
           arrive = data.find_element(By.XPATH, ".//div[@class='arrival-inner']")
           arrivalTime = arrive.find_element(By.XPATH, ".//div[@class='time mt-2 pt-1 d-flex align-items-baseline']").text.replace("\n", "")
           arrivalDate = None
@@ -195,7 +198,7 @@ class AmtrakSearch:
             # Search has been completed, but there is no service
             try:
               self.updateStatusMessage("Searching - loading results", 2)
-              time.sleep(1)
+              time.sleep(2)
               self.updateStatusMessage("Searching - checking results", 10)
               potentialError = self.driver.find_element(By.XPATH, "//div[@class='alert-yellow-text']").text
               print(potentialError)
