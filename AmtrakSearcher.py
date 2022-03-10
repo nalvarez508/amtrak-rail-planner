@@ -66,9 +66,8 @@ class AmtrakSearch:
     for page in range(1,pages+1):
       self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
       area.find_element(By.XPATH, f".//*[text()='{page}']").click()
-      if page > 1:
-        WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, f".//a[text()='{page}']//ancestor::li[@class='pagination-page page-item active ng-star-inserted']")))
-        time.sleep(0.5)
+      WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, f".//a[text()='{page}']//ancestor::li[@class='pagination-page page-item active ng-star-inserted']")))
+      time.sleep(1)
       searchResultsTable = self.driver.find_element(By.XPATH, "//div[@class='row ng-tns-c6-1 ng-trigger ng-trigger-searchList ng-star-inserted']")
       trainList = searchResultsTable.find_elements(By.XPATH, ".//div[@class='col-sm-6 col-lg-12 ng-tns-c6-1 ng-trigger ng-trigger-searchItems ng-star-inserted']")
       self.findTrainInfo(trainList)
