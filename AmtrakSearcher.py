@@ -1,7 +1,7 @@
 import time
 import json
 
-from HelperClasses import Driver
+from HelperClasses import Driver, Train
 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
@@ -9,6 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 
 SEARCH_URL = "https://www.amtrak.com/tickets/departure.html"
+USE_TRAIN_CLASSES = True
 
 class AmtrakSearch:
   def __init__(self, driver, origin="WAS", destination="NYP", departDate="03/29/2022"):
@@ -18,8 +19,17 @@ class AmtrakSearch:
 
     self.hasAlreadySearched = False
     self.driver = driver
-    self.thisSearchResults = dict()
+    self.thisSearchResultsAsDict = dict()
+    self.thisSearchResultsAsTrain = list()
     self.numberTrainsFound = 0
+
+  def _test_returnSearchData(self):
+    with open("TestTrainSearch.json", "r") as f:
+      self.thisSearchResultsAsDict = json.loads(f.read())
+    self.thisSearchResultsAsTrain.clear()
+    for item in self.thisSearchResultsAsDict:
+      self.thisSearchResultsAsTrain.append(Train(self.thisSearchResultsAsDict[item]))
+    return self.thisSearchResultsAsTrain
 
   # Retrives price information from search page
   def findPrice(self, searcher, xpath):
@@ -36,6 +46,8 @@ class AmtrakSearch:
         data = train.find_element(By.XPATH, ".//div[@class='search-results-leg d-flex']")
         try:
           number, name = data.find_element(By.XPATH, ".//div[@amt-auto-test-id='search-result-train-name']").text.split("\n")
+          if name == "NA":
+            name = "Train"
         except:
           name = 0
           number = data.find_element(By.XPATH, ".//div[@amt-auto-test-id='search-result-train-name']").text.split("\n")[0]
@@ -57,8 +69,14 @@ class AmtrakSearch:
           coachPrice = self.findPrice(prices, 'jl-0-op-0-coach')
           businessPrice = self.findPrice(prices, 'jl-0-op-0-business')
           sleeperPrice = self.findPrice(prices, 'jl-0-op-0-sleeper')
-          self.thisSearchResults[self.numberTrainsFound] = {"Number":number, "Name":name, "Origin":self.origin, "Departure Time":departTime, "Departure Date":self.departDate, "Travel Time":travelTime, "Destination":self.destination, "Arrival Time":arrivalTime, "Arrival Date":arrivalDate, "Coach Price":coachPrice, "Business Price":businessPrice, "Sleeper Price":sleeperPrice}
+
+          outputDict = {"Number":number, "Name":name, "Origin":self.origin, "Departure Time":departTime, "Departure Date":self.departDate, "Travel Time":travelTime, "Destination":self.destination, "Arrival Time":arrivalTime, "Arrival Date":arrivalDate, "Coach Price":coachPrice, "Business Price":businessPrice, "Sleeper Price":sleeperPrice}
+          if USE_TRAIN_CLASSES:
+            self.thisSearchResultsAsTrain.append(Train(outputDict))
+          else:
+            self.thisSearchResultsAsDict[self.numberTrainsFound] = outputDict
           self.numberTrainsFound += 1
+          #self.numberTrainsStringVar.set(self.numberTrainsFound)
       except:
         pass #Reached end of list but there is a second page
 
@@ -92,7 +110,8 @@ class AmtrakSearch:
     #searchArea.find_element(by=By.XPATH, value="//input[@id='mat-input-4']").send_keys("03/27/2022") #Return Date
 
   def oneWaySearch(self):
-
+    self.numberTrainsFound = 0
+    #self.numberTrainsStringVar.set(self.numberTrainsFound)
     try: # Loading the page
       if self.driver.current_url != SEARCH_URL:
         self.driver.get(SEARCH_URL)
