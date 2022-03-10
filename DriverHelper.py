@@ -90,8 +90,16 @@ class ImageSearch:
       self.setCityPhoto(no, render)
       self.setCityName(no, c)
       print(img.size)
-    except TclError:
-      pass
+    except TclError as e:
+      print(e)
+
+  def doCitySwap(self):
+    tempCity2 = self.getCityName(2)
+    self.setCityName(2, self.getCityName(1))
+    self.setCityName(1, tempCity2)
+    tempPhoto2 = self.getCityPhoto(2)
+    self.setCityPhoto(2, self.getCityPhoto(1))
+    self.setCityPhoto(1, tempPhoto2)
 
   def setCityName(self, cityNo, data):
     if cityNo == 1:
@@ -118,4 +126,9 @@ class ImageSearch:
       return self.photo_city2
     
 if __name__ == "__main__":
-  ImageSearch()
+  img = ImageSearch()
+  img.setCityName(1, "Sus1")
+  img.setCityName(2, "Sus2")
+  print(img.name_city1, img.name_city2)
+  img.doCitySwap()
+  print(img.name_city1, img.name_city2)
