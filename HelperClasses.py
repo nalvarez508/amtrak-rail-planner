@@ -2,6 +2,8 @@ import json
 import datetime
 import os
 import logging
+import requests
+from bs4 import BeautifulSoup
 
 from selenium.webdriver.remote.remote_connection import LOGGER as seleniumLogger
 seleniumLogger.setLevel(logging.WARNING)
@@ -116,6 +118,12 @@ class UserSelections:
 
     self.userSelections = RailPass()
   
+  def set(self, city, side):
+    if side == 1:
+      self.setOrigin(city)
+    elif side == 2:
+      self.setDestination(city)
+
   def setOrigin(self, o):
     self.origin = o
   def getOrigin(self):
