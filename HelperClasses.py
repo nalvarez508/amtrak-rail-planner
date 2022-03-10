@@ -3,11 +3,13 @@ import datetime
 import os
 import logging
 import requests
+import sys
 from bs4 import BeautifulSoup
 
 from selenium.webdriver.remote.remote_connection import LOGGER as seleniumLogger
 seleniumLogger.setLevel(logging.WARNING)
 from selenium import webdriver
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
@@ -21,7 +23,10 @@ class Train:
   def __init__(self, key):
     self.origin = key["Origin"]
     self.destination = key["Destination"]
-    self.number = int(key["Number"])
+    try:
+      self.number = int(key["Number"])
+    except ValueError:
+      self.number = key["Number"]
     self.name = key["Name"]
     self.departureTime = key["Departure Time"]
     self.departureDate = key["Departure Date"]
@@ -34,6 +39,8 @@ class Train:
     self.coachPrice = key["Coach Price"]
     self.businessPrice = key["Business Price"]
     self.sleeperPrice = key["Sleeper Price"]
+    self.segmentType = key["Segment Type"]
+    self.numberOfSegments = self.findSegments()
 
     self.organizationalUnit = {
       "Origin":self.origin,
@@ -49,12 +56,21 @@ class Train:
       "Arrives":self.prettyArrival,
       "Coach Price":self.coachPrice,
       "Business Price":self.businessPrice,
-      "Sleeper Price":self.sleeperPrice
+      "Sleeper Price":self.sleeperPrice,
+      "Segment Type":self.segmentType,
+      "Number of Segments":self.numberOfSegments
     }
-  
+
   def __str__(self):
     return f"{self.organizationalUnit}"
   
+  def findSegments(self):
+    try:
+      val = int(self.segmentType.split()[0])
+      return val
+    except ValueError:
+      return 1
+
   def makePrettyDate(self, dt, compare=False):
     def doDayStringPrettification(doDate=""):
       suffix = ""
@@ -75,15 +91,17 @@ class Train:
       return doDayStringPrettification()
   
   def makePrettyDates(self):
-    print(self.arrival, self.departure)
     def doDayStringPrettification(dt, doDate=""):
       suffix = ""
       if doDate:
-        day = dt.day % 10
-        if day == 1: suffix = "st"
-        elif day == 2: suffix = "nd"
-        elif day == 3: suffix = "rd"
-        else: suffix = "th"
+        if (dt.day <= 3) or (dt.day > 20):
+          day = dt.day % 10
+          if day == 1: suffix = "st"
+          elif day == 2: suffix = "nd"
+          elif day == 3: suffix = "rd"
+          else: suffix = "th"
+        else:
+          suffix = "th"
       return datetime.datetime.strftime(dt, f"{doDate}{suffix} %I:%M%p").strip()
 
     if self.departure.day == self.arrival.day:
@@ -153,9 +171,12 @@ class Driver:
     chrome_options = Options()
     #chrome_options.add_argument("--headless")
     chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
-    self.driver = webdriver.Chrome(ChromeDriverManager().install(),service_log_path=LOG_PATH, options=chrome_options)
-    self.driver.maximize_window()
-    self.driver.get(url)
+    try:
+      self.driver = webdriver.Chrome(ChromeDriverManager().install(),service_log_path=LOG_PATH, options=chrome_options)
+      self.driver.maximize_window()
+      self.driver.get(url)
+    except WebDriverException:
+      sys.exit(1)
 
 class Stations:
   def __init__(self):
@@ -198,10 +219,35 @@ class UserSelections:
   def __init__(self):
     self.origin = None
     self.destination = None
-    self.departDate = None
+    self.departDate = datetime.date.today()
 
     self.userSelections = RailPass()
   
+  def getPrettyDate(self):
+    def getSuffix():
+      if (self.departDate.day <= 3) or (self.departDate.day > 20):
+        day = self.departDate.day % 10
+        if day == 1: suffix = "st"
+        elif day == 2: suffix = "nd"
+        elif day == 3: suffix = "rd"
+        else: suffix = "th"
+      else:
+        suffix = "th"
+      return suffix
+    return datetime.datetime.strftime(self.departDate, f"%A, %b. %d{getSuffix()}, %Y")
+
+  def getDate(self):
+    return self.departDate
+  
+  def getSearchDate(self):
+    return datetime.datetime.strftime(self.departDate, "%m/%d/%Y")
+  
+  def setDate(self, d):
+    self.departDate = d
+  
+  def incrementDate(self, i):
+    self.departDate += datetime.timedelta(days=i)
+
   def set(self, city, side):
     if side == 1:
       self.setOrigin(city)
@@ -223,4 +269,6 @@ class UserSelections:
 
 if __name__ == "__main__":
   testDict = {'Number': 0, 'Name': 'Multiple Trains', 'Origin': 'NOL', 'Departure Time': '9:15a', 'Departure Date': '03/28/2022', 'Travel Time': '126h 46m', 'Destination': 'SLM', 'Arrival Time': '2:01p', 'Arrival Date': 'Sat, Apr 2', 'Coach Price': '$502', 'Business Price': '$467', 'Sleeper Price': '$2856'}
-  t = Train(testDict)
+  #t = Train(testDict)
+  u = UserSelections()
+  print(u.getPrettyDate())
