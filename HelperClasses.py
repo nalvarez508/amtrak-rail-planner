@@ -80,6 +80,7 @@ class Train:
         elif day == 2: suffix = "nd"
         elif day == 3: suffix = "rd"
         else: suffix = "th"
+        if dt.day < 10: doDate = f"%a. {dt.day}"
       return datetime.datetime.strftime(dt, f"{doDate}{suffix} %I:%M%p").strip()
     
     if compare == True:
@@ -102,6 +103,7 @@ class Train:
           else: suffix = "th"
         else:
           suffix = "th"
+        if dt.day < 10: doDate = f"%a. {dt.day}"
       return datetime.datetime.strftime(dt, f"{doDate}{suffix} %I:%M%p").strip()
 
     if self.departure.day == self.arrival.day:
@@ -234,7 +236,10 @@ class UserSelections:
       else:
         suffix = "th"
       return suffix
-    return datetime.datetime.strftime(self.departDate, f"%A, %b. %d{getSuffix()}, %Y")
+    def dayCheck():
+      if self.departDate.day < 10: return self.departDate.day
+      else: return "%d"
+    return datetime.datetime.strftime(self.departDate, f"%A, %b. {dayCheck()}{getSuffix()}, %Y")
 
   def getDate(self):
     return self.departDate
@@ -268,7 +273,8 @@ class UserSelections:
     self.userSelections.createSegment(t)
 
 if __name__ == "__main__":
-  testDict = {'Number': 0, 'Name': 'Multiple Trains', 'Origin': 'NOL', 'Departure Time': '9:15a', 'Departure Date': '03/28/2022', 'Travel Time': '126h 46m', 'Destination': 'SLM', 'Arrival Time': '2:01p', 'Arrival Date': 'Sat, Apr 2', 'Coach Price': '$502', 'Business Price': '$467', 'Sleeper Price': '$2856'}
+  testDict = {'Number': 0, 'Name': 'Multiple Trains', 'Origin': 'NOL', 'Departure Time': '9:15a', 'Departure Date': '03/8/2022', 'Travel Time': '126h 46m', 'Destination': 'SLM', 'Arrival Time': '2:01p', 'Arrival Date': 'Sat, Apr 2', 'Coach Price': '$502', 'Business Price': '$467', 'Sleeper Price': '$2856'}
   #t = Train(testDict)
   u = UserSelections()
+  u.departDate = datetime.date(year=2022, month=3, day=2)
   print(u.getPrettyDate())
