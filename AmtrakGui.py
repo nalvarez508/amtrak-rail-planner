@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, font
+from tkcalendar import Calendar
 import os
 import random
 import sys
@@ -37,11 +38,11 @@ class ImageArea(tk.Frame):
     self.rightImage = tk.Label(self, image=self.imageCatcher.getCityPhoto(2), width=IMAGE_DIMENSIONS[0], height=IMAGE_DIMENSIONS[1])
     self.rightImage.grid(row=0, column=1, padx=4, pady=16)
 
-    self.leftInfo = tk.Label(self, text=f"{self.leftImage.winfo_width()}x{self.leftImage.winfo_height()}")
-    self.leftInfo.grid(row=1, column=0)
-    self.rightInfo = tk.Label(self, text=f"{self.rightImage.winfo_width()}x{self.rightImage.winfo_height()}")
-    self.rightInfo.grid(row=1, column=2)
-    tk.Button(self, text="Update", command=self._test_widgetDims).grid(row=1, column=1)
+    #self.leftInfo = tk.Label(self, text=f"{self.leftImage.winfo_width()}x{self.leftImage.winfo_height()}")
+    #self.leftInfo.grid(row=1, column=0)
+    #self.rightInfo = tk.Label(self, text=f"{self.rightImage.winfo_width()}x{self.rightImage.winfo_height()}")
+    #self.rightInfo.grid(row=1, column=2)
+    #tk.Button(self, text="Update", command=self._test_widgetDims).grid(row=1, column=1)
 
   def _test_widgetDims(self):
     self.leftInfo.config(text=f"{self.leftImage.winfo_width()}x{self.leftImage.winfo_height()}")
@@ -59,24 +60,27 @@ class StationsArea(tk.Frame):
     self.parent = parent
     self.stations = Stations()
     lengthOfList = len(self.stations.returnStationKeys())
+    self.boxWidth = 20
 
-    self.origin = ttk.Combobox(self, values=self.stations.returnStationKeys())
+    self.origin = ttk.Combobox(self, values=self.stations.returnStationKeys(), width=self.boxWidth)
     self.origin.grid(row=0, column=0, padx=4)
     self.origin.current(random.randint(0, lengthOfList-1))
     self.origin.bind("<<ComboboxSelected>>", lambda e, widget=self.origin, side=1, isSwap=False: self.selectionChangedCallback(widget, side, isSwap, e))
-    self.parent.us.setOrigin(self.stations.getStationCode(self.origin.get()))
+    self.parent.us.setOrigin((self.origin.get()))
 
-    self.destination = ttk.Combobox(self, values=self.stations.returnStationKeys())
+    self.destination = ttk.Combobox(self, values=self.stations.returnStationKeys(), width=self.boxWidth)
     self.destination.grid(row=0, column=2, padx=4)
     self.destination.current(random.randint(0, lengthOfList-1))
     self.destination.bind("<<ComboboxSelected>>", lambda e, widget=self.destination, side=2, isSwap=False: self.selectionChangedCallback(widget, side, isSwap, e))
-    self.parent.us.setDestination(self.stations.getStationCode(self.destination.get()))
+    self.parent.us.setDestination((self.destination.get()))
 
-    self.swapButton = tk.Button(self, text="<- Swap ->", command=self.swapStations)
+    self.swapButton = ttk.Button(self, text="<- Swap ->", command=self.swapStations)
     self.swapButton.grid(row=0, column=1, padx=12)
 
     self.parent.doRefresh(self.stations.returnCityState(self.origin.get()), 1)
-    self.parent.doRefresh(self.stations.returnCityState(self.destination.get()), 2)
+    #self.parent.doRefresh(self.stations.returnCityState(self.destination.get()), 2)
+    #self.parent.startThread(self.parent.doRefresh, [self.stations.returnCityState(self.origin.get()), 1])
+    self.parent.startThread(self.parent.doRefresh, [self.stations.returnCityState(self.destination.get()), 2])
 
   def swapStations(self):
     newOriginCity = self.destination.current()
@@ -87,38 +91,119 @@ class StationsArea(tk.Frame):
     self.selectionChangedCallback(self.origin, 1, True)
     self.selectionChangedCallback(self.destination, 2, True)
 
-  def startSearch(self):
-    pass
-
   def selectionChangedCallback(self, widget, side, isSwap=False, e=None):
-    self.parent.us.set(self.stations.getStationCode(widget.get()), side)
+    self.parent.us.set((widget.get()), side)
     lock = self.parent.imageDriverLock
     city = self.stations.returnCityState(widget.get())
     self.parent.startThread(self.parent.doRefresh, [city, side, isSwap, lock])
 
+#class DateSelectionArea(tk.Frame):
+
+class ResultsHeadingArea(tk.Frame):
+  def __init__(self, parent, *args, **kwargs):
+    tk.Frame.__init__(self, parent, *args, **kwargs)
+    self.parent = parent
+
+    self.titleToAndFrom = tk.StringVar(self)
+    self.background = self.parent.resultsBackground
+    self.config(background=self.background)
+    self.boldItalic = font.Font(family=SYSTEM_FONT, size=14, weight=font.BOLD, slant=font.ITALIC)
+    self.numberOfTrains = tk.StringVar(self, value="0 trains found")
+
+    self.titleLabel = tk.Label(self, textvariable=self.titleToAndFrom, font=self.boldItalic, background=self.background)
+    self.titleLabel.pack(pady=1)#grid(row=0, column=0, pady=4)
+    self.numberLabel = tk.Label(self, textvariable=self.numberOfTrains, background=self.background)
+    self.numberLabel.pack()#grid(row=1, column=0)
+
 class TrainResultsArea(tk.Frame):
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)
-    
+    self.parent = parent
+    self.background = self.parent.resultsBackground
+    self.config(background=self.background)
+
+    self.columns = ["Number", "Name", "Departs", "Arrives", "Duration"]
+    self.headerCols = {"#":35, "Train":180, "Departs":125, "Arrives":125, "Duration":70}
+    #self.numberOfTrains = tk.StringVar(self, value="0 trains found") # Pass this in to searcher?
+    self.results = ttk.Treeview(self, columns=self.columns, show='headings', cursor="hand1", selectmode='browse')
+    self.makeHeadings()
+
+    self.findTrainsBtn = ttk.Button(self, text="Find Trains", command=self.startSearch)
+    self.findTrainsBtn.pack()
+    self.results.pack(fill=tk.BOTH, expand=True, padx=8, pady=8)
+  
+  def _test_getColInfo(self):
+    for col in self.columns:
+      print(self.results.column(col))
+
+  def clearTree(self):
+    for item in self.results.get_children():
+      self.results.delete(item)
+
+  def makeHeadings(self):
+    for index, col in enumerate(self.headerCols):
+      self.results.heading(self.columns[index], text=col)
+      self.results.column(self.columns[index], minwidth=10, width=self.headerCols[col], stretch=True)
+
+  def startSearch(self):
+    self.findTrainsBtn.config(state='disabled')
+    self.clearTree()
+    self.parent.resultsHeadingArea.numberOfTrains.set("0 trains found")
+    origin = self.parent.us.getOrigin()
+    dest = self.parent.us.getDestination()
+    self.parent.resultsHeadingArea.titleToAndFrom.set(f"{self.parent.stationsArea.stations.returnStationNameAndState(origin)} to {self.parent.stationsArea.stations.returnStationNameAndState(dest)}")
+    fakeResults = self.parent.searcher._test_returnSearchData()
+    self.parent.startThread(self.populateTreeview, [fakeResults])
+
+  def populateTreeview(self, list):
+    for num, train in enumerate(list):
+      vals = train.returnSelectedElements(self.columns)
+      self.results.insert('', tk.END, values=vals)
+      if num == 1:
+        self.parent.resultsHeadingArea.numberOfTrains.set(f"{num} train found")
+      else:
+        self.parent.resultsHeadingArea.numberOfTrains.set(f"{num} trains found")
+    self.findTrainsBtn.config(state='normal')
+    self.parent.update_idletasks()
+
+class DevTools(tk.Toplevel):
+  def __init__(self, parent, *args, **kwargs):
+    tk.Toplevel.__init__(self, parent, *args, **kwargs)
+    self.parent = parent
+    self.title("Dev Tools")
+    tk.Label(self, text="Development Tools", font=('', 16, font.NORMAL)).pack()
+    tk.Button(self, text="Print Geometry", command=self.parent._test_getGeometry).pack()
+    tk.Button(self, text="Print Column Info", command=self.parent.trainResultsArea._test_getColInfo).pack()
 
 class MainWindow(tk.Tk):
   def __init__(self):
     super().__init__()
+    self.geometry("540x660")
 
     self.title("Rail Pass Planner")
     self.iconbitmap("Amtrak_square.ico")
     self.us = UserSelections()
+    self.searcher = AmtrakSearch(None)
     self.imageDriverLock = Lock()
+    self.resultsBackground = "gainsboro"
 
     self.titleArea = TitleArea(self)
     self.imageArea = ImageArea(self)
     self.stationsArea = StationsArea(self)
+    self.resultsHeadingArea = ResultsHeadingArea(self)
+    self.trainResultsArea = TrainResultsArea(self)
+    self.devTools = DevTools(self)
 
     self.titleArea.pack()
     self.imageArea.pack()
-    self.stationsArea.pack()
+    self.stationsArea.pack(pady=16)
+    self.resultsHeadingArea.pack(fill=tk.X)
+    self.trainResultsArea.pack(fill=tk.BOTH)
 
     self.update()
+
+  def _test_getGeometry(self):
+    print(self.geometry(None))
 
   def startThread(self, function, args=None):
     if args:
@@ -127,9 +212,10 @@ class MainWindow(tk.Tk):
       Thread(target=function).start()
 
   def onClose(self):
+    self.devTools.destroy()
+    self.destroy()
     self.imageArea.imageCatcher.driver.close()
     self.imageArea.imageCatcher.driver.quit()
-    self.destroy()
     sys.exit()
 
   def doRefresh(self, city, side, isSwap=False, lock=None):
@@ -151,3 +237,7 @@ if __name__ == "__main__":
   app = MainWindow()
   app.wm_protocol("WM_DELETE_WINDOW", app.onClose)
   app.mainloop()
+  #am = AmtrakSearch(None)
+  #fakeresults = am._test_returnSearchData()
+  #for train in fakeresults:
+  #  vals = train.returnSelectedElements(["#", "Train", "Departs", "Arrives", "Duration"])
