@@ -110,6 +110,5 @@ class StationsArea(tk.Frame):
         Not used, by default None
     """
     self.parent.us.set((widget.get()), side)
-    lock = self.parent.imageDriverLock
     city = self.stations.returnCityState(widget.get())
-    self.parent.startThread(self.parent.imageArea.doRefresh, [city, side, isSwap, lock])
+    self.parent.startThread(self.parent.imageArea.doRefresh, [city, side, isSwap])
