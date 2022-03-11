@@ -1,12 +1,6 @@
 import PIL.Image, PIL.ImageTk, PIL.ImageFile
 from io import BytesIO
-import base64, gc
-from datetime import datetime, date
-import sys
-import requests
-from threading import Thread
-from threading import Event as ev
-import time
+import base64
 import urllib.parse
 import urllib.request
 from tkinter import TclError
@@ -74,8 +68,8 @@ class ImageSearch:
       image = image.crop((x, y, w - x, h - y))
 
       # resize
-      if image.size > tuple(size): # don't stretch smaller images
-        image.thumbnail(size, PIL.Image.ANTIALIAS)
+      #if image.size > tuple(size): # don't stretch smaller images
+      #  image.thumbnail(size, PIL.Image.ANTIALIAS)
       return image
     
     try:
