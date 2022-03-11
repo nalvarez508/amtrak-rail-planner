@@ -68,7 +68,7 @@ class DateSelectionArea(tk.Frame):
   def __callbackCalendar(self, e=None):
     """Gets selected date and removes calendar from view."""
     self.__changeDate(self.calendar.selection_get())
-    self.removeCal()
+    self.__removeCal()
   
   def __removeCal(self):
     time.sleep(0.15)
