@@ -5,6 +5,25 @@ import webbrowser
 from . import config as cfg
 
 class MenuOptions(tk.Menu):
+  """
+  A class to hold UI elements for the menu bar.
+
+  Parameters
+  ----------
+  tk : Tk
+      The parent frame.
+
+  Attributes
+  ----------
+  helpmenu : Menu
+
+  Methods
+  -------
+  openLink(l)
+      Opens a link in the default web browser.
+  openBox(m)
+      Displays an info box with a message.
+  """
   def __init__(self, parent, *args, **kwargs):
     tk.Menu.__init__(self, parent)
     self.parent = parent
@@ -14,7 +33,23 @@ class MenuOptions(tk.Menu):
     self.add_cascade(label="Help", menu=self.helpmenu)
 
   def openLink(self, l):
+    """
+    Opens a link in the default web browser.
+
+    Parameters
+    ----------
+    l : str
+        Fully qualified URL.
+    """
     webbrowser.open(l, new=1, autoraise=True)
   
   def openBox(self, m):
+    """
+    Displays an information messagebox.
+
+    Parameters
+    ----------
+    m : str
+        The message to display.
+    """
     tk.messagebox.showinfo(cfg.APP_NAME, message=m)

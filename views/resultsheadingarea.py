@@ -4,6 +4,27 @@ from tkinter import ttk, font
 from . import config as cfg
 
 class ResultsHeadingArea(tk.Frame):
+  """
+  A class to hold UI elements related to current search information.
+  
+  Parameters
+  ----------
+  tk : Tk
+      The parent frame.
+      
+  Attributes
+  ----------
+  titleToAndFrom : StringVar
+      Heading for search title (to and from stations).
+  searchDate : StringVar
+  background : str
+  boldItalic : Font
+      Custom heading style: large, bold, and italic.
+  numberOfTrains : StringVar
+  titleLabel = tk.Label
+  dateLabel = tk.Label
+  numberLabel = tk.Label
+  """
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)
     self.parent = parent

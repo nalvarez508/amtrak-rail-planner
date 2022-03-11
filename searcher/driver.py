@@ -15,7 +15,22 @@ elif os.name == 'posix':
   LOG_PATH = '/dev/null'
 
 class Driver:
+  """
+  A generalized class to create a webdriver.
+
+  Attributes
+  ----------
+  driver : WebDriver
+  """
   def __init__(self, url="about:blank"):
+    """
+    Initializes the webdriver and downloads one if necessary.
+
+    Parameters
+    ----------
+    url : str, optional
+        Starting page string, by default "about:blank"
+    """
     # Chrome options to disable logging in terminal
     chrome_options = Options()
     #chrome_options.add_argument("--headless")

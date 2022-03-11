@@ -1,14 +1,54 @@
 import datetime
 
 class RailPass:
+  """
+  A class to hold each user-selected segment of their journey.
+
+  Attributes
+  ----------
+  segments : dict
+      Holds an ordered dictionary of {Segment Number : Train object}.
+  segmentResults : dict
+      Holds dictionaries of selected segments' search results.
+  
+  Methods
+  -------
+  getSegmentResult(index)
+      Returns search results for a given segment.
+  createCsv()
+      Creates a dictionary of `segments` for later writing to a file.
+  createSegment():
+      Undefined.
+  """
   def __init__(self):
     self.segments = dict()
     self.segmentResults = dict()
   
   def getSegmentResult(self, index):
+    """
+    Returns the search results of a given segment.
+
+    Parameters
+    ----------
+    index : int
+        The segment number.
+
+    Returns
+    -------
+    dict
+        A dictionary of Train objects.
+    """
     return self.segmentResults[index]
 
   def createCsv(self):
+    """
+    Loads data into a dictionary for writing to a CSV file.
+
+    Returns
+    -------
+    dict
+        Dictionary with defined columns ready for writing to file.
+    """
     output = dict()
     for segment, train in enumerate(self.segments):
       output.update({segment:train.convertToCsvRow()})
@@ -21,6 +61,44 @@ class RailPass:
     pass
 
 class Train:
+  """
+  A class to store a single train journey's information.
+
+  Attributes
+  ----------
+  origin : str
+  destination : str
+  number : int or str
+      Train number or N/A if mixed service/multiple/unobtainable.
+  name : str
+  departureTime : str
+  departureDate : str
+  departure : datetime.datetime
+      Combines departure date and time.
+  travelTime : str
+  arrivalTime : str
+  arrivalDate : str
+  arrival : datetime.datetime
+      Combines arrival date and time.
+  prettyDeparture : str
+      Display string of `departure`.
+  prettyArrival : str
+      Display string of `arrival`.
+  coachPrice : str
+  businessPrice : str
+  sleeperPrice : str
+  segmentType : str
+      Information about segment (direct, multiple)
+  numberOfSegments : int
+      Total trip segments, defaults to 1 unless other info is available.
+  organizationalUnit : dict
+      Structured representation of the Train object for use in a Treeview object.
+
+  Methods
+  -------
+  returnSelectedElements(cols)
+      Gets a list of elements that match certain attributes in the `organizationalUnit`.
+  """
   def __init__(self, key):
     self.origin = key["Origin"]
     self.destination = key["Destination"]
@@ -31,17 +109,17 @@ class Train:
     self.name = key["Name"]
     self.departureTime = key["Departure Time"]
     self.departureDate = key["Departure Date"]
-    self.departure = self.convertToDatetime(self.departureDate, self.departureTime)
+    self.departure = self.__convertToDatetime(self.departureDate, self.departureTime)
     self.travelTime = key["Travel Time"]
     self.arrivalTime = key["Arrival Time"]
     self.arrivalDate = key["Arrival Date"]
-    self.arrival = self.convertToDatetime(self.arrivalDate, self.arrivalTime)
-    self.prettyDeparture, self.prettyArrival = self.makePrettyDates()
+    self.arrival = self.__convertToDatetime(self.arrivalDate, self.arrivalTime)
+    self.prettyDeparture, self.prettyArrival = self.__makePrettyDates()
     self.coachPrice = key["Coach Price"]
     self.businessPrice = key["Business Price"]
     self.sleeperPrice = key["Sleeper Price"]
     self.segmentType = key["Segment Type"]
-    self.numberOfSegments = self.findSegments()
+    self.numberOfSegments = self.__findSegments()
 
     self.organizationalUnit = {
       "Origin":self.origin,
@@ -65,14 +143,22 @@ class Train:
   def __str__(self):
     return f"{self.organizationalUnit}"
   
-  def findSegments(self):
+  def __findSegments(self):
+    """
+    Tries to find out how many segments this journey has.
+
+    Returns
+    -------
+    int
+        Number of segments.
+    """
     try:
       val = int(self.segmentType.split()[0])
       return val
     except ValueError:
       return 1
 
-  def makePrettyDate(self, dt, compare=False):
+  def __makePrettyDate(self, dt, compare=False):
     def doDayStringPrettification(doDate=""):
       suffix = ""
       if doDate:
@@ -92,11 +178,21 @@ class Train:
     elif compare == False:
       return doDayStringPrettification()
   
-  def makePrettyDates(self):
-    def doDayStringPrettification(dt, doDate=""):
+  def __makePrettyDates(self):
+    """
+    Removes leading zeroes, potentially fixes the year, and adds a suffix to the date display string.
+
+    Parameters
+    ----------
+    dt : datetime.datetime
+        Object to turn into string.
+    compare : bool, optional
+        Compares `departure` to `arrival` to fix the year, by default False
+    """
+    def doDayStringPrettification(dt, doDate=""): # doDate is the strftime format for weekday and day#
       suffix = ""
       if doDate:
-        if (dt.day <= 3) or (dt.day > 20):
+        if (dt.day <= 3) or (dt.day > 20): # Add 'th' to any dates 4th-20th
           day = dt.day % 10
           if day == 1: suffix = "st"
           elif day == 2: suffix = "nd"
@@ -107,22 +203,37 @@ class Train:
         if dt.day < 10: doDate = f"%a. {dt.day}"
       return datetime.datetime.strftime(dt, f"{doDate}{suffix} %I:%M%p").strip()
 
-    if self.departure.day == self.arrival.day:
+    if self.departure.day == self.arrival.day: # Only return the times
       return [doDayStringPrettification(self.departure), doDayStringPrettification(self.arrival)]
-    elif self.departure < self.arrival:
+    elif self.departure < self.arrival: # Return day of week, date, time
       return [doDayStringPrettification(self.departure, "%a. %d"), doDayStringPrettification(self.arrival, "%a. %d")]
 
   def returnSelectedElements(self, cols):
+    """
+    Given a list of attributes, return the corresponding values from `organizationalUnit`.
+
+    Parameters
+    ----------
+    cols : list
+        Attributes to find from `organizationalUnit`.
+
+    Returns
+    -------
+    list
+        Values from corresponding attributes.
+    """
     temp = list()
     for col in cols:
       try:
         temp.append(self.organizationalUnit[col])
       except KeyError:
+      # Passed in an incorrect attribute name
         temp.append('')
         print(f"Attribute {col} is not recognized.")
     return temp
 
   def convertToCsvRow(self):
+    """Returns a dictionary of items ready to be written to a spreadsheet."""
     tempDict = dict()
     tempDict["Origin"] = self.origin
     tempDict["Destination"] = self.destination
@@ -132,7 +243,26 @@ class Train:
     tempDict["Duration"] = self.travelTime
     return tempDict
 
-  def convertToDatetime(self, d, t):
+  def __convertToDatetime(self, d, t):
+    """
+    Takes in strings of date and time and creates an object.
+
+    Parameters
+    ----------
+    d : str
+        Date in the form mm/dd/yyyy or Weekday, Mnth. Day
+    t : str
+        Time in the form HH:MMp
+
+    Returns
+    -------
+    datetime.datetime
+        Converted object.
+    
+    Notes
+    -----
+    Often the arrival date, if it isn't the same day as the departure date, is not a very friendly format to work with. Creating a datetime object does not input the year and defaults to 1900. We first try to replace this with the departure year and if that fails, the current year.
+    """
     t = t.replace("p", "PM")
     t = t.replace("a", "AM")
     try:
