@@ -136,17 +136,17 @@ class AmtrakSearch:
 
   def enterStationInfo(self, area):
     # Entering departure station info
-    fromStationSearchArea = area.find_element_by_xpath("//div[@class='from-station flex-grow-1']")
-    fromStationSearchArea.find_element_by_xpath("//station-search[@amt-auto-test-id='fare-finder-from-station-field-page']").click()
-    inputField1 = fromStationSearchArea.find_element_by_xpath("//input[@id='mat-input-0']")
+    fromStationSearchArea = area.find_element(By.XPATH, "//div[@class='from-station flex-grow-1']")
+    fromStationSearchArea.find_element(By.XPATH, "//station-search[@amt-auto-test-id='fare-finder-from-station-field-page']").click()
+    inputField1 = fromStationSearchArea.find_element(By.XPATH, "//input[@id='mat-input-0']")
     inputField1.clear()
     inputField1.send_keys(self.origin)
     WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, "//button[contains(@aria-label,'From')]"))) # Station name autofilled
 
     # Entering destination station info
-    toStationSearchArea = area.find_element_by_xpath("//div[@class='to-station flex-grow-1']")
-    toStationSearchArea.find_element_by_xpath("//station-search[@amt-auto-test-id='fare-finder-to-station-field-page']").click()
-    inputField2 = toStationSearchArea.find_element_by_xpath("//input[@id='mat-input-1']")
+    toStationSearchArea = area.find_element(By.XPATH, "//div[@class='to-station flex-grow-1']")
+    toStationSearchArea.find_element(By.XPATH, "//station-search[@amt-auto-test-id='fare-finder-to-station-field-page']").click()
+    inputField2 = toStationSearchArea.find_element(By.XPATH, "//input[@id='mat-input-1']")
     inputField2.clear()
     inputField2.send_keys(self.destination)
     WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, "//button[contains(@aria-label,'To')]"))) # Station name autofilled
@@ -175,14 +175,14 @@ class AmtrakSearch:
 
       try: # Clicking the new search button
         self.updateStatusMessage("Searching - opening input fields", 5)
-        newSearchButton = self.driver.find_element_by_xpath("//button[@class='am-btn btn--secondary btn--transparent-blue-border']")
+        newSearchButton = self.driver.find_element(By.XPATH, "//button[@class='am-btn btn--secondary btn--transparent-blue-border']")
         newSearchButton.click()
         time.sleep(1)
 
         try: # Entering to/from stations
           self.updateStatusMessage("Searching - entering stations", 1)
-          searchArea = self.driver.find_element_by_xpath("//div[@id='refineSearch']")
-          searchArea = searchArea.find_element_by_xpath("//div[@class='row align-items-center']")
+          searchArea = self.driver.find_element(By.XPATH, "//div[@id='refineSearch']")
+          searchArea = searchArea.find_element(By.XPATH, "//div[@class='row align-items-center']")
           self.enterStationInfo(searchArea)
 
           try: # Entering departure date
