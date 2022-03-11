@@ -2,14 +2,15 @@ import time
 import json
 import traceback
 
-from HelperClasses import Driver, Train
-
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 
-SEARCH_URL = "https://www.amtrak.com/tickets/departure.html"
+from .driver import Driver
+from traintracks.train import Train
+from views import config as cfg
+
 USE_TRAIN_CLASSES = True
 
 class AmtrakSearch:
@@ -166,8 +167,8 @@ class AmtrakSearch:
     #self.numberTrainsStringVar.set(self.numberTrainsFound)
     try: # Loading the page
       self.updateStatusMessage("Searching - loading page", 0)
-      if (self.driver.current_url != SEARCH_URL) or self.returnedError:
-        self.driver.get(SEARCH_URL)
+      if (self.driver.current_url != cfg.SEARCH_URL) or self.returnedError:
+        self.driver.get(cfg.SEARCH_URL)
       self.returnedError = False
       self.driver.execute_script("window.scrollTo(document.body.scrollHeight, 0)")
       # Make sure the page loads and the New Search button is available to us
@@ -256,6 +257,6 @@ if __name__ == "__main__":
   origin = input("Origin code: ")
   destination = input("Destination code: ")
   departureDate = input("Depature date (MM/DD/YYYY): ")
-  d = Driver(SEARCH_URL)
+  d = Driver(cfg.SEARCH_URL)
   a = AmtrakSearch(d.driver, origin, destination, departureDate)
   a.oneWaySearch()

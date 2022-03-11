@@ -4,17 +4,19 @@ from tkinter import ttk
 import sys
 from threading import Thread, Event, Lock
 
-from HelperClasses import Driver, UserSelections
-from AmtrakSearcher import AmtrakSearch
+from searcher.driver import Driver
+from searcher.userselections import UserSelections
+from searcher.amtrak_searcher import AmtrakSearch
+
 from views import config as cfg
-from views.TitleArea import TitleArea
-from views.ImageArea import ImageArea
-from views.StationsArea import StationsArea
-from views.DateSelectionArea import DateSelectionArea
-from views.ResultsHeadingArea import ResultsHeadingArea
-from views.TrainResultsArea import TrainResultsArea
-from views.MenuOptions import MenuOptions
-from views.DevTools import DevTools
+from views.titlearea import TitleArea
+from views.imagearea import ImageArea
+from views.stationsarea import StationsArea
+from views.dateselectionarea import DateSelectionArea
+from views.resultsheadingarea import ResultsHeadingArea
+from views.trainresultsarea import TrainResultsArea
+from views.menuoptions import MenuOptions
+from views.devtools import DevTools
 
 class MainWindow(tk.Tk):
   def __init__(self):

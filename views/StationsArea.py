@@ -3,7 +3,7 @@ from tkinter import ttk
 
 import random
 
-from HelperClasses import Stations
+from traintracks.stations import Stations
 from . import config as cfg
 
 class StationsArea(tk.Frame):

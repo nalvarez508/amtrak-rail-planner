@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from DriverHelper import ImageSearch
+from searcher.image_searcher import ImageSearch
 from . import config as cfg
 
 class ImageArea(tk.Frame):
