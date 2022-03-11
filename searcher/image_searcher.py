@@ -13,6 +13,17 @@ from selenium.webdriver.support import expected_conditions as EC
 from .driver import Driver
 
 class ImageSearch:
+  """
+  A class to search for images of selected cities in the ImageArea.
+
+  Attributes
+  ----------
+  driver : Driver
+  photo_city1 = PhotoImage
+  photo_city2 = PhotoImage
+  name_city1 = str
+  name_city2 = str
+  """
   def __init__(self):
     self.driver = Driver().driver
     PIL.ImageFile.LOAD_TRUNCATED_IMAGES = True
@@ -22,7 +33,20 @@ class ImageSearch:
     self.name_city1 = None
     self.name_city2 = None
 
-  def returnCityPhoto(self, c): #c=city
+  def __returnCityPhoto(self, c):
+    """
+    Searches Google for the first image of a city and saves it.
+
+    Parameters
+    ----------
+    c : str
+        'City, State'
+
+    Returns
+    -------
+    list[str, bytes]
+        Returns a list with type of image (Image "Img" or Base64 "B64") and the raw data.
+    """
     URL = f"https://www.google.com/search?tbm=isch&q={urllib.parse.quote(c)}"
     self.driver.get(URL)
     image = WebDriverWait(self.driver,5).until(EC.presence_of_element_located((By.XPATH, "//img[@class='rg_i Q4LuWd']")))
@@ -34,7 +58,7 @@ class ImageSearch:
         return imgType
       return None
     
-    def getHiDef():
+    def getHiDef(): # Try and get image from URL and not base64 preview from google
       try:
         self.driver.find_element(By.XPATH, "//div[@class='bRMDJf islir']").click()
         bigImageArea = WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, "//img[@class='n3VNCb']")))
@@ -56,6 +80,18 @@ class ImageSearch:
     return getHiDef()
 
   def loadImage(self, c, no, dims):
+    """
+    Finds an image for a given city and returns an image object with specified dimensions.
+
+    Parameters
+    ----------
+    c : str
+        'City, State'
+    no : int
+        Accepts 1 (left/origin) or 2 (right/destination).
+    dims : list
+        Width and height of output image.
+    """
     def crop_resize(image):
       ratio = Fraction(dims[0], dims[1])
       size = dims
@@ -73,47 +109,98 @@ class ImageSearch:
       return image
     
     try:
-      onlineImage = self.returnCityPhoto(c)
+      onlineImage = self.__returnCityPhoto(c)
       if onlineImage[0] == "B64":
         onlineImage[1] = (base64.b64decode(onlineImage[1]))
+
       fh = BytesIO(onlineImage[1])
       img = PIL.Image.open(fh, mode='r')
       img = crop_resize(img)
       img.thumbnail((dims), PIL.Image.ANTIALIAS)
       render = PIL.ImageTk.PhotoImage(image=img)
+
       self.setCityPhoto(no, render)
-      self.setCityName(no, c)
+      self.__setCityName(no, c)
       print(img.size)
     except TclError as e:
       print(e)
 
   def doCitySwap(self):
+    """
+    Swaps images and city names for the origin and destination.
+    """
     tempCity2 = self.getCityName(2)
-    self.setCityName(2, self.getCityName(1))
-    self.setCityName(1, tempCity2)
+    self.__setCityName(2, self.getCityName(1))
+    self.__setCityName(1, tempCity2)
     tempPhoto2 = self.getCityPhoto(2)
     self.setCityPhoto(2, self.getCityPhoto(1))
     self.setCityPhoto(1, tempPhoto2)
 
-  def setCityName(self, cityNo, data):
+  def __setCityName(self, cityNo, data):
+    """
+    Updates the stored city name.
+
+    Parameters
+    ----------
+    cityNo : int
+        Accepts 1 (left/origin) or 2 (right/destination).
+    data : str
+        New city name in the form 'City, State'.
+    """
     if cityNo == 1:
       self.name_city1 = data
     elif cityNo == 2:
       self.name_city2 = data
   
   def getCityName(self, cityNo):
+    """
+    Returns the selected city's name.
+
+    Parameters
+    ----------
+    cityNo : int
+        Accepts 1 (left/origin) or 2 (right/destination).
+
+    Returns
+    -------
+    str
+        City name in the form 'City, State'.
+    """
     if cityNo == 1:
       return self.name_city1
     elif cityNo == 2:
       return self.name_city2
 
   def setCityPhoto(self, cityNo, data):
+    """
+    Updates the city photo variable with new image data.
+
+    Parameters
+    ----------
+    cityNo : int
+        Accepts 1 (left/origin) or 2 (right/destination).
+    data : PhotoImage or None
+        Sets the new image, or erases it if None.
+    """
     if cityNo == 1:
       self.photo_city1 = data
     elif cityNo == 2:
       self.photo_city2 = data
 
   def getCityPhoto(self, cityNo):
+    """
+    Returns the image data for a city.
+
+    Parameters
+    ----------
+    cityNo : int
+        Accepts 1 (left/origin) or 2 (right/destination).
+
+    Returns
+    -------
+    PhotoImage or None
+        The image if one exists, otherwise None.
+    """
     if cityNo == 1:
       return self.photo_city1
     elif cityNo == 2:
