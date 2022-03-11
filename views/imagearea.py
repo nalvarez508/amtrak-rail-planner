@@ -1,5 +1,7 @@
 import tkinter as tk
 
+from threading import Lock
+
 from searcher.image_searcher import ImageSearch
 from . import config as cfg
 
@@ -16,6 +18,8 @@ class ImageArea(tk.Frame):
   ----------
   imageCatcher : ImageSearch
       Creates a driver for the purpose of finding images.
+  imageDriverLock : threading.Lock
+      Used to stop two requests from getting to the WebDriver at the same time.
   leftImage : tk.Label
       Origin city picture.
   rightImage : tk.Label
@@ -23,6 +27,8 @@ class ImageArea(tk.Frame):
   
   Methods
   -------
+  doRefresh(city, side, isSwap=False, lock=None)
+      Refreshes the images in the window with new cities.
   updateImage(side)
       Refreshes the selected image Label.
   """
@@ -30,6 +36,7 @@ class ImageArea(tk.Frame):
     tk.Frame.__init__(self, parent, *args, **kwargs)
     self.parent = parent
     self.imageCatcher = ImageSearch()
+    self.imageDriverLock = Lock()
 
     self.leftImage = tk.Label(self, image=self.imageCatcher.getCityPhoto(1), width=cfg.IMAGE_DIMENSIONS[0], height=cfg.IMAGE_DIMENSIONS[1])
     self.leftImage.grid(row=0, column=0, padx=4, pady=4)
@@ -47,6 +54,38 @@ class ImageArea(tk.Frame):
   def __test_widgetDims(self):
     self.leftInfo.config(text=f"{self.leftImage.winfo_width()}x{self.leftImage.winfo_height()}")
     self.rightInfo.config(text=f"{self.leftImage.winfo_width()}x{self.leftImage.winfo_height()}")
+
+  def doRefresh(self, city, side, isSwap=False):
+    """
+    Refreshes the ImageArea labels with new cities.
+
+    Parameters
+    ----------
+    city : str
+        'City, State'
+    side : int
+        Accepts 1 (left/origin) or 2 (right/destination).
+    isSwap : bool, optional
+        True if the images are only being swapped, by default False
+    
+    Raises
+    ------
+    AttributeError
+        Lock failed, somehow.
+    """
+    if isSwap == False:
+      if city != self.imageCatcher.getCityName(side): # Do not update anything if the same city is selected
+        self.imageCatcher.setCityPhoto(side, None) # Remove the photo to indicate something is happening
+        self.updateImage(side)
+        try:
+          with self.imageDriverLock:
+            self.imageCatcher.loadImage(city, side, cfg.IMAGE_DIMENSIONS) # Find a new image
+        except AttributeError:
+          self.imageCatcher.loadImage(city, side, cfg.IMAGE_DIMENSIONS)
+        self.updateImage(side)
+    elif isSwap == True: # Do not call search functions
+      self.updateImage(side)
+    self.update_idletasks()
 
   def updateImage(self, side):
     """

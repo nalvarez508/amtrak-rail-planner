@@ -129,7 +129,7 @@ class TrainResultsArea(tk.Frame):
     self.update_idletasks()
     try:
       # Starting search thread
-      self.parent.searcher.preSearchSetup(self.parent.stationsArea.stations.getStationCode(origin), self.parent.stationsArea.stations.getStationCode(dest), date, self.progressBar)
+      self.parent.searcher.preSearchSetup(self.parent.stationsArea.stations.getStationCode(origin), self.parent.stationsArea.stations.getStationCode(dest), date, self.progressBar, self.parent.resultsHeadingArea.numberOfTrains)
       self.parent.startThread(self.__doSearchCall)
     except Exception as e:
       print(e)

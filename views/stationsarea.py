@@ -44,10 +44,10 @@ class StationsArea(tk.Frame):
     self.swapButton = ttk.Button(self, text="<- Swap ->", command=self.__swapStations)
     self.swapButton.grid(row=1, column=1, padx=12)
 
-    self.parent.doRefresh(self.stations.returnCityState(self.origin.get()), 1)
+    self.parent.imageArea.doRefresh(self.stations.returnCityState(self.origin.get()), 1)
     #self.parent.doRefresh(self.stations.returnCityState(self.destination.get()), 2)
     #self.parent.startThread(self.parent.doRefresh, [self.stations.returnCityState(self.origin.get()), 1])
-    self.parent.startThread(self.parent.doRefresh, [self.stations.returnCityState(self.destination.get()), 2])
+    self.parent.startThread(self.parent.imageArea.doRefresh, [self.stations.returnCityState(self.destination.get()), 2])
 
   def __swapStations(self):
     """Swaps the origin and destination, both Combobox objects and ImageArea labels."""
@@ -112,4 +112,4 @@ class StationsArea(tk.Frame):
     self.parent.us.set((widget.get()), side)
     lock = self.parent.imageDriverLock
     city = self.stations.returnCityState(widget.get())
-    self.parent.startThread(self.parent.doRefresh, [city, side, isSwap, lock])
+    self.parent.startThread(self.parent.imageArea.doRefresh, [city, side, isSwap, lock])

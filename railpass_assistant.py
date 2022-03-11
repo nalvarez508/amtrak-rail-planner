@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 import sys
-from threading import Thread, Event, Lock
+from threading import Thread
 
 from searcher.driver import Driver
 from searcher.userselections import UserSelections
@@ -35,8 +35,6 @@ class MainWindow(tk.Tk):
   searcher : AmtrakSearch
   statusMessage : StringVar
       Holds message for status bar at the bottom of the window.
-  imageDriverLock : threading.Lock
-      Used to stop two requests from getting to the WebDriver at the same time.
   resultsBackground : str
       Background color for train search results area.
   titleArea : TitleArea
@@ -55,8 +53,6 @@ class MainWindow(tk.Tk):
       Starts a thread to run the given function.
   onClose()
       Quits the application and closes the webdrivers.
-  doRefresh(city, side, isSwap=False, lock=None)
-      Refreshes the images in the window with new cities.
   """
   def __init__(self):
     super().__init__()
@@ -69,7 +65,6 @@ class MainWindow(tk.Tk):
     self.searcher = None
     self.statusMessage = tk.StringVar(self, "Ready")
     self.startThread(self.__startup)
-    self.imageDriverLock = Lock()
     self.resultsBackground = "gainsboro"
 
     self.titleArea = TitleArea(self)
@@ -150,40 +145,6 @@ class MainWindow(tk.Tk):
 
   def __startup(self):
     self.searcher = AmtrakSearch(self, Driver(cfg.SEARCH_URL).driver, status=self.statusMessage)
-
-  def doRefresh(self, city, side, isSwap=False, lock=None):
-    """
-    Refreshes the ImageArea labels with new cities.
-
-    Parameters
-    ----------
-    city : str
-        'City, State'
-    side : int
-        Accepts 1 (left/origin) or 2 (right/destination).
-    isSwap : bool, optional
-        True if the images are only being swapped, by default False
-    lock : threading.Lock, optional
-        ImageCatcher lock so WebDriver does not get multiple requests at once, by default None
-    
-    Raises
-    ------
-    AttributeError
-        Lock was not passed to function.
-    """
-    if isSwap == False:
-      if city != self.imageArea.imageCatcher.getCityName(side): # Do not update anything if the same city is selected
-        self.imageArea.imageCatcher.setCityPhoto(side, None) # Remove the photo to indicate something is happening
-        self.imageArea.updateImage(side)
-        try:
-          with lock:
-            self.imageArea.imageCatcher.loadImage(city, side, cfg.IMAGE_DIMENSIONS) # Find a new image
-        except AttributeError:
-          self.imageArea.imageCatcher.loadImage(city, side, cfg.IMAGE_DIMENSIONS)
-        self.imageArea.updateImage(side)
-    elif isSwap == True: # Do not call search functions
-      self.imageArea.updateImage(side)
-    self.update_idletasks()
 
 if __name__ == "__main__":
   app = MainWindow()
