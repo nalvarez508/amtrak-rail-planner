@@ -65,7 +65,10 @@ class AmtrakSearch:
     self.root.update_idletasks()
 
   def __updateNumberTrainsLabel(self):
-    self.numberTrainsLabel.set(self.numberTrainsFound)
+    if self.numberTrainsFound == 1:
+      self.numberTrainsLabel.set(f"{self.numberTrainsFound} train found")
+    else:
+      self.numberTrainsLabel.set(f"{self.numberTrainsFound} trains found")
     self.root.update_idletasks()
 
   def preSearchSetup(self, origin, destination, departDate, pb, l):
