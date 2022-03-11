@@ -66,7 +66,7 @@ class TrainResultsArea(tk.Frame):
       myTrain = (self.inViewSegmentResults[self.results.item(item, "text")])
       print(myTrain)
 
-  def __test_getColInfo(self):
+  def _test_getColInfo(self):
     for col in self.columns:
       print(self.results.column(col))
 

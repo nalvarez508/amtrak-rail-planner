@@ -110,9 +110,9 @@ class MainWindow(tk.Tk):
           print(e)
           pass
 
-  def __test_getGeometry(self):
+  def _test_getGeometry(self):
     print(self.geometry(None))
-  def __test_getBackground(self):
+  def _test_getBackground(self):
     s1 = ttk.Style()
     bg = s1.lookup("TButton", "background")
     print(bg)
