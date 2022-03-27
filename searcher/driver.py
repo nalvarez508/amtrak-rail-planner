@@ -8,6 +8,7 @@ from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+import undetected_chromedriver as uc
 
 if os.name == 'nt':
   LOG_PATH = 'NUL'
@@ -22,7 +23,7 @@ class Driver:
   ----------
   driver : WebDriver
   """
-  def __init__(self, url="about:blank"):
+  def __init__(self, url="about:blank", undetected=False):
     """
     Initializes the webdriver and downloads one if necessary.
 
@@ -33,10 +34,11 @@ class Driver:
     """
     # Chrome options to disable logging in terminal
     chrome_options = Options()
-    #chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--headless")
     chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
     try:
-      self.driver = webdriver.Chrome(ChromeDriverManager().install(),service_log_path=LOG_PATH, options=chrome_options)
+      if undetected: self.driver = uc.Chrome(executable_path=ChromeDriverManager().install(), service_log_path=LOG_PATH)
+      else: self.driver = webdriver.Chrome(ChromeDriverManager().install(),service_log_path=LOG_PATH, options=chrome_options)
       self.driver.maximize_window()
       self.driver.get(url)
     except WebDriverException:

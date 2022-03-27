@@ -138,13 +138,13 @@ class MainWindow(tk.Tk):
     self.destroy()
     # Close webdrivers
     self.imageArea.imageCatcher.driver.close()
-    self.searcher.driver.close()
     self.imageArea.imageCatcher.driver.quit()
+    self.searcher.driver.close()
     self.searcher.driver.quit()
     sys.exit()
 
   def __startup(self):
-    self.searcher = AmtrakSearch(self, Driver(cfg.SEARCH_URL).driver, status=self.statusMessage)
+    self.searcher = AmtrakSearch(self, Driver(cfg.SEARCH_URL, undetected=True).driver, status=self.statusMessage)
 
 if __name__ == "__main__":
   app = MainWindow()
