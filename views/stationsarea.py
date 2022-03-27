@@ -45,9 +45,9 @@ class StationsArea(tk.Frame):
     self.swapButton.grid(row=1, column=1, padx=12)
 
     self.parent.imageArea.doRefresh(self.stations.returnCityState(self.origin.get()), 1)
-    #self.parent.doRefresh(self.stations.returnCityState(self.destination.get()), 2)
+    self.parent.imageArea.doRefresh(self.stations.returnCityState(self.destination.get()), 2)
     #self.parent.startThread(self.parent.doRefresh, [self.stations.returnCityState(self.origin.get()), 1])
-    self.parent.startThread(self.parent.imageArea.doRefresh, [self.stations.returnCityState(self.destination.get()), 2])
+    #self.parent.startThread(self.parent.imageArea.doRefresh, [self.stations.returnCityState(self.destination.get()), 2])
 
   def __swapStations(self):
     """Swaps the origin and destination, both Combobox objects and ImageArea labels."""
