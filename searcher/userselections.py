@@ -1,5 +1,8 @@
 import datetime
 
+from tkinter import messagebox
+
+from views.config import APP_NAME
 from traintracks.train import RailPass
 
 class UserSelections:
@@ -26,6 +29,39 @@ class UserSelections:
 
     self.userSelections = RailPass()
   
+  def isSearchOkay(self):
+    mostRecent = self.userSelections.getMostRecentSegment()
+    if mostRecent != None:
+      if self.__beforeSearch_isSameStationOkay(mostRecent):
+        if self.__beforeSearch_isSameDateOkay(mostRecent):
+          return True
+        else:
+          return False
+      else:
+        return False
+    else:
+      return True
+
+  def __beforeSearch_isSameDateOkay(self, mostRecent):
+    if mostRecent.arrival.date() == self.departDate:
+      return messagebox.askyesno(title=APP_NAME, message=f"The selected departure date for this search is the same as the most recent segment's arrival date, scheduled at {mostRecent.arrival.strftime('%I:%M %p')}. Ensure that there is ample time for a transfer.\nContinue with the search?")
+    elif mostRecent.arrival.date() > self.departDate:
+      return messagebox.askyesno(title=APP_NAME, message=f"The selected departure date for this search is before the most recent segment's arrival date of {mostRecent.arrival.date().strftime('%A, %B %d, %Y')}.\nContinue with the search?")
+    else:
+      return True
+  
+  def __beforeSearch_isSameStationOkay(self, mostRecent):
+    origin = self.origin.split()[0]
+    destination = self.destination.split()[0]
+    if (mostRecent.origin == origin) & (mostRecent.destination == destination):
+      return messagebox.askyesno(title=APP_NAME, message="The selected origin and destination stations are the same as the previous segment's stations.\nContinue with the search?")
+    elif mostRecent.origin == origin:
+      return messagebox.askyesno(title=APP_NAME, message="The selected origin station is the same as the previous segment's origin.\nContinue with the search?")
+    elif mostRecent.destination == destination:
+      return messagebox.askyesno(title=APP_NAME, message="The selected destination station is the same as the previous segment's destination.\nContinue with the search?")
+    else:
+      return True
+
   def getPrettyDate(self):
     """
     Formats `departDate` for display in the date selection area.
