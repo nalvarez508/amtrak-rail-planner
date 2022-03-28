@@ -2,6 +2,7 @@ import tkinter as tk
 
 import webbrowser
 
+from views.columnsettings import ColumnSettings
 from . import config as cfg
 
 class MenuOptions(tk.Menu):
@@ -46,6 +47,9 @@ class MenuOptions(tk.Menu):
     self.filemenu.add_command(label="Import")
     self.filemenu.add_command(label="Export")
 
+    self.editmenu = tk.Menu(self, tearoff=0)
+    self.editmenu.add_command(label="Display Columns", command=lambda: ColumnSettings(self.parent))
+
     self.viewmenu = tk.Menu(self, tearoff=0)
     self.viewmenu.add_command(label="Current Itinerary")
     self.viewmenu.add_command(label="Route Map", command=lambda: self.openLink("https://www.amtrak.com/content/dam/projects/dotcom/english/public/documents/Maps/Amtrak-System-Map-1018.pdf"))
@@ -56,6 +60,7 @@ class MenuOptions(tk.Menu):
     self.viewmenu.add_cascade(label="On-Time Performance", menu=self.otpmenu)
 
     self.add_cascade(label="File", menu=self.filemenu)
+    self.add_cascade(label="Edit", menu=self.editmenu)
     self.add_cascade(label="View", menu=self.viewmenu)
     self.add_cascade(label="Status", menu=self.statusmenu)
     self.add_cascade(label="Help", menu=self.helpmenu)
