@@ -45,8 +45,9 @@ class TrainResultsArea(tk.Frame):
 
     self.inViewSegmentResults = dict()#self.parent.searcher._test_returnSearchData() # AmtrakSearch thisSearchResultsAsTrain
 
-    self.columns = ["Number", "Name", "Departs", "Arrives", "Duration", "Number of Segments"]
-    self.headerCols = {"#":30, "Train":175, "Departs":130, "Arrives":130, "Duration":65, "Segments":65}
+    self.columns = list()
+    self.headerCols = dict()
+    self.__getDisplayColumns()
     #self.numberOfTrains = tk.StringVar(self, value="0 trains found") # Pass this in to searcher?
     self.results = ttk.Treeview(self.resultsArea, columns=self.columns, show='headings', cursor="hand2", selectmode='browse', height=12/cfg.WIDTH_DIV)
     self.__makeHeadings()
@@ -68,6 +69,27 @@ class TrainResultsArea(tk.Frame):
   def toggleSaveButton(self, enabled=False):
     if enabled: self.saveButton.config(state='normal')
     else: self.saveButton.config(state='disabled')
+
+  def updateDisplayColumns(self):
+    self.__getDisplayColumns()
+    #self.results["columns"] = ()
+    # Can add columns but not remove
+    # Recreate treeview widget (function?)
+    self.results.configure(columns=self.columns)
+    self.__makeHeadings()
+    if self.inViewSegmentResults != {}:
+      self.__clearTree()
+      self.__populateTreeview(self.inViewSegmentResults)
+    self.update_idletasks()
+
+  def __getDisplayColumns(self):
+    allCols = self.parent.us.getColumns()
+    self.columns = list()
+    self.headerCols = dict()
+    for col in allCols:
+      if allCols[col]["Selected"] == True:
+        self.columns.append(col)
+        self.headerCols[allCols[col]["Header"]] = allCols[col]["Width"]
 
   def __saveSelection(self, *args):
     segment = self.getSelection()

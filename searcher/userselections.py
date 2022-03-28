@@ -26,9 +26,29 @@ class UserSelections:
     self.origin = None
     self.destination = None
     self.departDate = datetime.date.today()
-
     self.userSelections = RailPass()
+
+    self.columns = {
+      "Origin": {"Display Name": "Origin", "Header": "Origin", "Width": 175, "Selected": False},
+      "Destination": {"Display Name": "Destination", "Header": "Destination", "Width": 175, "Selected": False},
+      "Number": {"Display Name": "Train Number", "Header": "#", "Width": 30, "Selected": True},
+      "Name": {"Display Name": "Train Name", "Header": "Train", "Width": 175, "Selected": True},
+      "Departure": {"Display Name": "Departure Date/Time", "Header": "Departs", "Width": 130, "Selected": True},
+      "Arrival": {"Display Name": "Arrival Date/Time", "Header": "Arrives", "Width": 130, "Selected": True},
+      "Duration": {"Display Name": "Travel Time", "Header": "Duration", "Width": 65, "Selected": True},
+      "Coach Price": {"Display Name": "Coach Price", "Header": "Coach ($)", "Width": 60, "Selected": False},
+      "Business Price": {"Display Name": "Business Price", "Header": "Business ($)", "Width": 60, "Selected": False},
+      "Sleeper Price": {"Display Name": "Sleeper Price", "Header": "Sleeper ($)", "Width": 60, "Selected": False},
+      "Number of Segments": {"Display Name": "Number of Segments", "Header": "Segments", "Width": 65, "Selected": True}
+    }
   
+  def setColumns(self, vals):
+    for col in vals:
+      self.columns[col]["Selected"] = vals[col]
+
+  def getColumns(self):
+    return self.columns
+
   def isSearchOkay(self):
     mostRecent = self.userSelections.getMostRecentSegment()
     if mostRecent != None:
