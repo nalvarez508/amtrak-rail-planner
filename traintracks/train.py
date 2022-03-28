@@ -21,6 +21,8 @@ class RailPass:
       Undefined.
   """
   def __init__(self):
+    self.numSegments = 1
+    self.numRecentSegment = 1
     self.segments = dict()
     self.segmentResults = dict()
   
@@ -54,11 +56,22 @@ class RailPass:
       output.update({segment:train.convertToCsvRow()})
     return output
   
-  def createSegment(self):
-    # Retrieve the user parameters and train selection
-    # Create a train object
-    # Add this train object to the segments var
-    pass
+  def createSegment(self, segment, searchResults):
+    self.numRecentSegment = self.numSegments
+    self.segments[self.numSegments] = segment
+    self.segmentResults[self.numSegments] = searchResults
+    self.numSegments += segment.numberOfSegments
+  
+  def getMostRecentSegment(self):
+    if self.numSegments > 1:
+      return self.segments[self.numRecentSegment]
+    else:
+      return None
+
+  def _printRailPass(self):
+    for item in self.segments:
+      print(item)
+      print(self.segments[item])
 
 class Train:
   """
