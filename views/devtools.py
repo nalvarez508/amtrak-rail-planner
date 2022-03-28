@@ -11,3 +11,4 @@ class DevTools(tk.Toplevel):
     tk.Button(self, text="Print Column Info", command=self.parent.trainResultsArea._test_getColInfo).pack()
     tk.Button(self, text="Print Selection", command=self.parent.trainResultsArea.getSelection).pack()
     tk.Button(self, text="Print Widget Background", command=self.parent._test_getBackground).pack()
+    tk.Button(self, text="Print Rail Pass", command=self.parent.us.userSelections._printRailPass).pack()
