@@ -30,6 +30,7 @@ class StationsArea(tk.Frame):
     tk.Frame.__init__(self, parent, *args, **kwargs)
     self.parent = parent
     self.stations = Stations()
+    self.stationKeys = self.stations.returnStationKeys()
     self.lengthOfList = len(self.stations.returnStationKeys())
     self.boxWidth = int(30/cfg.WIDTH_DIV)
     
@@ -64,6 +65,18 @@ class StationsArea(tk.Frame):
     #self.origin.xview_scroll(0*(event.delta/120), "units")
     #self.destination.xview_scroll(0*(event.delta/120), "units")
 
+  def __autocomplete(self, event):
+    val = event.widget.get()
+
+    if val == '':
+      event.widget['values'] = self.stationKeys
+    else:
+      data = []
+      for item in self.stationKeys:
+        if val.lower() in item.lower():
+          data.append(item)
+      event.widget['values'] = data
+
   def __createCombobox(self, side):
     """
     Creates a Combobox widget with all stations and a random initial selection.
@@ -82,10 +95,12 @@ class StationsArea(tk.Frame):
     ttk.Combobox
         The newly created Combobox.
     """
-    temp = ttk.Combobox(self, values=self.stations.returnStationKeys(), width=self.boxWidth, height=16, xscrollcommand=self.ignoreHorizontalScroll)
+    temp = ttk.Combobox(self, values=self.stationKeys, width=self.boxWidth, height=16, xscrollcommand=self.ignoreHorizontalScroll)
     temp.current(random.randint(0, self.lengthOfList-1))
     temp.bind("<<ComboboxSelected>>", lambda e, widget=temp, side=side, isSwap=False: self.__selectionChangedCallback(widget, side, isSwap, e))
     temp.bind("<Shift-MouseWheel>", self.ignoreHorizontalScroll)
+    temp.bind("<KeyRelease>", self.__autocomplete)
+    temp.bind("<Return>", lambda e: temp.event_generate("<Down>"))
     #temp.configure(xscrollcommand=self.ignoreHorizontalScroll)
     self.parent.us.set(temp.get(), side)
     return temp
