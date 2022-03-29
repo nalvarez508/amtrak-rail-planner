@@ -42,6 +42,9 @@ class RailPass:
     """
     return self.segmentResults[index]
 
+  def getSegments(self):
+    return self.segments
+
   def createCsv(self):
     """
     Loads data into a dictionary for writing to a CSV file.

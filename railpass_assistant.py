@@ -9,6 +9,7 @@ from searcher.userselections import UserSelections
 from searcher.amtrak_searcher import AmtrakSearch
 
 from views import config as cfg
+from views.itinerary import Itinerary
 from views.titlearea import TitleArea
 from views.imagearea import ImageArea
 from views.stationsarea import StationsArea
@@ -64,7 +65,7 @@ class MainWindow(tk.Tk):
     self.us = UserSelections()
     self.searcher = None
     self.statusMessage = tk.StringVar(self, "Ready")
-    self.startThread(self.__startup)
+    #self.startThread(self.__startup)
     self.resultsBackground = "gainsboro"
 
     self.titleArea = TitleArea(self)
@@ -75,6 +76,7 @@ class MainWindow(tk.Tk):
     self.resultsHeadingArea = ResultsHeadingArea(self)
     self.trainResultsArea = TrainResultsArea(self)
     self.devTools = DevTools(self)
+    self.itineraryWindow = None
     self.config(menu=MenuOptions(self))
 
     self.statusBar = tk.Label(self, textvariable=self.statusMessage, bd=1, relief=tk.SUNKEN, anchor=tk.W)
@@ -89,6 +91,12 @@ class MainWindow(tk.Tk):
     self.trainResultsArea.pack(fill=tk.BOTH, expand=True)
 
     self.update()
+
+  def openItinerary(self):
+    self.itineraryWindow = Itinerary(self)
+  
+  def closeItinerary(self):
+    self.itineraryWindow = None
 
   def __setBackground(self, f=None):
     """Sets the background to `cfg.BACKGROUND` for all non-results and non-ttk elements."""

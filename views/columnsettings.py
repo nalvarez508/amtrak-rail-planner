@@ -26,4 +26,6 @@ class ColumnSettings(tk.Toplevel):
       newValues[col] = self.checkbuttonVals[index].get()
     self.parent.us.setColumns(newValues)
     self.parent.trainResultsArea.updateDisplayColumns()
+    try: self.parent.itineraryWindow.updateDisplayColumns()
+    except: pass
     self.destroy()
