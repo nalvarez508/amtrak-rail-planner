@@ -47,12 +47,14 @@ class TrainResultsArea(tk.Frame):
 
     self.columns = list()
     self.headerCols = dict()
+    self.dispCols = list()
     self.__getDisplayColumns()
     #self.numberOfTrains = tk.StringVar(self, value="0 trains found") # Pass this in to searcher?
     self.results = ttk.Treeview(self.resultsArea, columns=self.columns, show='headings', cursor="hand2", selectmode='browse', height=12/cfg.WIDTH_DIV)
     self.__makeHeadings()
     self.tvScroll = ttk.Scrollbar(self.resultsArea, orient='vertical', command=self.results.yview)
-    self.results.configure(yscrollcommand=self.tvScroll.set)
+    self.tvScrollHoriz = ttk.Scrollbar(self.resultsArea, orient='horizontal', command=self.results.xview)
+    self.results.configure(yscrollcommand=self.tvScroll.set, xscrollcommand=self.tvScrollHoriz.set)
     self.results.bind("<Button-1>", lambda e: self.toggleSaveButton(True))
     self.results.bind("<Double-Button-1>", lambda e: self.__saveSelection)
 
@@ -61,6 +63,7 @@ class TrainResultsArea(tk.Frame):
     self.findTrainsBtn = ttk.Button(self, text="Find Trains", command=self.startSearch)
     self.findTrainsBtn.pack()
     self.progressBar = ttk.Progressbar(self, orient='horizontal', length=200, maximum=100, mode='determinate')
+    self.tvScrollHoriz.pack(side=tk.BOTTOM, fill=tk.BOTH)
     self.results.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
     self.tvScroll.pack(side=tk.RIGHT, fill=tk.BOTH)
     self.resultsArea.pack(fill=tk.BOTH, padx=8, pady=4, expand=True)
@@ -72,24 +75,14 @@ class TrainResultsArea(tk.Frame):
 
   def updateDisplayColumns(self):
     self.__getDisplayColumns()
-    #self.results["columns"] = ()
-    # Can add columns but not remove
-    # Recreate treeview widget (function?)
-    self.results.configure(columns=self.columns)
-    self.__makeHeadings()
+    self.results["displaycolumns"] = self.dispCols
     if self.inViewSegmentResults != {}:
       self.__clearTree()
       self.__populateTreeview(self.inViewSegmentResults)
     self.update_idletasks()
 
   def __getDisplayColumns(self):
-    allCols = self.parent.us.getColumns()
-    self.columns = list()
-    self.headerCols = dict()
-    for col in allCols:
-      if allCols[col]["Selected"] == True:
-        self.columns.append(col)
-        self.headerCols[allCols[col]["Header"]] = allCols[col]["Width"]
+    self.columns, self.headerCols, self.dispCols = self.parent.us.getDisplayColumns()
 
   def __saveSelection(self, *args):
     segment = self.getSelection()
@@ -97,6 +90,8 @@ class TrainResultsArea(tk.Frame):
       self.parent.us.userSelections.createSegment(segment["Train"], self.inViewSegmentResults)
       self.isSegmentSaved = True
       self.savedSegmentsIndices.append(segment["Index"])
+      try: self.parent.itineraryWindow.updateItinerary()
+      except: pass
     if self.isSegmentSaved == False:
       doSave()
     else:
@@ -132,12 +127,10 @@ class TrainResultsArea(tk.Frame):
       self.results.delete(item)
 
   def __makeHeadings(self):
-    dispCols = list()
     for index, col in enumerate(self.headerCols):
       self.results.heading(self.columns[index], text=col, anchor='w')
       self.results.column(self.columns[index], minwidth=10, width=self.headerCols[col], stretch=True, anchor='w')
-      dispCols.append(self.columns[index])
-    self.results["displaycolumns"] = dispCols # Creates mapping so we can retrieve Train objects later
+    self.results["displaycolumns"] = self.dispCols
 
   def startSearch(self):
     """

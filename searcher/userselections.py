@@ -29,12 +29,12 @@ class UserSelections:
     self.userSelections = RailPass()
 
     self.columns = {
-      "Origin": {"Display Name": "Origin", "Header": "Origin", "Width": 175, "Selected": False},
-      "Destination": {"Display Name": "Destination", "Header": "Destination", "Width": 175, "Selected": False},
+      "Origin": {"Display Name": "Origin", "Header": "Origin", "Width": 55, "Selected": False},
+      "Destination": {"Display Name": "Destination", "Header": "Destination", "Width": 55, "Selected": False},
       "Number": {"Display Name": "Train Number", "Header": "#", "Width": 30, "Selected": True},
       "Name": {"Display Name": "Train Name", "Header": "Train", "Width": 175, "Selected": True},
-      "Departure": {"Display Name": "Departure Date/Time", "Header": "Departs", "Width": 130, "Selected": True},
-      "Arrival": {"Display Name": "Arrival Date/Time", "Header": "Arrives", "Width": 130, "Selected": True},
+      "Departs": {"Display Name": "Departure Date/Time", "Header": "Departs", "Width": 130, "Selected": True},
+      "Arrives": {"Display Name": "Arrival Date/Time", "Header": "Arrives", "Width": 130, "Selected": True},
       "Duration": {"Display Name": "Travel Time", "Header": "Duration", "Width": 65, "Selected": True},
       "Coach Price": {"Display Name": "Coach Price", "Header": "Coach ($)", "Width": 60, "Selected": False},
       "Business Price": {"Display Name": "Business Price", "Header": "Business ($)", "Width": 60, "Selected": False},
@@ -48,6 +48,17 @@ class UserSelections:
 
   def getColumns(self):
     return self.columns
+
+  def getDisplayColumns(self):
+    columns = list()
+    headerCols = dict()
+    dispCols = list()
+    for col in self.columns:
+      columns.append(col)
+      headerCols[self.columns[col]["Header"]] = self.columns[col]["Width"]
+      if self.columns[col]["Selected"] == True:
+        dispCols.append(col) # Creates mapping so we can retrieve Train objects later
+    return [columns, headerCols, dispCols]
 
   def isSearchOkay(self):
     mostRecent = self.userSelections.getMostRecentSegment()
