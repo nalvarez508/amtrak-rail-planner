@@ -4,10 +4,8 @@ title: "Home"
 
 ## Overview
 ---
-> *Love taking Amtrak?*
->
-> *Bought a Rail Pass?*
->
+> *Love taking Amtrak?*<br>
+> *Bought a Rail Pass?*<br>
 > *Having trouble creating an itinerary?*
 
 Look no further than the Amtrak Rail Planner. Built because I was in that very situation, it performs the legwork of searching for you and compiles all the trains in one, neat table. Specific train segments can be saved to your itinerary, which will be exported to a spreadsheet once you're happy with the trip.
@@ -18,8 +16,8 @@ Traveling by train with a Rail Pass is a cost-efficient way to see the country i
 
 ## Installation and Requirements
 ---
-What's needed:
+Here's what you'll need:
 - Windows/MacOS system (Linux will need to run source code, see readme)
-- Google Chrome (just needs to be installed on the computer)
+- [Google Chrome](https://www.google.com/chrome/) (just needs to be installed on the computer)
 
 Download the OS-specific zipfile from the Releases page, it's packaged inside. Store the executable wherever is convenient and launch it. If there are issues with launching it, please create an issue and I can try to investigate.

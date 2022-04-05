@@ -6,7 +6,6 @@ title: "Usage"
 
 ### Main Window
 ---
-This is where most work will be done in the app.
 #### Stations
 Origin and destination lists are presented on the left and right. Every *train* station in Amtrak's network is listed here. To search, type something in the box and hit enter. The Swap button will flip the origin and destination locations.
 
@@ -21,7 +20,6 @@ Once a search is successful, all results will be displayed in the table below th
 
 ### Itinerary
 ---
-View your saved segments here.
 
 #### Editing segments
 Buttons below the table allow you to delete or reorder segments. Additionally, the search results button will bring up *that segment's* search with itself and any other trains found.
@@ -31,27 +29,22 @@ Click the export button to bring up a file dialog box, asking where to save the 
 
 ### Settings and Menu Elements
 ---
-Here, there is some additional functionality.
 #### File
 
-Import: Load a previously generated itinerary file.
-
+Import: Load a previously generated itinerary file.  
 Export: Save your current itinerary to a file.
 
 #### Edit
 Display Columns: Change which train attributes are present in the results and itinerary tables.
 
 #### View
-Current Itinerary: Open the itinerary window.
-
-Route Map: Load the PDF of Amtrak's system map.
-
+Current Itinerary: Open the itinerary window.  
+Route Map: Load the PDF of Amtrak's system map.  
 On-Time Performance: Inspect OTP data from Amtrak and the Bureau of Transportation Statistics.
 
 #### Status
 See a live map of all Amtrak trains nationwide or for a specific region.
 
 #### Help
-About: See application version information.
-
+About: See application version information.  
 Github: Open the source code for the app.
