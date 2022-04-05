@@ -1,7 +1,6 @@
 ---
 layout: page
 title: Home
-filename: index.md
 ---
 
 # Overview
