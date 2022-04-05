@@ -1,1 +1,5 @@
 theme: jekyll-theme-minimal
+author: Nick Alvarez
+title: Amtrak Rail Planner
+logo: amtrak_header.png
+show_downloads: true
