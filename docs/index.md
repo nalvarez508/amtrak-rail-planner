@@ -1,6 +1,7 @@
+---
 layout: page
-title: "Amtrak Rail Planner"
-permalink: /
+title: "Home"
+---
 
 # Overview
 ---
