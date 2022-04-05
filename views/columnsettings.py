@@ -2,6 +2,19 @@ import tkinter as tk
 from tkinter import ttk
 
 class ColumnSettings(tk.Toplevel):
+  """
+  A class to create a column settings window, where the user can choose which columns to display on Treeviews.
+
+  Parameters
+  ----------
+  tk : Toplevel
+  
+  Attributes
+  ----------
+  checkbuttonVals : list
+      Populated with BooleanVar objects holding each column's selected state.
+  availableCols : dict
+  """
   def __init__(self, parent, *args, **kwargs):
     tk.Toplevel.__init__(self, parent, *args, **kwargs)
     self.parent = parent

@@ -6,6 +6,8 @@ class RailPass:
 
   Attributes
   ----------
+  numSegments : int
+      Number of currently saved segments, starting at 1, inclusive.
   segments : dict
       Holds an ordered dictionary of {Segment Number : Train object}.
   segmentResults : dict
@@ -22,7 +24,6 @@ class RailPass:
   """
   def __init__(self):
     self.numSegments = 1
-    self.numRecentSegment = 1
     self.segments = dict()
     self.segmentResults = dict()
   
@@ -43,6 +44,14 @@ class RailPass:
     return self.segmentResults[index]
 
   def getSegments(self):
+    """
+    Returns all saved segments.
+
+    Returns
+    -------
+    dict
+        Full of Trains!
+    """
     return self.segments
 
   def createCsv(self):
@@ -60,14 +69,30 @@ class RailPass:
     return output
   
   def createSegment(self, segment, searchResults):
-    self.numRecentSegment = self.numSegments
+    """
+    Creates a saved Rail Pass segment.
+
+    Parameters
+    ----------
+    segment : Train
+    searchResults : dict
+        This segment's search results (every train returned).
+    """
     self.segments[self.numSegments] = segment
     self.segmentResults[self.numSegments] = searchResults
     self.numSegments += segment.numberOfSegments
   
   def getMostRecentSegment(self):
+    """
+    Returns the most recent segment object.
+
+    Returns
+    -------
+    Train
+        The most recent saved segment as a Train object.
+    """
     if self.numSegments > 1:
-      return self.segments[self.numRecentSegment]
+      return self.segments[self.numSegments-1]
     else:
       return None
 

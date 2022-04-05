@@ -27,7 +27,7 @@ class ImageArea(tk.Frame):
   
   Methods
   -------
-  doRefresh(city, side, isSwap=False, lock=None)
+  doRefresh(city, side, isSwap=False)
       Refreshes the images in the window with new cities.
   updateImage(side)
       Refreshes the selected image Label.

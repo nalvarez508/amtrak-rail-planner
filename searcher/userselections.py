@@ -18,6 +18,8 @@ class UserSelections:
   departDate : datetime.date
   userSelections : RailPass
       Holds selected trip segments.
+  columns : dict
+      Defines columns for treeview objects and the column picker.
   
   getPrettyDate()
       Returns `departDate` as a pretty string.
@@ -43,13 +45,37 @@ class UserSelections:
     }
   
   def setColumns(self, vals):
+    """
+    Updates the dictionary of selected columns.
+
+    Parameters
+    ----------
+    vals : dict
+        Column : Selected format, all columns required.
+    """
     for col in vals:
       self.columns[col]["Selected"] = vals[col]
 
   def getColumns(self):
+    """
+    Gets the column settings, in the form {Train Column: {Display Name, Header, Width, Selected}}
+
+    Returns
+    -------
+    dict
+        Columns.
+    """
     return self.columns
 
   def getDisplayColumns(self):
+    """
+    Creates elements for a treeview object.
+
+    Returns
+    -------
+    list
+        Train object columns, headers with width, and display names.
+    """
     columns = list()
     headerCols = dict()
     dispCols = list()
@@ -61,6 +87,14 @@ class UserSelections:
     return [columns, headerCols, dispCols]
 
   def isSearchOkay(self):
+    """
+    Performs validations at search time for station selections and departure date.
+
+    Returns
+    -------
+    bool
+        Continue the search if True.
+    """
     mostRecent = self.userSelections.getMostRecentSegment()
     if mostRecent != None:
       if self.__beforeSearch_isSameStationOkay(mostRecent):

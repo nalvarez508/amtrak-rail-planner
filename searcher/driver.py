@@ -31,6 +31,8 @@ class Driver:
     ----------
     url : str, optional
         Starting page string, by default "about:blank"
+    undetected : bool, optional
+        If True, use the undetected chromedriver.
     """
     # Chrome options to disable logging in terminal
     chrome_options = Options()

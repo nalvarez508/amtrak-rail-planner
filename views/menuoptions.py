@@ -17,6 +17,12 @@ class MenuOptions(tk.Menu):
   Attributes
   ----------
   helpmenu : Menu
+  statusmenu : Menu
+  filemenu : Menu
+  editmenu : Menu
+  viewmenu : Menu
+  otpmenu : Menu
+      On-time performance.
 
   Methods
   -------

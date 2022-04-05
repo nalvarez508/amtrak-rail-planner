@@ -4,6 +4,43 @@ from tkinter import ttk
 from views.config import WIDTH_DIV
 
 class Itinerary(tk.Toplevel):
+  """
+  A class to create the Itinerary window, used to display saved segments.
+
+  Parameters
+  ----------
+  tk : Toplevel
+  
+  Attributes
+  ----------
+  inViewSavedSegments : dict
+  segmentsArea : tk.Frame
+      Holds Treeview and scrollbars.
+  columns = list
+      Selected column names from `Train.organizationalUnit`.
+  headerCols = dict
+      Selected column display names and their widths. Corresponds to `columns`.
+  dispCols : list
+      Currently displayed columns.
+  userSegments : ttk.Treeview
+  tvScroll : ttk.Scrollbar
+      Y-axis.
+  tvScrollHoriz : ttk.Scrollbar
+      X-axis.
+  deleteButton : ttk.Button
+  moveUpButton : ttk.Button
+  moveDownButton : ttk.Button
+  exportButton : ttk.Button
+  openResultsButton : ttk.Button
+      Loads this segment's search results into the train results area.
+  
+  Methods
+  -------
+  updateItinerary
+      Refreshes the treeview object with new information.
+  updateDisplayColumns
+      Changes which columns are shown in the table.
+  """
   def __init__(self, parent, *args, **kwargs):
     tk.Toplevel.__init__(self, parent, *args, **kwargs)
     self.parent = parent
@@ -50,6 +87,9 @@ class Itinerary(tk.Toplevel):
     self.destroy()
 
   def updateItinerary(self):
+    """
+    Refreshes the treeview object with new information from the Rail Pass object.
+    """
     self.__clearTree()
     self.__populateTreeview(self.parent.us.userSelections.getSegments())
     self.__exportButtonCheck()
@@ -57,10 +97,12 @@ class Itinerary(tk.Toplevel):
     self.update_idletasks()
 
   def __exportButtonCheck(self):
+    """If there are no segments present, do not allow an export."""
     if self.userSegments.get_children() != (): self.exportButton.configure(state='normal')
     else: self.exportButton.configure(state='disabled')
 
   def __buttonStateChanges(self, enabled=False):
+    """Enables or disables every button besides Export."""
     selectionBasedButtons = [self.deleteButton, self.moveDownButton, self.moveUpButton, self.openResultsButton]
     if enabled:
       for widget in selectionBasedButtons:
@@ -76,6 +118,9 @@ class Itinerary(tk.Toplevel):
     self.userSegments["displaycolumns"] = self.dispCols
   
   def updateDisplayColumns(self):
+    """
+    Changes which columns are currently shown in the table.
+    """
     self.__getDisplayColumns()
     self.userSegments["displaycolumns"] = self.dispCols
     if self.inViewSavedSegments != {}:

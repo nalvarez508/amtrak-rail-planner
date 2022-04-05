@@ -17,15 +17,22 @@ class TrainResultsArea(tk.Frame):
   background : str
   resultsArea : tk.Frame
       Holds `results` and `tvScroll`.
+  isSegmentSaved : bool
+  savedSegmentIndices : list
   inViewSegmentResults : dict
       Currently displayed results.
-  columns = list
+  columns : list
       Selected column names from `Train.organizationalUnit`.
-  headerCols = dict
+  headerCols : dict
       Selected column display names and their widths. Corresponds to `columns`.
+  dispCols : list
+      Columns to be shown in the table.
   results : ttk.Treeview
   tvScroll : ttk.Scrollbar
       Controls `results` yview.
+  tvScrollHoriz : ttk.Scrollbar
+      Controls `results` xview.
+  saveButton : ttk.Button
   findTrainsBtn : ttk.Button
   progressBar : ttk.Progressbar
 
@@ -70,10 +77,21 @@ class TrainResultsArea(tk.Frame):
     self.saveButton.pack()
 
   def toggleSaveButton(self, enabled=False):
+    """
+    Enables or disables the "Save Segment" button.
+
+    Parameters
+    ----------
+    enabled : bool, optional
+        Whether or not to enable the button, by default False
+    """
     if enabled: self.saveButton.config(state='normal')
     else: self.saveButton.config(state='disabled')
 
   def updateDisplayColumns(self):
+    """
+    Refreshes currently displayed columns in `results`.
+    """
     self.__getDisplayColumns()
     self.results["displaycolumns"] = self.dispCols
     if self.inViewSegmentResults != {}:
@@ -85,6 +103,7 @@ class TrainResultsArea(tk.Frame):
     self.columns, self.headerCols, self.dispCols = self.parent.us.getDisplayColumns()
 
   def __saveSelection(self, *args):
+    """Performs some validation for segments before saving them to the Rail Pass."""
     segment = self.getSelection()
     def doSave():
       self.parent.us.userSelections.createSegment(segment["Train"], self.inViewSegmentResults)
@@ -105,6 +124,14 @@ class TrainResultsArea(tk.Frame):
           pass
 
   def getSelection(self, *args):
+    """
+    Gets the currently selected item from the results table.
+
+    Returns
+    -------
+    dict
+        Index (int): Train (Train)
+    """
     item = self.results.focus()
     if item != "":
       myTrain = (self.inViewSegmentResults[self.results.item(item, "text")]) # Train object
@@ -187,10 +214,12 @@ class TrainResultsArea(tk.Frame):
     import json
     from traintracks.train import Train
 
+    # DEVELOPMENT
     with open("TestTrainSearch.json", "r") as f:
       temp = json.loads(f.read())
       for num in temp:
         response[int(num)] = Train(temp[num])
+
     if type(response) == dict: # Trains returned
       self.inViewSegmentResults = response
       self.__populateTreeview(response)

@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 import random
+import os
 
 from traintracks.stations import Stations
 from . import config as cfg
@@ -19,6 +20,8 @@ class StationsArea(tk.Frame):
   ----------
   stations : Stations
       All Amtrak stations.
+  stationKeys : list
+      Display names for list elements.
   lengthOfList : int
   boxWidth : int
       Combobox width based on OS.
@@ -46,9 +49,9 @@ class StationsArea(tk.Frame):
     self.swapButton.grid(row=1, column=1, padx=12)
 
     self.parent.imageArea.doRefresh(self.stations.returnCityState(self.origin.get()), 1)
-    self.parent.imageArea.doRefresh(self.stations.returnCityState(self.destination.get()), 2)
+    if os.name == 'posix': self.parent.imageArea.doRefresh(self.stations.returnCityState(self.destination.get()), 2)
     #self.parent.startThread(self.parent.doRefresh, [self.stations.returnCityState(self.origin.get()), 1])
-    #self.parent.startThread(self.parent.imageArea.doRefresh, [self.stations.returnCityState(self.destination.get()), 2])
+    elif os.name == 'nt': self.parent.startThread(self.parent.imageArea.doRefresh, [self.stations.returnCityState(self.destination.get()), 2])
 
   def __swapStations(self):
     """Swaps the origin and destination, both Combobox objects and ImageArea labels."""
@@ -66,6 +69,7 @@ class StationsArea(tk.Frame):
     #self.destination.xview_scroll(0*(event.delta/120), "units")
 
   def __autocomplete(self, event):
+    """If the user types in the combobox and presses Enter, results with from that query will be displayed."""
     val = event.widget.get()
 
     if val == '':
@@ -111,7 +115,7 @@ class StationsArea(tk.Frame):
 
     Extended Summary
     ----------------
-    The UserSelection variable(s) are set with the new values. A Lock is created before the image search begins, so if the user changes another image too quickly, the WebDriver will not fall apart.
+    The UserSelection variable(s) are set with the new values. A Lock is created before the image search begins, so if the user changes another image too quickly, the WebDriver will not fall apart, usually.
 
     Parameters
     ----------
