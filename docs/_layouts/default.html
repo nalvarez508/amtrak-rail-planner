@@ -22,23 +22,16 @@
         {% endif %}
 
         <p>{{ site.description | default: site.github.project_tagline }}</p>
-        <p>Current version: v{{ site.app_version }}</p>
-
-        {% if site.github.is_project_page %}
-        <p class="view"><a href="{{ site.github.repository_url }}">View the Project on GitHub <small>{{ site.github.repository_nwo }}</small></a></p>
-        {% endif %}
-
-        {% if site.github.is_user_page %}
-        <p class="view"><a href="{{ site.github.owner_url }}">View My GitHub Profile</a></p>
-        {% endif %}
-
-        <p><a href="{{ "/" | "https://nalvarez508.github.io/amtrak-rail-planner/"}}">Home</a></p>
-        <p><a href="{{ "/usage" | "https://nalvarez508.github.io/amtrak-rail-planner/usage"}}">Usage</a></p>
-
+        <strong>Current version: v{{ site.app_version }}</strong><br>
+        <hr>
+        
+        <p class="view"><a href="/amtrak-rail-planner/">Home</a> | <a href="/amtrak-rail-planner/usage">Usage</a></p>
+        
         {% if site.show_downloads %}
         <ul class="downloads">
-          <li><a href="{{ site.win_url }}">Download for <strong>Windows</strong></a></li>
-          <li><a href="{{ site.mac_url }}">Download for <strong>MacOS</strong></a></li>
+          <li><a href="{{ site.win_url }}">Download <strong>Windows</strong></a></li>
+          <li><a href="{{ site.mac_url }}">Download <strong>MacOS</strong></a></li>
+          <li><a href="{{ site.github.repository_url }}">View on <strong>GitHub</strong></a></li>
         </ul>
         {% endif %}
       </header>
@@ -47,12 +40,6 @@
       {{ content }}
 
       </section>
-      <footer>
-        {% if site.github.is_project_page %}
-        <p>This project is maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></p>
-        {% endif %}
-        <p><small>Hosted on GitHub Pages</small></p>
-      </footer>
     </div>
     <script src="{{ "/assets/js/scale.fix.js" | relative_url }}"></script>
   </body>
