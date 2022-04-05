@@ -46,11 +46,11 @@ class Stations:
         code = rowData[1].text.strip() # Amtrak-defined station code
         city = rowData[2].text.strip() # City where the station is located
         state = rowData[3].text.strip() # State, as an abbreviation
-        self.stations[f"{code} | {name}, {state}"] = {"Code":code, "Name":name, "City":city, "State":state}
+        self.stations[f"{name}, {state} ({code})"] = {"Code":code, "Name":name, "City":city, "State":state}
 
   def returnStationKeys(self):
     """
-    Returns a list of stations in the form 'Code | Name, State' for use in a Combobox.
+    Returns a list of stations in the form 'Name, State (Code)' for use in a Combobox.
     
     Returns
     -------
@@ -66,7 +66,7 @@ class Stations:
     Parameters
     ----------
     key : str
-        a 'Code | Name, State' string
+        a 'Name, State (Code)' string
 
     Returns
     -------
@@ -82,7 +82,7 @@ class Stations:
     Parameters
     ----------
     key : str
-        a 'Code | Name, State' string
+        a 'Name, State (Code)' string
     
     Returns
     -------
@@ -98,7 +98,7 @@ class Stations:
     Parameters
     ----------
     key : str
-        a 'Code | Name, State' string
+        a 'Name, State (Code)' string
     Returns
     -------
     str
