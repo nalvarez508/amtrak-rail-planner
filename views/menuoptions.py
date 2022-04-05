@@ -36,7 +36,7 @@ class MenuOptions(tk.Menu):
     self.parent = parent
     self.helpmenu = tk.Menu(self, tearoff=0)
     self.helpmenu.add_command(label="About", command=lambda: self.openBox("Amtrak Rail Pass Assistant\nv0.1.0"))
-    self.helpmenu.add_command(label="Github", command=lambda: self.openLink("https://github.com/nalvarez508/cs620"))
+    self.helpmenu.add_command(label="Github", command=lambda: self.openLink("https://github.com/nalvarez508/amtrak-rail-planner"))
 
     self.statusmenu = tk.Menu(self, tearoff=0)
     self.statusmenu.add_command(label="Nationwide", command=lambda: self.openLink("https://asm.transitdocs.com/map"))
