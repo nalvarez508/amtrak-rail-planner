@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Usage
-permalink: /usage
+filename: usage.md
 ---
 # Usage
 
