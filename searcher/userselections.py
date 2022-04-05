@@ -116,8 +116,9 @@ class UserSelections:
       return True
   
   def __beforeSearch_isSameStationOkay(self, mostRecent):
-    origin = self.origin.split()[0]
-    destination = self.destination.split()[0]
+    # Patchwork
+    origin = self.origin[self.origin.find("(")+1:self.origin.find(")")]
+    destination = self.destination[self.destination.find("(")+1:self.destination.find(")")]
     if (mostRecent.origin == origin) & (mostRecent.destination == destination):
       return messagebox.askyesno(title=APP_NAME, message="The selected origin and destination stations are the same as the previous segment's stations.\nContinue with the search?")
     elif mostRecent.origin == origin:
