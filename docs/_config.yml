@@ -5,4 +5,7 @@ description: >-
   Currently in Alpha - not ready for release.
 title: Amtrak Rail Planner
 logo: amtrak_header.png
-show_downloads: false
+show_downloads: true
+app_version: 0.1.0
+mac_url: https://nalvarez508.github.io/amtrak-rail-planner/usage
+win_url: https://nalvarez508.github.io/amtrak-rail-planner/usage
