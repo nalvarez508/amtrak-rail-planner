@@ -46,13 +46,19 @@ class MainWindow(tk.Tk):
   trainResultsArea : TrainResultsArea
   devTools : DevTools
       Not used in production, only for testing.
+  itineraryWindow : Itinerary
+      `None` if window is not open.
   statusBar : tk.Label
 
   Methods
   -------
+  openItinerary
+      If not already open, spawns an Itinerary object.
+  closeItinerary
+      Sets `itineraryWindow` to None.
   startThread(function, args=None)
       Starts a thread to run the given function.
-  onClose()
+  onClose
       Quits the application and closes the webdrivers.
   """
   def __init__(self):
@@ -93,7 +99,10 @@ class MainWindow(tk.Tk):
     self.update()
 
   def openItinerary(self):
-    self.itineraryWindow = Itinerary(self)
+    if self.itineraryWindow == None:
+      self.itineraryWindow = Itinerary(self)
+    else:
+      self.itineraryWindow.lift()
   
   def closeItinerary(self):
     self.itineraryWindow = None
@@ -142,6 +151,7 @@ class MainWindow(tk.Tk):
       Thread(target=function).start()
 
   def onClose(self):
+    """Closes webdrivers and any windows."""
     self.devTools.destroy()
     self.destroy()
     # Close webdrivers
