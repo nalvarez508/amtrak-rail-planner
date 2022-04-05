@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
+from views.config import BACKGROUND
+
 class ColumnSettings(tk.Toplevel):
   """
   A class to create a column settings window, where the user can choose which columns to display on Treeviews.
@@ -19,8 +21,9 @@ class ColumnSettings(tk.Toplevel):
     tk.Toplevel.__init__(self, parent, *args, **kwargs)
     self.parent = parent
     self.checkbuttonVals = list()
+    self.configure(background=BACKGROUND)
 
-    tk.Label(self, text="Select Display Columns").pack()
+    tk.Label(self, text="Select Display Columns", background=BACKGROUND).pack()
     self.availableCols = self.parent.us.getColumns()
     self.__createCheckbuttons()
     

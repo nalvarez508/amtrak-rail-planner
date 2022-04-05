@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkcalendar import Calendar
 
 import sys
 from threading import Thread
@@ -109,7 +110,7 @@ class MainWindow(tk.Tk):
 
   def __setBackground(self, f=None):
     """Sets the background to `cfg.BACKGROUND` for all non-results and non-ttk elements."""
-    DONOTCHANGETHESE = [ttk.Button, ttk.Combobox, ttk.Treeview, ttk.Progressbar, ttk.Label, ttk.Frame, ttk.Scrollbar]
+    DONOTCHANGETHESE = [ttk.Button, ttk.Combobox, ttk.Treeview, ttk.Progressbar, ttk.Label, ttk.Frame, ttk.Scrollbar, Calendar]
     if f == None:
       f = self
     if type(f) not in DONOTCHANGETHESE:

@@ -4,6 +4,7 @@ from tkcalendar import Calendar as Cal
 
 import time
 import datetime
+import os
 
 from . import config as cfg
 
@@ -88,6 +89,7 @@ class DateSelectionArea(tk.Frame):
   def __createCalendarArea(self):
     rightNow = self.parent.us.getDate()
     cal = Cal(self, selectmode='day', year=rightNow.year, month=rightNow.month, day=rightNow.day, firstweekday="sunday", mindate=rightNow, date_pattern="m/d/y")
+    if os.name == 'posix': cal.configure(font='TkDefaultFont 14', background='seashell3', selectforeground='red', foreground='black')
     cal.bind("<<CalendarSelected>>", self.__callbackCalendar)
     return cal
 
