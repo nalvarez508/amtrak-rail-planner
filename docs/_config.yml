@@ -1,7 +1,6 @@
 theme: jekyll-theme-minimal
-tagline: Amtrak Rail Planner intends to make multi-city trip planning easier. 
 description: >-
-  Meant for use with a Rail Pass.
+  Amtrak Rail Planner intends to make multi-city trip planning easier. Meant for use with a Rail Pass.
   Currently in Alpha - not ready for release.
 title: Amtrak Rail Planner
 logo: amtrak_header.png
