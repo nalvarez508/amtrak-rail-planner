@@ -1,0 +1,68 @@
+XHRPOSThttps://www.amtrak.com/v4/journey-solution-option
+[HTTP/1.1 422 Unprocessable Entity 30885ms]
+
+	
+POST
+	https://www.amtrak.com/v4/journey-solution-option
+Status
+422
+Unprocessable Entity
+VersionHTTP/1.1
+Transferred1.65 KB (506 B size)
+Referrer Policystrict-origin-when-cross-origin
+
+    	
+    HTTP/1.1 422 Unprocessable Entity
+
+    Content-Type: application/json; charset=UTF-8
+
+    Content-Length: 506
+
+    Strict-Transport-Security: max-age=31536000; includeSubdomains;
+
+    Date: Thu, 31 Mar 2022 20:49:22 GMT
+
+    Connection: close
+
+    Access-Control-Allow-Methods: GET,POST,OPTIONS
+
+    Access-Control-Allow-Credentials: true
+
+    Access-Control-Allow-Origin: *
+
+    Set-Cookie: bm_sv=FD80ACB7E3F7BBB574C4990488A51367~bZ24GtysJ2r5XwKq+Iv1cYu19hbu8uGNmASC/lcvqi9cBOFU/u2lhWce/lcbGjrSshvBovo8JQed/szHHvX9Kir+y2pguEKIXvbeEzO4mI0q6u3rjHeHohzf382yZsfxlX0gzsMHWMmZx/7+8y9Ospudu6lny1Cc6+7YDWPZc7c=; Domain=.amtrak.com; Path=/; Max-Age=7154; HttpOnly
+
+    Set-Cookie: _abck=3944AE4CEAAB45B5390A1FC0C4258756~-1~YAAQLFw6F5iOSt9/AQAAT2294QfFiM3X6FLAvU3/B7pVxzIvF0vqszoM3Cs+fnL7XWyD4/khkj2eHIpiN4dXTw8jCAEuHWeJ9PRnHWQdjZBpH12kdOrfl42lBlcpqM4hxqN2FLun3b+A8e1uLlu9Q3vL/FNF7H13wooh6orYNFMgk24VBoGPapJUa2Sj1CaNwxuCQiO0Kd7IbncDcgdzJZDg2HihyXb4g7TOfsn2X86ygqL2lzolBap1vZYviCkHxbPNxmDk1qYJ8ySkQJQzm/VooaM4pOPa1z+P5XsJJGLxCVseQHe4e2IFelfWnYRJP5PCq1QnHPtHFhCZMT6T928jvhFEYjNxKIH7Bn8hcv1atrqrRcnQar5ysPLwZXQrc7Mu18ToJP0ddsPJu+fILjbDsykNu1m1Ow==~0~-1~-1; Domain=.amtrak.com; Path=/; Expires=Fri, 31 Mar 2023 20:49:22 GMT; Max-Age=31536000; Secure
+    	
+    Accept
+    	application/json, text/plain, */*
+    Accept-Encoding
+    	gzip, deflate, br
+    Accept-Language
+    	en-US,en;q=0.5
+    Connection
+    	keep-alive
+    Content-Length
+    	408
+    Content-Type
+    	application/json
+    Cookie
+    	_abck=3944AE4CEAAB45B5390A1FC0C4258756~0~YAAQLFw6F+eDSt9/AQAAacm84QciYxWt4UTQNEwcMQkFy59/YEIccamprRzMX8Kg1dny+fXI0hhOcfna1rd0J04y24D/Kudlpcnm60mswzsWcOcHxteRvehnblRgF3z8ayeLk4v8i0VYd6S9vINQMdL3Pj2aGby7Q18mOjP6MbqyM6QYn0DhAhumpEZmiSk7ysmNUr22mAMNSD08EPx0E8L1vQ/Ci1LkO7D3nHjoA0EhYF17GbX5QJyB52N0jWT6SYUuoOUvod3iHP437SKBpM86FXbNRBXaulxCiXuyf+0pcGfgTXrabgw5ampO7oZ7zjYoxvuSnGQGLfH6HwqHCmOOHV/QDJaVHIWTjGa2lKUN9xy0LbD8nT7L44PWsrLdANaDt7TGWro9tqqxeUPQMz6JfyQfVwTSNQ==~-1~-1~-1; AMCV_2909B74F57B49A137F000101%40AdobeOrg…eGbzx+f1fKYictN6I0wmxwORD4YNt1Rsi5hqqXtK/3vjVtA4bR0bkYGHBUeH8TeU4Xo7hsLjWfb31L0Vhc57sHXehEzdulbrrd4Gk89qhfubfVnlq5j6scg54pqWiuxDHt88OkilFi5EgAb2U+xAtW1f7HNxBIHYP9ucho=~4469300~4403526; check=true; mbox=session#63404b7c22f04b40ba52f1bdf5c99959#1648761576; AMCVS_2909B74F57B49A137F000101%40AdobeOrg=1; bm_sv=FD80ACB7E3F7BBB574C4990488A51367~bZ24GtysJ2r5XwKq+Iv1cYu19hbu8uGNmASC/lcvqi9cBOFU/u2lhWce/lcbGjrSshvBovo8JQed/szHHvX9Kir+y2pguEKIXvbeEzO4mI3Hdwt9ng5BNE/YsfzSNo9Q/ooT5ED+a5HHVm988FbAUvwusc6QMlW3xzrU9BEclq8=
+    CSRF-Token
+    	undefined
+    Host
+    	www.amtrak.com
+    Origin
+    	https://www.amtrak.com
+    Referer
+    	https://www.amtrak.com/home.html
+    Sec-Fetch-Dest
+    	empty
+    Sec-Fetch-Mode
+    	cors
+    Sec-Fetch-Site
+    	same-origin
+    User-Agent
+    	Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:98.0) Gecko/20100101 Firefox/98.0
+    x-amtrak-trace-id
+    	e08a2b6648cb444d544a4124c73ade4835f51648759717357

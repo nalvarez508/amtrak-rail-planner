@@ -1,0 +1,2044 @@
+{
+  "initialJourneyLegOnly": false,
+  "reservableAccomodationOptions": "ALL",
+  "journeyRequest": {
+    "alternateDayOption": false,
+    "customer": {
+      "tierStatus": "Member"
+    },
+    "fare": {
+      "pricingUnit": "DOLLARS"
+    },
+    "isPassRider": false,
+    "journeyLegRequests": [
+      {
+        "destination": {
+          "code": "DEN",
+          "schedule": {
+            "arrivalDateTime": "NA"
+          }
+        },
+        "origin": {
+          "code": "RNO",
+          "schedule": {
+            "departureDateTime": "2022-04-05T00:00:00"
+          }
+        },
+        "passengers": [
+          {
+            "id": "P1",
+            "isDiscounted": false,
+            "isModified": false,
+            "type": "F"
+          }
+        ]
+      }
+    ],
+    "type": "One-Way"
+  },
+  "journeySolutionOption": {
+    "id": "534aba65-b29c-4b7e-8f3d-59069cd407d6",
+    "journeyLegs": [
+      {
+        "alternateDayOption": false,
+        "id": "journeyLeg-1",
+        "journeyLegOptions": [
+          {
+            "reservableAccommodations": [
+              {
+                "accommodationFare": {
+                  "dollarsAmount": {
+                    "accommodation": "0.00",
+                    "rail": "170.00",
+                    "total": "170.00"
+                  },
+                  "pricingUnit": "DOLLARS"
+                },
+                "isAdditionalProduct": false,
+                "travelLegAccommodations": [
+                  {
+                    "additionalProducts": [
+                      {
+                        "additionalProductFare": {
+                          "dollarsAmount": {
+                            "accommodation": "0.00",
+                            "rail": "0.00",
+                            "total": "0.00"
+                          }
+                        },
+                        "passengers": [
+                          {
+                            "passengerFare": {
+                              "dollarsAmount": {
+                                "accommodation": "0.00",
+                                "rail": "0.00",
+                                "total": "0.00"
+                              },
+                              "pricingUnit": "DOLLARS"
+                            },
+                            "id": "P1",
+                            "initialType": "F",
+                            "isDiscounted": false,
+                            "isModified": false,
+                            "type": "F"
+                          }
+                        ],
+                        "availableInventory": 2,
+                        "capacity": 1,
+                        "code": "1028",
+                        "count": 1,
+                        "lowAvailabilityThreshold": 4,
+                        "maxAllowedCount": 1,
+                        "name": "Lower Level Coach Seat",
+                        "position": "L",
+                        "rbd": "LY",
+                        "rbdType": "Coach",
+                        "seatAssignRBD": false
+                      }
+                    ],
+                    "passengers": [
+                      {
+                        "passengerFare": {
+                          "dollarsAmount": {
+                            "accommodation": "0.00",
+                            "rail": "170.00",
+                            "total": "170.00"
+                          },
+                          "pricingUnit": "DOLLARS"
+                        },
+                        "id": "P1",
+                        "initialType": "F",
+                        "isDiscounted": false,
+                        "isModified": false,
+                        "type": "F"
+                      }
+                    ],
+                    "reservableProduct": {
+                      "availableInventory": 10,
+                      "code": "1027",
+                      "count": 1,
+                      "lowAvailabilityThreshold": 4,
+                      "lowestAvailabilityThreshold": null,
+                      "maxAllowedCount": 1,
+                      "name": "Reserved Coach Seat",
+                      "rbd": "YB",
+                      "rbdType": "Coach",
+                      "isSelectedRoom": false,
+                      "capacity": 1,
+                      "position": "U",
+                      "seatAssignRBD": false
+                    },
+                    "travelLegFare": {
+                      "dollarsAmount": {
+                        "accommodation": "0.00",
+                        "rail": "170.00",
+                        "total": "170.00"
+                      },
+                      "farePlan": "BOF1",
+                      "pricingUnit": "DOLLARS"
+                    },
+                    "isUnaccompaniedChild": false,
+                    "travelLegId": "05ac3e8c_2022-04-05T16:06:00"
+                  }
+                ],
+                "category": "RG",
+                "fareFamily": "VAL",
+                "isMixedClass": false,
+                "isThroughfare": false,
+                "travelClass": "Coach"
+              },
+              {
+                "accommodationFare": {
+                  "dollarsAmount": {
+                    "accommodation": "0.00",
+                    "rail": "257.00",
+                    "total": "257.00"
+                  },
+                  "pricingUnit": "DOLLARS"
+                },
+                "isAdditionalProduct": false,
+                "travelLegAccommodations": [
+                  {
+                    "additionalProducts": [
+                      {
+                        "additionalProductFare": {
+                          "dollarsAmount": {
+                            "accommodation": "0.00",
+                            "rail": "0.00",
+                            "total": "0.00"
+                          }
+                        },
+                        "passengers": [
+                          {
+                            "passengerFare": {
+                              "dollarsAmount": {
+                                "accommodation": "0.00",
+                                "rail": "0.00",
+                                "total": "0.00"
+                              },
+                              "pricingUnit": "DOLLARS"
+                            },
+                            "id": "P1",
+                            "initialType": "F",
+                            "isDiscounted": false,
+                            "isModified": false,
+                            "type": "F"
+                          }
+                        ],
+                        "availableInventory": 2,
+                        "capacity": 1,
+                        "code": "1028",
+                        "count": 1,
+                        "lowAvailabilityThreshold": 4,
+                        "maxAllowedCount": 1,
+                        "name": "Lower Level Coach Seat",
+                        "position": "L",
+                        "rbd": "LY",
+                        "rbdType": "Coach",
+                        "seatAssignRBD": false
+                      }
+                    ],
+                    "passengers": [
+                      {
+                        "passengerFare": {
+                          "dollarsAmount": {
+                            "accommodation": "0.00",
+                            "rail": "257.00",
+                            "total": "257.00"
+                          },
+                          "pricingUnit": "DOLLARS"
+                        },
+                        "id": "P1",
+                        "initialType": "F",
+                        "isDiscounted": false,
+                        "isModified": false,
+                        "type": "F"
+                      }
+                    ],
+                    "reservableProduct": {
+                      "availableInventory": 32,
+                      "code": "1027",
+                      "count": 1,
+                      "lowAvailabilityThreshold": 4,
+                      "lowestAvailabilityThreshold": null,
+                      "maxAllowedCount": 1,
+                      "name": "Reserved Coach Seat",
+                      "rbd": "Y",
+                      "rbdType": "Coach",
+                      "isSelectedRoom": false,
+                      "capacity": 1,
+                      "position": "U",
+                      "seatAssignRBD": false
+                    },
+                    "travelLegFare": {
+                      "dollarsAmount": {
+                        "accommodation": "0.00",
+                        "rail": "257.00",
+                        "total": "257.00"
+                      },
+                      "farePlan": "YOFC",
+                      "pricingUnit": "DOLLARS"
+                    },
+                    "isUnaccompaniedChild": false,
+                    "travelLegId": "05ac3e8c_2022-04-05T16:06:00"
+                  }
+                ],
+                "category": "RG",
+                "fareFamily": "FLX",
+                "isMixedClass": false,
+                "isThroughfare": false,
+                "travelClass": "Coach"
+              },
+              {
+                "accommodationFare": {
+                  "dollarsAmount": {
+                    "accommodation": "388.00",
+                    "rail": "170.00",
+                    "total": "558.00"
+                  },
+                  "pricingUnit": "DOLLARS"
+                },
+                "isAdditionalProduct": false,
+                "travelLegAccommodations": [
+                  {
+                    "additionalProducts": [
+                      {
+                        "additionalProductFare": {
+                          "dollarsAmount": {
+                            "accommodation": "388.00",
+                            "rail": "170.00",
+                            "total": "558.00"
+                          }
+                        },
+                        "passengers": [
+                          {
+                            "passengerFare": {
+                              "dollarsAmount": {
+                                "accommodation": "388.00",
+                                "rail": "170.00",
+                                "total": "558.00"
+                              },
+                              "pricingUnit": "DOLLARS"
+                            },
+                            "id": "P1",
+                            "initialType": "F",
+                            "isDiscounted": false,
+                            "isModified": false,
+                            "type": "F"
+                          }
+                        ],
+                        "availableInventory": 1,
+                        "capacity": 2,
+                        "code": "1021",
+                        "count": 1,
+                        "lowAvailabilityThreshold": 4,
+                        "maxAllowedCount": 1,
+                        "name": "Superliner Accessible Bedroom",
+                        "rbd": "HS",
+                        "rbdType": "Sleeper",
+                        "seatAssignRBD": false
+                      }
+                    ],
+                    "passengers": [
+                      {
+                        "passengerFare": {
+                          "dollarsAmount": {
+                            "accommodation": "388.00",
+                            "rail": "170.00",
+                            "total": "558.00"
+                          },
+                          "pricingUnit": "DOLLARS"
+                        },
+                        "id": "P1",
+                        "initialType": "F",
+                        "isDiscounted": false,
+                        "isModified": false,
+                        "type": "F"
+                      }
+                    ],
+                    "reservableProduct": {
+                      "availableInventory": 4,
+                      "code": "1019",
+                      "count": 1,
+                      "lowAvailabilityThreshold": 4,
+                      "lowestAvailabilityThreshold": null,
+                      "maxAllowedCount": 1,
+                      "name": "Roomette",
+                      "rbd": "EB",
+                      "rbdType": "Sleeper",
+                      "isSelectedRoom": false,
+                      "capacity": 2,
+                      "seatAssignRBD": false,
+                      "minRequiredRooms": 1,
+                      "pricePerRoom": 388
+                    },
+                    "travelLegFare": {
+                      "dollarsAmount": {
+                        "accommodation": "388.00",
+                        "rail": "170.00",
+                        "total": "558.00"
+                      },
+                      "farePlan": "BOF1",
+                      "pricingUnit": "DOLLARS"
+                    },
+                    "isUnaccompaniedChild": false,
+                    "travelLegId": "05ac3e8c_2022-04-05T16:06:00"
+                  }
+                ],
+                "category": "RG",
+                "fareFamily": "NA",
+                "isMixedClass": false,
+                "isThroughfare": false,
+                "travelClass": "Sleeper"
+              }
+            ],
+            "nonReservableAccommodations": [
+              {
+                "category": "RG",
+                "fareFamily": "SVR",
+                "isBorderCross": false,
+                "isThroughfare": false,
+                "message": "NOT AVAILABLE",
+                "reason": "NOT AVAILABLE",
+                "travelClass": "Coach"
+              }
+            ],
+            "travelLegs": [
+              {
+                "destination": {
+                  "schedule": {
+                    "arrivalDateTime": "2022-04-06T18:38:00"
+                  },
+                  "code": "DEN",
+                  "name": "Denver, CO"
+                },
+                "origin": {
+                  "schedule": {
+                    "departureDateTime": "2022-04-05T16:06:00"
+                  },
+                  "code": "RNO",
+                  "name": "Reno, NV"
+                },
+                "travelService": {
+                  "amenities": [
+                    {
+                      "code": "B",
+                      "name": "Checked Baggage"
+                    },
+                    {
+                      "code": "L",
+                      "name": "Cafe Car"
+                    },
+                    {
+                      "code": "D",
+                      "name": "Traditional Dining"
+                    },
+                    {
+                      "code": "R",
+                      "name": "Wheelchair Ramp"
+                    }
+                  ],
+                  "carrier": "AMTRAK",
+                  "isAcela": false,
+                  "name": "California Zephyr",
+                  "number": "6",
+                  "type": "TRAIN"
+                },
+                "elapsedTime": "P1DT1H32M",
+                "id": "05ac3e8c_2022-04-05T16:06:00",
+                "isBorderCross": false,
+                "isCancelled": false,
+                "isRestricted": false,
+                "isSelfTransfer": false,
+                "numberOfStops": 0
+              }
+            ],
+            "isCoachSelected": false,
+            "isBusinessSelected": false,
+            "isRoomsSelected": false,
+            "isFirstSelected": false,
+            "hasUpperAndLowerBearths": true,
+            "addedToCart": false,
+            "selectedIndex": null,
+            "selectedTravelClass": "",
+            "totalPrice": 0,
+            "totalPoints": 0,
+            "passriderPolicies": [],
+            "citySegments": [
+              "RNO",
+              "DEN"
+            ],
+            "isOvernight": true,
+            "coach": {
+              "name": "Coach",
+              "lowestPrice": 170,
+              "lowestPriceIndex": 0,
+              "lowestPoints": null,
+              "lowestPointsIndex": null,
+              "accoms": [
+                {
+                  "accommodationFare": {
+                    "dollarsAmount": {
+                      "accommodation": "0.00",
+                      "rail": "170.00",
+                      "total": "170.00"
+                    },
+                    "pricingUnit": "DOLLARS"
+                  },
+                  "isAdditionalProduct": false,
+                  "travelLegAccommodations": [
+                    {
+                      "additionalProducts": [
+                        {
+                          "additionalProductFare": {
+                            "dollarsAmount": {
+                              "accommodation": "0.00",
+                              "rail": "0.00",
+                              "total": "0.00"
+                            }
+                          },
+                          "passengers": [
+                            {
+                              "passengerFare": {
+                                "dollarsAmount": {
+                                  "accommodation": "0.00",
+                                  "rail": "0.00",
+                                  "total": "0.00"
+                                },
+                                "pricingUnit": "DOLLARS"
+                              },
+                              "id": "P1",
+                              "initialType": "F",
+                              "isDiscounted": false,
+                              "isModified": false,
+                              "type": "F"
+                            }
+                          ],
+                          "availableInventory": 2,
+                          "capacity": 1,
+                          "code": "1028",
+                          "count": 1,
+                          "lowAvailabilityThreshold": 4,
+                          "maxAllowedCount": 1,
+                          "name": "Lower Level Coach Seat",
+                          "position": "L",
+                          "rbd": "LY",
+                          "rbdType": "Coach",
+                          "seatAssignRBD": false
+                        }
+                      ],
+                      "passengers": [
+                        {
+                          "passengerFare": {
+                            "dollarsAmount": {
+                              "accommodation": "0.00",
+                              "rail": "170.00",
+                              "total": "170.00"
+                            },
+                            "pricingUnit": "DOLLARS"
+                          },
+                          "id": "P1",
+                          "initialType": "F",
+                          "isDiscounted": false,
+                          "isModified": false,
+                          "type": "F"
+                        }
+                      ],
+                      "reservableProduct": {
+                        "availableInventory": 10,
+                        "code": "1027",
+                        "count": 1,
+                        "lowAvailabilityThreshold": 4,
+                        "lowestAvailabilityThreshold": null,
+                        "maxAllowedCount": 1,
+                        "name": "Reserved Coach Seat",
+                        "rbd": "YB",
+                        "rbdType": "Coach",
+                        "isSelectedRoom": false,
+                        "capacity": 1,
+                        "position": "U",
+                        "seatAssignRBD": false
+                      },
+                      "travelLegFare": {
+                        "dollarsAmount": {
+                          "accommodation": "0.00",
+                          "rail": "170.00",
+                          "total": "170.00"
+                        },
+                        "farePlan": "BOF1",
+                        "pricingUnit": "DOLLARS"
+                      },
+                      "isUnaccompaniedChild": false,
+                      "travelLegId": "05ac3e8c_2022-04-05T16:06:00"
+                    }
+                  ],
+                  "category": "RG",
+                  "fareFamily": "VAL",
+                  "isMixedClass": false,
+                  "isThroughfare": false,
+                  "travelClass": "Coach"
+                },
+                {
+                  "accommodationFare": {
+                    "dollarsAmount": {
+                      "accommodation": "0.00",
+                      "rail": "257.00",
+                      "total": "257.00"
+                    },
+                    "pricingUnit": "DOLLARS"
+                  },
+                  "isAdditionalProduct": false,
+                  "travelLegAccommodations": [
+                    {
+                      "additionalProducts": [
+                        {
+                          "additionalProductFare": {
+                            "dollarsAmount": {
+                              "accommodation": "0.00",
+                              "rail": "0.00",
+                              "total": "0.00"
+                            }
+                          },
+                          "passengers": [
+                            {
+                              "passengerFare": {
+                                "dollarsAmount": {
+                                  "accommodation": "0.00",
+                                  "rail": "0.00",
+                                  "total": "0.00"
+                                },
+                                "pricingUnit": "DOLLARS"
+                              },
+                              "id": "P1",
+                              "initialType": "F",
+                              "isDiscounted": false,
+                              "isModified": false,
+                              "type": "F"
+                            }
+                          ],
+                          "availableInventory": 2,
+                          "capacity": 1,
+                          "code": "1028",
+                          "count": 1,
+                          "lowAvailabilityThreshold": 4,
+                          "maxAllowedCount": 1,
+                          "name": "Lower Level Coach Seat",
+                          "position": "L",
+                          "rbd": "LY",
+                          "rbdType": "Coach",
+                          "seatAssignRBD": false
+                        }
+                      ],
+                      "passengers": [
+                        {
+                          "passengerFare": {
+                            "dollarsAmount": {
+                              "accommodation": "0.00",
+                              "rail": "257.00",
+                              "total": "257.00"
+                            },
+                            "pricingUnit": "DOLLARS"
+                          },
+                          "id": "P1",
+                          "initialType": "F",
+                          "isDiscounted": false,
+                          "isModified": false,
+                          "type": "F"
+                        }
+                      ],
+                      "reservableProduct": {
+                        "availableInventory": 32,
+                        "code": "1027",
+                        "count": 1,
+                        "lowAvailabilityThreshold": 4,
+                        "lowestAvailabilityThreshold": null,
+                        "maxAllowedCount": 1,
+                        "name": "Reserved Coach Seat",
+                        "rbd": "Y",
+                        "rbdType": "Coach",
+                        "isSelectedRoom": false,
+                        "capacity": 1,
+                        "position": "U",
+                        "seatAssignRBD": false
+                      },
+                      "travelLegFare": {
+                        "dollarsAmount": {
+                          "accommodation": "0.00",
+                          "rail": "257.00",
+                          "total": "257.00"
+                        },
+                        "farePlan": "YOFC",
+                        "pricingUnit": "DOLLARS"
+                      },
+                      "isUnaccompaniedChild": false,
+                      "travelLegId": "05ac3e8c_2022-04-05T16:06:00"
+                    }
+                  ],
+                  "category": "RG",
+                  "fareFamily": "FLX",
+                  "isMixedClass": false,
+                  "isThroughfare": false,
+                  "travelClass": "Coach"
+                }
+              ],
+              "pwdAccoms": [],
+              "nonResAccoms": [
+                {
+                  "category": "RG",
+                  "fareFamily": "SVR",
+                  "isBorderCross": false,
+                  "isThroughfare": false,
+                  "message": "NOT AVAILABLE",
+                  "reason": "NOT AVAILABLE",
+                  "travelClass": "Coach"
+                }
+              ],
+              "pwdNonResAccoms": [],
+              "availabilityStatus": 0,
+              "leftOuts": "",
+              "isMixedAccom": false
+            },
+            "business": {
+              "name": "Business",
+              "lowestPrice": null,
+              "lowestPriceIndex": null,
+              "lowestPoints": null,
+              "lowestPointsIndex": null,
+              "accoms": [],
+              "pwdAccoms": [],
+              "nonResAccoms": [],
+              "pwdNonResAccoms": [],
+              "availabilityStatus": 2,
+              "leftOuts": "",
+              "isMixedAccom": false
+            },
+            "rooms": {
+              "name": "Sleeper",
+              "lowestPrice": 558,
+              "lowestPriceIndex": 0,
+              "lowestPoints": null,
+              "lowestPointsIndex": null,
+              "accoms": [
+                {
+                  "accommodationFare": {
+                    "dollarsAmount": {
+                      "accommodation": "388.00",
+                      "rail": "170.00",
+                      "total": "558.00"
+                    },
+                    "pricingUnit": "DOLLARS"
+                  },
+                  "isAdditionalProduct": false,
+                  "travelLegAccommodations": [
+                    {
+                      "additionalProducts": [
+                        {
+                          "additionalProductFare": {
+                            "dollarsAmount": {
+                              "accommodation": "388.00",
+                              "rail": "170.00",
+                              "total": "558.00"
+                            }
+                          },
+                          "passengers": [
+                            {
+                              "passengerFare": {
+                                "dollarsAmount": {
+                                  "accommodation": "388.00",
+                                  "rail": "170.00",
+                                  "total": "558.00"
+                                },
+                                "pricingUnit": "DOLLARS"
+                              },
+                              "id": "P1",
+                              "initialType": "F",
+                              "isDiscounted": false,
+                              "isModified": false,
+                              "type": "F"
+                            }
+                          ],
+                          "availableInventory": 1,
+                          "capacity": 2,
+                          "code": "1021",
+                          "count": 1,
+                          "lowAvailabilityThreshold": 4,
+                          "maxAllowedCount": 1,
+                          "name": "Superliner Accessible Bedroom",
+                          "rbd": "HS",
+                          "rbdType": "Sleeper",
+                          "seatAssignRBD": false
+                        }
+                      ],
+                      "passengers": [
+                        {
+                          "passengerFare": {
+                            "dollarsAmount": {
+                              "accommodation": "388.00",
+                              "rail": "170.00",
+                              "total": "558.00"
+                            },
+                            "pricingUnit": "DOLLARS"
+                          },
+                          "id": "P1",
+                          "initialType": "F",
+                          "isDiscounted": false,
+                          "isModified": false,
+                          "type": "F"
+                        }
+                      ],
+                      "reservableProduct": {
+                        "availableInventory": 4,
+                        "code": "1019",
+                        "count": 1,
+                        "lowAvailabilityThreshold": 4,
+                        "lowestAvailabilityThreshold": null,
+                        "maxAllowedCount": 1,
+                        "name": "Roomette",
+                        "rbd": "EB",
+                        "rbdType": "Sleeper",
+                        "isSelectedRoom": false,
+                        "capacity": 2,
+                        "seatAssignRBD": false,
+                        "minRequiredRooms": 1,
+                        "pricePerRoom": 388
+                      },
+                      "travelLegFare": {
+                        "dollarsAmount": {
+                          "accommodation": "388.00",
+                          "rail": "170.00",
+                          "total": "558.00"
+                        },
+                        "farePlan": "BOF1",
+                        "pricingUnit": "DOLLARS"
+                      },
+                      "isUnaccompaniedChild": false,
+                      "travelLegId": "05ac3e8c_2022-04-05T16:06:00"
+                    }
+                  ],
+                  "category": "RG",
+                  "fareFamily": "NA",
+                  "isMixedClass": false,
+                  "isThroughfare": false,
+                  "travelClass": "Sleeper"
+                },
+                {
+                  "accommodationFare": {
+                    "pricingUnit": "DOLLARS",
+                    "dollarsAmount": {
+                      "accommodation": "388.00",
+                      "rail": "170.00",
+                      "total": "558.00"
+                    }
+                  },
+                  "isAdditionalProduct": true,
+                  "travelLegAccommodations": [
+                    {
+                      "additionalProducts": [],
+                      "reservableProduct": {
+                        "availableInventory": 1,
+                        "code": "1021",
+                        "count": 1,
+                        "lowAvailabilityThreshold": 4,
+                        "lowestAvailabilityThreshold": null,
+                        "maxAllowedCount": 1,
+                        "name": "Superliner Accessible Bedroom",
+                        "rbd": "HS",
+                        "rbdType": "Sleeper",
+                        "isSelectedRoom": false,
+                        "minRequiredRooms": 1,
+                        "pricePerRoom": 388
+                      },
+                      "passengers": [
+                        {
+                          "passengerFare": {
+                            "dollarsAmount": {
+                              "accommodation": "388.00",
+                              "rail": "170.00",
+                              "total": "558.00"
+                            },
+                            "pricingUnit": "DOLLARS"
+                          },
+                          "id": "P1",
+                          "initialType": "F",
+                          "isDiscounted": false,
+                          "isModified": false,
+                          "type": "F"
+                        }
+                      ],
+                      "travelLegFare": {
+                        "dollarsAmount": {
+                          "accommodation": "388.00",
+                          "rail": "170.00",
+                          "total": "558.00"
+                        },
+                        "farePlan": "BOF1",
+                        "pricingUnit": "DOLLARS"
+                      },
+                      "travelLegId": "05ac3e8c_2022-04-05T16:06:00"
+                    }
+                  ],
+                  "travelClass": "Sleeper",
+                  "category": "RG",
+                  "fareFamily": "NA",
+                  "isMixedClass": false,
+                  "name": "Superliner Accessible Bedroom",
+                  "code": "1021",
+                  "rbd": "HS",
+                  "rbdType": "Sleeper"
+                }
+              ],
+              "pwdAccoms": [],
+              "nonResAccoms": [],
+              "pwdNonResAccoms": [],
+              "availabilityStatus": 0,
+              "leftOuts": "",
+              "isMixedAccom": false
+            },
+            "first": {
+              "name": "First",
+              "lowestPrice": null,
+              "lowestPriceIndex": null,
+              "lowestPoints": null,
+              "lowestPointsIndex": null,
+              "accoms": [],
+              "pwdAccoms": [],
+              "nonResAccoms": [],
+              "pwdNonResAccoms": [],
+              "availabilityStatus": 2,
+              "leftOuts": "",
+              "isMixedAccom": false
+            },
+            "segments": [
+              {
+                "travelLeg": {
+                  "destination": {
+                    "schedule": {
+                      "arrivalDateTime": "2022-04-06T18:38:00"
+                    },
+                    "code": "DEN",
+                    "name": "Denver, CO"
+                  },
+                  "origin": {
+                    "schedule": {
+                      "departureDateTime": "2022-04-05T16:06:00"
+                    },
+                    "code": "RNO",
+                    "name": "Reno, NV"
+                  },
+                  "travelService": {
+                    "amenities": [
+                      {
+                        "code": "B",
+                        "name": "Checked Baggage"
+                      },
+                      {
+                        "code": "L",
+                        "name": "Cafe Car"
+                      },
+                      {
+                        "code": "D",
+                        "name": "Traditional Dining"
+                      },
+                      {
+                        "code": "R",
+                        "name": "Wheelchair Ramp"
+                      }
+                    ],
+                    "carrier": "AMTRAK",
+                    "isAcela": false,
+                    "name": "California Zephyr",
+                    "number": "6",
+                    "type": "TRAIN"
+                  },
+                  "elapsedTime": "P1DT1H32M",
+                  "id": "05ac3e8c_2022-04-05T16:06:00",
+                  "isBorderCross": false,
+                  "isCancelled": false,
+                  "isRestricted": false,
+                  "isSelfTransfer": false,
+                  "numberOfStops": 0
+                },
+                "travelLegIndex": 0,
+                "travelLegId": "05ac3e8c_2022-04-05T16:06:00",
+                "journeyLegOptionId": "1_2022-04-05T16:06:00_49617b92",
+                "isCollapsed": false,
+                "isDisabled": false,
+                "isSelected": false,
+                "selectedState": "Disabled",
+                "selectedIndex": null,
+                "selectedTravelClass": "",
+                "addedTravelClass": "",
+                "addedSelectedIndex": null,
+                "addedSelectedBearth": "",
+                "isCoachSelected": false,
+                "isBusinessSelected": false,
+                "isFirstSelected": false,
+                "isRoomsSelected": false,
+                "isLastSegment": true,
+                "coach": {
+                  "name": "Coach",
+                  "lowestPrice": 170,
+                  "lowestPriceIndex": 0,
+                  "lowestPoints": null,
+                  "lowestPointsIndex": null,
+                  "accoms": [
+                    {
+                      "accommodationFare": {
+                        "pricingUnit": "DOLLARS",
+                        "dollarsAmount": {
+                          "accommodation": "0.00",
+                          "rail": "170.00",
+                          "total": "170.00"
+                        }
+                      },
+                      "isAdditionalProduct": false,
+                      "travelLegAccommodations": [
+                        {
+                          "additionalProducts": [
+                            {
+                              "additionalProductFare": {
+                                "dollarsAmount": {
+                                  "accommodation": "0.00",
+                                  "rail": "0.00",
+                                  "total": "0.00"
+                                }
+                              },
+                              "passengers": [
+                                {
+                                  "passengerFare": {
+                                    "dollarsAmount": {
+                                      "accommodation": "0.00",
+                                      "rail": "0.00",
+                                      "total": "0.00"
+                                    },
+                                    "pricingUnit": "DOLLARS"
+                                  },
+                                  "id": "P1",
+                                  "initialType": "F",
+                                  "isDiscounted": false,
+                                  "isModified": false,
+                                  "type": "F"
+                                }
+                              ],
+                              "availableInventory": 2,
+                              "capacity": 1,
+                              "code": "1028",
+                              "count": 1,
+                              "lowAvailabilityThreshold": 4,
+                              "maxAllowedCount": 1,
+                              "name": "Lower Level Coach Seat",
+                              "position": "L",
+                              "rbd": "LY",
+                              "rbdType": "Coach",
+                              "seatAssignRBD": false
+                            }
+                          ],
+                          "passengers": [
+                            {
+                              "passengerFare": {
+                                "dollarsAmount": {
+                                  "accommodation": "0.00",
+                                  "rail": "170.00",
+                                  "total": "170.00"
+                                },
+                                "pricingUnit": "DOLLARS"
+                              },
+                              "id": "P1",
+                              "initialType": "F",
+                              "isDiscounted": false,
+                              "isModified": false,
+                              "type": "F"
+                            }
+                          ],
+                          "reservableProduct": {
+                            "availableInventory": 10,
+                            "code": "1027",
+                            "count": 1,
+                            "lowAvailabilityThreshold": 4,
+                            "lowestAvailabilityThreshold": null,
+                            "maxAllowedCount": 1,
+                            "name": "Reserved Coach Seat",
+                            "rbd": "YB",
+                            "rbdType": "Coach",
+                            "isSelectedRoom": false,
+                            "capacity": 1,
+                            "position": "U",
+                            "seatAssignRBD": false
+                          },
+                          "travelLegFare": {
+                            "dollarsAmount": {
+                              "accommodation": "0.00",
+                              "rail": "170.00",
+                              "total": "170.00"
+                            },
+                            "farePlan": "BOF1",
+                            "pricingUnit": "DOLLARS"
+                          },
+                          "isUnaccompaniedChild": false,
+                          "travelLegId": "05ac3e8c_2022-04-05T16:06:00"
+                        }
+                      ],
+                      "travelClass": "Coach",
+                      "category": "RG",
+                      "fareFamily": "VAL",
+                      "isMixedClass": false,
+                      "name": "Reserved Coach Seat",
+                      "code": "1027",
+                      "rbd": "YB",
+                      "rbdType": "Coach",
+                      "showPill": true,
+                      "showPrice": true,
+                      "reservableTravelClass": "Coach",
+                      "totalPrice": 170
+                    },
+                    {
+                      "accommodationFare": {
+                        "pricingUnit": "DOLLARS",
+                        "dollarsAmount": {
+                          "accommodation": "0.00",
+                          "rail": "257.00",
+                          "total": "257.00"
+                        }
+                      },
+                      "isAdditionalProduct": false,
+                      "travelLegAccommodations": [
+                        {
+                          "additionalProducts": [
+                            {
+                              "additionalProductFare": {
+                                "dollarsAmount": {
+                                  "accommodation": "0.00",
+                                  "rail": "0.00",
+                                  "total": "0.00"
+                                }
+                              },
+                              "passengers": [
+                                {
+                                  "passengerFare": {
+                                    "dollarsAmount": {
+                                      "accommodation": "0.00",
+                                      "rail": "0.00",
+                                      "total": "0.00"
+                                    },
+                                    "pricingUnit": "DOLLARS"
+                                  },
+                                  "id": "P1",
+                                  "initialType": "F",
+                                  "isDiscounted": false,
+                                  "isModified": false,
+                                  "type": "F"
+                                }
+                              ],
+                              "availableInventory": 2,
+                              "capacity": 1,
+                              "code": "1028",
+                              "count": 1,
+                              "lowAvailabilityThreshold": 4,
+                              "maxAllowedCount": 1,
+                              "name": "Lower Level Coach Seat",
+                              "position": "L",
+                              "rbd": "LY",
+                              "rbdType": "Coach",
+                              "seatAssignRBD": false
+                            }
+                          ],
+                          "passengers": [
+                            {
+                              "passengerFare": {
+                                "dollarsAmount": {
+                                  "accommodation": "0.00",
+                                  "rail": "257.00",
+                                  "total": "257.00"
+                                },
+                                "pricingUnit": "DOLLARS"
+                              },
+                              "id": "P1",
+                              "initialType": "F",
+                              "isDiscounted": false,
+                              "isModified": false,
+                              "type": "F"
+                            }
+                          ],
+                          "reservableProduct": {
+                            "availableInventory": 32,
+                            "code": "1027",
+                            "count": 1,
+                            "lowAvailabilityThreshold": 4,
+                            "lowestAvailabilityThreshold": null,
+                            "maxAllowedCount": 1,
+                            "name": "Reserved Coach Seat",
+                            "rbd": "Y",
+                            "rbdType": "Coach",
+                            "isSelectedRoom": false,
+                            "capacity": 1,
+                            "position": "U",
+                            "seatAssignRBD": false
+                          },
+                          "travelLegFare": {
+                            "dollarsAmount": {
+                              "accommodation": "0.00",
+                              "rail": "257.00",
+                              "total": "257.00"
+                            },
+                            "farePlan": "YOFC",
+                            "pricingUnit": "DOLLARS"
+                          },
+                          "isUnaccompaniedChild": false,
+                          "travelLegId": "05ac3e8c_2022-04-05T16:06:00"
+                        }
+                      ],
+                      "travelClass": "Coach",
+                      "category": "RG",
+                      "fareFamily": "FLX",
+                      "isMixedClass": false,
+                      "name": "Reserved Coach Seat",
+                      "code": "1027",
+                      "rbd": "Y",
+                      "rbdType": "Coach",
+                      "showPill": true,
+                      "showPrice": true,
+                      "reservableTravelClass": "Coach",
+                      "totalPrice": 257
+                    }
+                  ],
+                  "pwdAccoms": [],
+                  "nonResAccoms": [
+                    {
+                      "category": "RG",
+                      "fareFamily": "SVR",
+                      "isBorderCross": false,
+                      "isThroughfare": false,
+                      "message": "NOT AVAILABLE",
+                      "reason": "NOT AVAILABLE",
+                      "travelClass": "Coach"
+                    }
+                  ],
+                  "pwdNonResAccoms": [],
+                  "availabilityStatus": 0
+                },
+                "business": {
+                  "name": "Business",
+                  "lowestPrice": null,
+                  "lowestPriceIndex": null,
+                  "lowestPoints": null,
+                  "lowestPointsIndex": null,
+                  "accoms": [],
+                  "pwdAccoms": [],
+                  "nonResAccoms": [],
+                  "pwdNonResAccoms": [],
+                  "availabilityStatus": 2
+                },
+                "rooms": {
+                  "name": "Sleeper",
+                  "lowestPrice": 558,
+                  "lowestPriceIndex": 0,
+                  "lowestPoints": null,
+                  "lowestPointsIndex": null,
+                  "accoms": [
+                    {
+                      "accommodationFare": {
+                        "pricingUnit": "DOLLARS",
+                        "dollarsAmount": {
+                          "accommodation": "388.00",
+                          "rail": "170.00",
+                          "total": "558.00"
+                        }
+                      },
+                      "isAdditionalProduct": false,
+                      "travelLegAccommodations": [
+                        {
+                          "additionalProducts": [
+                            {
+                              "additionalProductFare": {
+                                "dollarsAmount": {
+                                  "accommodation": "388.00",
+                                  "rail": "170.00",
+                                  "total": "558.00"
+                                }
+                              },
+                              "passengers": [
+                                {
+                                  "passengerFare": {
+                                    "dollarsAmount": {
+                                      "accommodation": "388.00",
+                                      "rail": "170.00",
+                                      "total": "558.00"
+                                    },
+                                    "pricingUnit": "DOLLARS"
+                                  },
+                                  "id": "P1",
+                                  "initialType": "F",
+                                  "isDiscounted": false,
+                                  "isModified": false,
+                                  "type": "F"
+                                }
+                              ],
+                              "availableInventory": 1,
+                              "capacity": 2,
+                              "code": "1021",
+                              "count": 1,
+                              "lowAvailabilityThreshold": 4,
+                              "maxAllowedCount": 1,
+                              "name": "Superliner Accessible Bedroom",
+                              "rbd": "HS",
+                              "rbdType": "Sleeper",
+                              "seatAssignRBD": false
+                            }
+                          ],
+                          "passengers": [
+                            {
+                              "passengerFare": {
+                                "dollarsAmount": {
+                                  "accommodation": "388.00",
+                                  "rail": "170.00",
+                                  "total": "558.00"
+                                },
+                                "pricingUnit": "DOLLARS"
+                              },
+                              "id": "P1",
+                              "initialType": "F",
+                              "isDiscounted": false,
+                              "isModified": false,
+                              "type": "F"
+                            }
+                          ],
+                          "reservableProduct": {
+                            "availableInventory": 4,
+                            "code": "1019",
+                            "count": 1,
+                            "lowAvailabilityThreshold": 4,
+                            "lowestAvailabilityThreshold": null,
+                            "maxAllowedCount": 1,
+                            "name": "Roomette",
+                            "rbd": "EB",
+                            "rbdType": "Sleeper",
+                            "isSelectedRoom": false,
+                            "capacity": 2,
+                            "seatAssignRBD": false,
+                            "minRequiredRooms": 1,
+                            "pricePerRoom": 388
+                          },
+                          "travelLegFare": {
+                            "dollarsAmount": {
+                              "accommodation": "388.00",
+                              "rail": "170.00",
+                              "total": "558.00"
+                            },
+                            "farePlan": "BOF1",
+                            "pricingUnit": "DOLLARS"
+                          },
+                          "isUnaccompaniedChild": false,
+                          "travelLegId": "05ac3e8c_2022-04-05T16:06:00"
+                        }
+                      ],
+                      "travelClass": "Sleeper",
+                      "category": "RG",
+                      "fareFamily": "NA",
+                      "isMixedClass": false,
+                      "name": "Roomette",
+                      "code": "1019",
+                      "rbd": "EB",
+                      "rbdType": "Sleeper",
+                      "showPill": true,
+                      "showPrice": true,
+                      "reservableTravelClass": "Sleeper",
+                      "totalPrice": 558
+                    },
+                    {
+                      "accommodationFare": {
+                        "pricingUnit": "DOLLARS",
+                        "dollarsAmount": {
+                          "accommodation": "388.00",
+                          "rail": "170.00",
+                          "total": "558.00"
+                        }
+                      },
+                      "isAdditionalProduct": true,
+                      "travelLegAccommodations": [
+                        {
+                          "additionalProducts": [],
+                          "reservableProduct": {
+                            "availableInventory": 1,
+                            "code": "1021",
+                            "count": 1,
+                            "lowAvailabilityThreshold": 4,
+                            "lowestAvailabilityThreshold": null,
+                            "maxAllowedCount": 1,
+                            "name": "Superliner Accessible Bedroom",
+                            "rbd": "HS",
+                            "rbdType": "Sleeper",
+                            "isSelectedRoom": false,
+                            "minRequiredRooms": 1,
+                            "pricePerRoom": 388
+                          },
+                          "passengers": [
+                            {
+                              "passengerFare": {
+                                "dollarsAmount": {
+                                  "accommodation": "388.00",
+                                  "rail": "170.00",
+                                  "total": "558.00"
+                                },
+                                "pricingUnit": "DOLLARS"
+                              },
+                              "id": "P1",
+                              "initialType": "F",
+                              "isDiscounted": false,
+                              "isModified": false,
+                              "type": "F"
+                            }
+                          ],
+                          "travelLegFare": {
+                            "dollarsAmount": {
+                              "accommodation": "388.00",
+                              "rail": "170.00",
+                              "total": "558.00"
+                            },
+                            "farePlan": "BOF1",
+                            "pricingUnit": "DOLLARS"
+                          },
+                          "travelLegId": "05ac3e8c_2022-04-05T16:06:00"
+                        }
+                      ],
+                      "travelClass": "Sleeper",
+                      "category": "RG",
+                      "fareFamily": "NA",
+                      "isMixedClass": false,
+                      "name": "Superliner Accessible Bedroom",
+                      "code": "1021",
+                      "rbd": "HS",
+                      "rbdType": "Sleeper",
+                      "reservableTravelClass": "Sleeper",
+                      "totalPrice": 558
+                    }
+                  ],
+                  "pwdAccoms": [],
+                  "nonResAccoms": [],
+                  "pwdNonResAccoms": [],
+                  "availabilityStatus": 0
+                },
+                "first": {
+                  "name": "First",
+                  "lowestPrice": null,
+                  "lowestPriceIndex": null,
+                  "lowestPoints": null,
+                  "lowestPointsIndex": null,
+                  "accoms": [],
+                  "pwdAccoms": [],
+                  "nonResAccoms": [],
+                  "pwdNonResAccoms": [],
+                  "availabilityStatus": 2
+                },
+                "coachSeatTrainState": {
+                  "hasUpperAndLowerBearths": false,
+                  "upperAvailable": false,
+                  "lowerAvailable": true
+                },
+                "selectedRBD": "",
+                "selectedBearth": "",
+                "hasUpperAndLowerBearths": true
+              }
+            ],
+            "selectedSegments": [],
+            "isMultiSegment": false,
+            "isPWDCompanion": false,
+            "isRegularPWD": false,
+            "isPWD": false,
+            "isAutoTrain": false,
+            "vehicles": null,
+            "coachSeatTrainState": {
+              "hasUpperAndLowerBearths": false,
+              "upperAvailable": false,
+              "lowerAvailable": true
+            },
+            "isPassRider": false,
+            "isAcela": false,
+            "destination": {
+              "schedule": {
+                "arrivalDateTime": "2022-04-06T18:38:00"
+              },
+              "code": "DEN",
+              "name": "Denver, CO"
+            },
+            "origin": {
+              "schedule": {
+                "departureDateTime": "2022-04-05T16:06:00"
+              },
+              "code": "RNO",
+              "name": "Reno, NV"
+            },
+            "seatCapacityInfo": {
+              "capacitySold": 80,
+              "seatCapacityTravelClasses": [
+                {
+                  "availableInventory": 32,
+                  "baseRbdCode": "Y",
+                  "criticalCapacity": 122,
+                  "trainNumber": "6",
+                  "travelClass": "Coach"
+                },
+                {
+                  "availableInventory": 2,
+                  "baseRbdCode": "LY",
+                  "criticalCapacity": 10,
+                  "trainNumber": "6",
+                  "travelClass": "Coach"
+                },
+                {
+                  "availableInventory": 8,
+                  "baseRbdCode": "ES",
+                  "criticalCapacity": 35,
+                  "trainNumber": "6",
+                  "travelClass": "Sleeper"
+                },
+                {
+                  "availableInventory": 0,
+                  "baseRbdCode": "DS",
+                  "criticalCapacity": 10,
+                  "trainNumber": "6",
+                  "travelClass": "Sleeper"
+                },
+                {
+                  "availableInventory": 1,
+                  "baseRbdCode": "HS",
+                  "criticalCapacity": 3,
+                  "trainNumber": "6",
+                  "travelClass": "Sleeper"
+                },
+                {
+                  "availableInventory": 0,
+                  "baseRbdCode": "FS",
+                  "criticalCapacity": 2,
+                  "trainNumber": "6",
+                  "travelClass": "Sleeper"
+                }
+              ]
+            },
+            "elapsedTime": "P1DT1H32M",
+            "id": "1_2022-04-05T16:06:00_49617b92",
+            "isBorderCross": false,
+            "isCancelled": false,
+            "isFilteredForPoints": false,
+            "isRTDiscountAvailable": false,
+            "isRestricted": false,
+            "isSegPriceAvailable": false,
+            "logicalId": "6_RNO-1S",
+            "selfServiceEligible": null,
+            "isFareProtectedDate": null,
+            "duration": "25h 32m",
+            "durationLabel": "25 hours 32 minutes",
+            "lastSegment": {
+              "travelLeg": {
+                "destination": {
+                  "schedule": {
+                    "arrivalDateTime": "2022-04-06T18:38:00"
+                  },
+                  "code": "DEN",
+                  "name": "Denver, CO"
+                },
+                "origin": {
+                  "schedule": {
+                    "departureDateTime": "2022-04-05T16:06:00"
+                  },
+                  "code": "RNO",
+                  "name": "Reno, NV"
+                },
+                "travelService": {
+                  "amenities": [
+                    {
+                      "code": "B",
+                      "name": "Checked Baggage"
+                    },
+                    {
+                      "code": "L",
+                      "name": "Cafe Car"
+                    },
+                    {
+                      "code": "D",
+                      "name": "Traditional Dining"
+                    },
+                    {
+                      "code": "R",
+                      "name": "Wheelchair Ramp"
+                    }
+                  ],
+                  "carrier": "AMTRAK",
+                  "isAcela": false,
+                  "name": "California Zephyr",
+                  "number": "6",
+                  "type": "TRAIN"
+                },
+                "elapsedTime": "P1DT1H32M",
+                "id": "05ac3e8c_2022-04-05T16:06:00",
+                "isBorderCross": false,
+                "isCancelled": false,
+                "isRestricted": false,
+                "isSelfTransfer": false,
+                "numberOfStops": 0
+              },
+              "travelLegIndex": 0,
+              "travelLegId": "05ac3e8c_2022-04-05T16:06:00",
+              "journeyLegOptionId": "1_2022-04-05T16:06:00_49617b92",
+              "isCollapsed": false,
+              "isDisabled": false,
+              "isSelected": false,
+              "selectedState": "Disabled",
+              "selectedIndex": null,
+              "selectedTravelClass": "",
+              "addedTravelClass": "",
+              "addedSelectedIndex": null,
+              "addedSelectedBearth": "",
+              "isCoachSelected": false,
+              "isBusinessSelected": false,
+              "isFirstSelected": false,
+              "isRoomsSelected": false,
+              "isLastSegment": true,
+              "coach": {
+                "name": "Coach",
+                "lowestPrice": 170,
+                "lowestPriceIndex": 0,
+                "lowestPoints": null,
+                "lowestPointsIndex": null,
+                "accoms": [
+                  {
+                    "accommodationFare": {
+                      "pricingUnit": "DOLLARS",
+                      "dollarsAmount": {
+                        "accommodation": "0.00",
+                        "rail": "170.00",
+                        "total": "170.00"
+                      }
+                    },
+                    "isAdditionalProduct": false,
+                    "travelLegAccommodations": [
+                      {
+                        "additionalProducts": [
+                          {
+                            "additionalProductFare": {
+                              "dollarsAmount": {
+                                "accommodation": "0.00",
+                                "rail": "0.00",
+                                "total": "0.00"
+                              }
+                            },
+                            "passengers": [
+                              {
+                                "passengerFare": {
+                                  "dollarsAmount": {
+                                    "accommodation": "0.00",
+                                    "rail": "0.00",
+                                    "total": "0.00"
+                                  },
+                                  "pricingUnit": "DOLLARS"
+                                },
+                                "id": "P1",
+                                "initialType": "F",
+                                "isDiscounted": false,
+                                "isModified": false,
+                                "type": "F"
+                              }
+                            ],
+                            "availableInventory": 2,
+                            "capacity": 1,
+                            "code": "1028",
+                            "count": 1,
+                            "lowAvailabilityThreshold": 4,
+                            "maxAllowedCount": 1,
+                            "name": "Lower Level Coach Seat",
+                            "position": "L",
+                            "rbd": "LY",
+                            "rbdType": "Coach",
+                            "seatAssignRBD": false
+                          }
+                        ],
+                        "passengers": [
+                          {
+                            "passengerFare": {
+                              "dollarsAmount": {
+                                "accommodation": "0.00",
+                                "rail": "170.00",
+                                "total": "170.00"
+                              },
+                              "pricingUnit": "DOLLARS"
+                            },
+                            "id": "P1",
+                            "initialType": "F",
+                            "isDiscounted": false,
+                            "isModified": false,
+                            "type": "F"
+                          }
+                        ],
+                        "reservableProduct": {
+                          "availableInventory": 10,
+                          "code": "1027",
+                          "count": 1,
+                          "lowAvailabilityThreshold": 4,
+                          "lowestAvailabilityThreshold": null,
+                          "maxAllowedCount": 1,
+                          "name": "Reserved Coach Seat",
+                          "rbd": "YB",
+                          "rbdType": "Coach",
+                          "isSelectedRoom": false,
+                          "capacity": 1,
+                          "position": "U",
+                          "seatAssignRBD": false
+                        },
+                        "travelLegFare": {
+                          "dollarsAmount": {
+                            "accommodation": "0.00",
+                            "rail": "170.00",
+                            "total": "170.00"
+                          },
+                          "farePlan": "BOF1",
+                          "pricingUnit": "DOLLARS"
+                        },
+                        "isUnaccompaniedChild": false,
+                        "travelLegId": "05ac3e8c_2022-04-05T16:06:00"
+                      }
+                    ],
+                    "travelClass": "Coach",
+                    "category": "RG",
+                    "fareFamily": "VAL",
+                    "isMixedClass": false,
+                    "name": "Reserved Coach Seat",
+                    "code": "1027",
+                    "rbd": "YB",
+                    "rbdType": "Coach",
+                    "showPill": true,
+                    "showPrice": true,
+                    "reservableTravelClass": "Coach",
+                    "totalPrice": 170
+                  },
+                  {
+                    "accommodationFare": {
+                      "pricingUnit": "DOLLARS",
+                      "dollarsAmount": {
+                        "accommodation": "0.00",
+                        "rail": "257.00",
+                        "total": "257.00"
+                      }
+                    },
+                    "isAdditionalProduct": false,
+                    "travelLegAccommodations": [
+                      {
+                        "additionalProducts": [
+                          {
+                            "additionalProductFare": {
+                              "dollarsAmount": {
+                                "accommodation": "0.00",
+                                "rail": "0.00",
+                                "total": "0.00"
+                              }
+                            },
+                            "passengers": [
+                              {
+                                "passengerFare": {
+                                  "dollarsAmount": {
+                                    "accommodation": "0.00",
+                                    "rail": "0.00",
+                                    "total": "0.00"
+                                  },
+                                  "pricingUnit": "DOLLARS"
+                                },
+                                "id": "P1",
+                                "initialType": "F",
+                                "isDiscounted": false,
+                                "isModified": false,
+                                "type": "F"
+                              }
+                            ],
+                            "availableInventory": 2,
+                            "capacity": 1,
+                            "code": "1028",
+                            "count": 1,
+                            "lowAvailabilityThreshold": 4,
+                            "maxAllowedCount": 1,
+                            "name": "Lower Level Coach Seat",
+                            "position": "L",
+                            "rbd": "LY",
+                            "rbdType": "Coach",
+                            "seatAssignRBD": false
+                          }
+                        ],
+                        "passengers": [
+                          {
+                            "passengerFare": {
+                              "dollarsAmount": {
+                                "accommodation": "0.00",
+                                "rail": "257.00",
+                                "total": "257.00"
+                              },
+                              "pricingUnit": "DOLLARS"
+                            },
+                            "id": "P1",
+                            "initialType": "F",
+                            "isDiscounted": false,
+                            "isModified": false,
+                            "type": "F"
+                          }
+                        ],
+                        "reservableProduct": {
+                          "availableInventory": 32,
+                          "code": "1027",
+                          "count": 1,
+                          "lowAvailabilityThreshold": 4,
+                          "lowestAvailabilityThreshold": null,
+                          "maxAllowedCount": 1,
+                          "name": "Reserved Coach Seat",
+                          "rbd": "Y",
+                          "rbdType": "Coach",
+                          "isSelectedRoom": false,
+                          "capacity": 1,
+                          "position": "U",
+                          "seatAssignRBD": false
+                        },
+                        "travelLegFare": {
+                          "dollarsAmount": {
+                            "accommodation": "0.00",
+                            "rail": "257.00",
+                            "total": "257.00"
+                          },
+                          "farePlan": "YOFC",
+                          "pricingUnit": "DOLLARS"
+                        },
+                        "isUnaccompaniedChild": false,
+                        "travelLegId": "05ac3e8c_2022-04-05T16:06:00"
+                      }
+                    ],
+                    "travelClass": "Coach",
+                    "category": "RG",
+                    "fareFamily": "FLX",
+                    "isMixedClass": false,
+                    "name": "Reserved Coach Seat",
+                    "code": "1027",
+                    "rbd": "Y",
+                    "rbdType": "Coach",
+                    "showPill": true,
+                    "showPrice": true,
+                    "reservableTravelClass": "Coach",
+                    "totalPrice": 257
+                  }
+                ],
+                "pwdAccoms": [],
+                "nonResAccoms": [
+                  {
+                    "category": "RG",
+                    "fareFamily": "SVR",
+                    "isBorderCross": false,
+                    "isThroughfare": false,
+                    "message": "NOT AVAILABLE",
+                    "reason": "NOT AVAILABLE",
+                    "travelClass": "Coach"
+                  }
+                ],
+                "pwdNonResAccoms": [],
+                "availabilityStatus": 0
+              },
+              "business": {
+                "name": "Business",
+                "lowestPrice": null,
+                "lowestPriceIndex": null,
+                "lowestPoints": null,
+                "lowestPointsIndex": null,
+                "accoms": [],
+                "pwdAccoms": [],
+                "nonResAccoms": [],
+                "pwdNonResAccoms": [],
+                "availabilityStatus": 2
+              },
+              "rooms": {
+                "name": "Sleeper",
+                "lowestPrice": 558,
+                "lowestPriceIndex": 0,
+                "lowestPoints": null,
+                "lowestPointsIndex": null,
+                "accoms": [
+                  {
+                    "accommodationFare": {
+                      "pricingUnit": "DOLLARS",
+                      "dollarsAmount": {
+                        "accommodation": "388.00",
+                        "rail": "170.00",
+                        "total": "558.00"
+                      }
+                    },
+                    "isAdditionalProduct": false,
+                    "travelLegAccommodations": [
+                      {
+                        "additionalProducts": [
+                          {
+                            "additionalProductFare": {
+                              "dollarsAmount": {
+                                "accommodation": "388.00",
+                                "rail": "170.00",
+                                "total": "558.00"
+                              }
+                            },
+                            "passengers": [
+                              {
+                                "passengerFare": {
+                                  "dollarsAmount": {
+                                    "accommodation": "388.00",
+                                    "rail": "170.00",
+                                    "total": "558.00"
+                                  },
+                                  "pricingUnit": "DOLLARS"
+                                },
+                                "id": "P1",
+                                "initialType": "F",
+                                "isDiscounted": false,
+                                "isModified": false,
+                                "type": "F"
+                              }
+                            ],
+                            "availableInventory": 1,
+                            "capacity": 2,
+                            "code": "1021",
+                            "count": 1,
+                            "lowAvailabilityThreshold": 4,
+                            "maxAllowedCount": 1,
+                            "name": "Superliner Accessible Bedroom",
+                            "rbd": "HS",
+                            "rbdType": "Sleeper",
+                            "seatAssignRBD": false
+                          }
+                        ],
+                        "passengers": [
+                          {
+                            "passengerFare": {
+                              "dollarsAmount": {
+                                "accommodation": "388.00",
+                                "rail": "170.00",
+                                "total": "558.00"
+                              },
+                              "pricingUnit": "DOLLARS"
+                            },
+                            "id": "P1",
+                            "initialType": "F",
+                            "isDiscounted": false,
+                            "isModified": false,
+                            "type": "F"
+                          }
+                        ],
+                        "reservableProduct": {
+                          "availableInventory": 4,
+                          "code": "1019",
+                          "count": 1,
+                          "lowAvailabilityThreshold": 4,
+                          "lowestAvailabilityThreshold": null,
+                          "maxAllowedCount": 1,
+                          "name": "Roomette",
+                          "rbd": "EB",
+                          "rbdType": "Sleeper",
+                          "isSelectedRoom": false,
+                          "capacity": 2,
+                          "seatAssignRBD": false,
+                          "minRequiredRooms": 1,
+                          "pricePerRoom": 388
+                        },
+                        "travelLegFare": {
+                          "dollarsAmount": {
+                            "accommodation": "388.00",
+                            "rail": "170.00",
+                            "total": "558.00"
+                          },
+                          "farePlan": "BOF1",
+                          "pricingUnit": "DOLLARS"
+                        },
+                        "isUnaccompaniedChild": false,
+                        "travelLegId": "05ac3e8c_2022-04-05T16:06:00"
+                      }
+                    ],
+                    "travelClass": "Sleeper",
+                    "category": "RG",
+                    "fareFamily": "NA",
+                    "isMixedClass": false,
+                    "name": "Roomette",
+                    "code": "1019",
+                    "rbd": "EB",
+                    "rbdType": "Sleeper",
+                    "showPill": true,
+                    "showPrice": true,
+                    "reservableTravelClass": "Sleeper",
+                    "totalPrice": 558
+                  },
+                  {
+                    "accommodationFare": {
+                      "pricingUnit": "DOLLARS",
+                      "dollarsAmount": {
+                        "accommodation": "388.00",
+                        "rail": "170.00",
+                        "total": "558.00"
+                      }
+                    },
+                    "isAdditionalProduct": true,
+                    "travelLegAccommodations": [
+                      {
+                        "additionalProducts": [],
+                        "reservableProduct": {
+                          "availableInventory": 1,
+                          "code": "1021",
+                          "count": 1,
+                          "lowAvailabilityThreshold": 4,
+                          "lowestAvailabilityThreshold": null,
+                          "maxAllowedCount": 1,
+                          "name": "Superliner Accessible Bedroom",
+                          "rbd": "HS",
+                          "rbdType": "Sleeper",
+                          "isSelectedRoom": false,
+                          "minRequiredRooms": 1,
+                          "pricePerRoom": 388
+                        },
+                        "passengers": [
+                          {
+                            "passengerFare": {
+                              "dollarsAmount": {
+                                "accommodation": "388.00",
+                                "rail": "170.00",
+                                "total": "558.00"
+                              },
+                              "pricingUnit": "DOLLARS"
+                            },
+                            "id": "P1",
+                            "initialType": "F",
+                            "isDiscounted": false,
+                            "isModified": false,
+                            "type": "F"
+                          }
+                        ],
+                        "travelLegFare": {
+                          "dollarsAmount": {
+                            "accommodation": "388.00",
+                            "rail": "170.00",
+                            "total": "558.00"
+                          },
+                          "farePlan": "BOF1",
+                          "pricingUnit": "DOLLARS"
+                        },
+                        "travelLegId": "05ac3e8c_2022-04-05T16:06:00"
+                      }
+                    ],
+                    "travelClass": "Sleeper",
+                    "category": "RG",
+                    "fareFamily": "NA",
+                    "isMixedClass": false,
+                    "name": "Superliner Accessible Bedroom",
+                    "code": "1021",
+                    "rbd": "HS",
+                    "rbdType": "Sleeper",
+                    "reservableTravelClass": "Sleeper",
+                    "totalPrice": 558
+                  }
+                ],
+                "pwdAccoms": [],
+                "nonResAccoms": [],
+                "pwdNonResAccoms": [],
+                "availabilityStatus": 0
+              },
+              "first": {
+                "name": "First",
+                "lowestPrice": null,
+                "lowestPriceIndex": null,
+                "lowestPoints": null,
+                "lowestPointsIndex": null,
+                "accoms": [],
+                "pwdAccoms": [],
+                "nonResAccoms": [],
+                "pwdNonResAccoms": [],
+                "availabilityStatus": 2
+              },
+              "coachSeatTrainState": {
+                "hasUpperAndLowerBearths": false,
+                "upperAvailable": false,
+                "lowerAvailable": true
+              },
+              "selectedRBD": "",
+              "selectedBearth": "",
+              "hasUpperAndLowerBearths": true
+            }
+          }
+        ],
+        "currentPage": 1
+      }
+    ],
+    "cities": [
+      {
+        "id": 0,
+        "time": "2022-04-05T16:06:00",
+        "origin": "RNO",
+        "destination": "DEN",
+        "isCollapsed": false,
+        "isDisabled": false,
+        "isSelected": false
+      }
+    ]
+  },
+  "availableClasses": {
+    "coach": true,
+    "business": false,
+    "rooms": true,
+    "first": false
+  },
+  "redirect": true,
+  "mixedSegmentResults": false
+}

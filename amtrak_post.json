@@ -1,0 +1,35 @@
+{
+  "journeyRequest": {
+    "fare": {
+      "pricingUnit": "DOLLARS"
+    },
+    "alternateDayOption": false,
+    "type": "OW",
+    "journeyLegRequests": [
+      {
+        "origin": {
+          "code": "RNO",
+          "schedule": {
+            "departureDateTime": "2022-04-05T00:00:00"
+          }
+        },
+        "destination": {
+          "code": "DEN"
+        },
+        "passengers": [
+          {
+            "id": "P1",
+            "type": "F",
+            "initialType": "adult"
+          }
+        ]
+      }
+    ],
+    "customer": {
+      "tierStatus": "MEMBER"
+    },
+    "isPassRider": false
+  },
+  "initialJourneyLegOnly": false,
+  "reservableAccomodationOptions": "ALL"
+}
