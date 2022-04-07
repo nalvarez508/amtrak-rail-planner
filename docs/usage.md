@@ -2,6 +2,14 @@
 title: "Usage"
 ---
 
+## Intent
+> You're traveling with a Rail Pass.  
+> You have some idea of where you want to go, at least a start and end.  
+> You're not sure how schedules would line up.
+
+Launching the application, you select an origin and destination alongside your departure date, and start the search. Picking a train from the list that makes sense for your schedule, it's added to your itinerary. Maybe the rest of the stops are undecided, so you open the route map from the menu.  
+Repeating this process for the desired number of segments, eventually you'll have a filled out itinerary. Double check the dates and times line up, and export it to a spreadsheet with your desired information. Use this itinerary to speed through ticket booking on Amtrak.
+
 ## Usage
 
 ### Main Window
