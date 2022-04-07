@@ -129,7 +129,9 @@ class MainWindow(tk.Tk):
           pass
 
   def _test_getGeometry(self):
-    print(self.geometry(None))
+    print("Main Window:", self.geometry(None))
+    if self.itineraryWindow != None:
+      self.itineraryWindow._test_getGeometry()
   def _test_getBackground(self):
     s1 = ttk.Style()
     bg = s1.lookup("TButton", "background")
