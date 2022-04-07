@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-from views.config import WIDTH_DIV
+from views.config import WIDTH_DIV, BACKGROUND
 
 class Itinerary(tk.Toplevel):
   """
@@ -44,16 +44,17 @@ class Itinerary(tk.Toplevel):
   def __init__(self, parent, *args, **kwargs):
     tk.Toplevel.__init__(self, parent, *args, **kwargs)
     self.parent = parent
-    self.geometry('700x500')
+    self.geometry('700x330')
     self.title("Itinerary")
     self.inViewSavedSegments = dict()
     self.segmentsArea = tk.Frame(self)
+    self.buttonsArea = tk.Frame(self, background=BACKGROUND)
 
     self.columns = list()
     self.headerCols = dict()
     self.dispCols = list()
     self.__getDisplayColumns()
-    self.userSegments = ttk.Treeview(self.segmentsArea, columns=self.columns, show='headings', cursor='hand2', selectmode='browse', height=12/WIDTH_DIV)
+    self.userSegments = ttk.Treeview(self.segmentsArea, columns=self.columns, show='headings', cursor='hand2', selectmode='browse', height=int(12/WIDTH_DIV))
     self.__makeHeadings()
     self.tvScroll = ttk.Scrollbar(self.segmentsArea, orient='vertical', command=self.userSegments.yview)
     self.tvScrollHoriz = ttk.Scrollbar(self.segmentsArea, orient='horizontal', command=self.userSegments.xview)
@@ -61,30 +62,35 @@ class Itinerary(tk.Toplevel):
     self.__populateTreeview(self.parent.us.userSelections.getSegments())
     self.userSegments.bind("<Button-1>", lambda e: self.__buttonStateChanges(True))
 
-    self.deleteButton = ttk.Button(self, text="Delete")
-    self.moveUpButton = ttk.Button(self, text="Move Up")
-    self.moveDownButton = ttk.Button(self, text="Move Down")
-    self.exportButton = ttk.Button(self, text="Export Itinerary")
-    self.openResultsButton = ttk.Button(self, text="Search Results")
+    self.deleteButton = ttk.Button(self.buttonsArea, text="Delete")
+    self.moveUpButton = ttk.Button(self.buttonsArea, text="Move Up")
+    self.moveDownButton = ttk.Button(self.buttonsArea, text="Move Down")
+    self.exportButton = ttk.Button(self.buttonsArea, text="Export Itinerary")
+    self.openResultsButton = ttk.Button(self.buttonsArea, text="Search Results")
     self.__exportButtonCheck()
     self.__buttonStateChanges()
 
     self.tvScrollHoriz.pack(side=tk.BOTTOM, fill=tk.BOTH)
     self.userSegments.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
     self.tvScroll.pack(side=tk.RIGHT, fill=tk.BOTH)
-    self.segmentsArea.pack(fill=tk.BOTH, padx=8, pady=4, expand=False)
+    self.segmentsArea.pack(fill=tk.BOTH, padx=8, pady=4, expand=True)
 
-    self.exportButton.pack(side=tk.BOTTOM, fill=tk.X)
-    self.openResultsButton.pack(side=tk.LEFT, fill=tk.X)
-    self.deleteButton.pack(side=tk.LEFT, fill=tk.X)
-    self.moveUpButton.pack(side=tk.LEFT, fill=tk.X)
-    self.moveDownButton.pack(side=tk.LEFT, fill=tk.X)
+    self.exportButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
+    self.openResultsButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
+    self.deleteButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
+    self.moveUpButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
+    self.moveDownButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
+
+    self.buttonsArea.pack(side=tk.BOTTOM, expand=False, padx=8, pady=4)
 
     self.wm_protocol("WM_DELETE_WINDOW", self.__onClose)
 
   def __onClose(self):
     self.parent.closeItinerary()
     self.destroy()
+  
+  def _test_getGeometry(self):
+    print("Itinerary:", self.geometry(None))
 
   def updateItinerary(self):
     """

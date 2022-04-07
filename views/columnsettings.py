@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-from views.config import BACKGROUND
+from views.config import BACKGROUND, SYSTEM_FONT
 
 class ColumnSettings(tk.Toplevel):
   """
@@ -23,18 +23,18 @@ class ColumnSettings(tk.Toplevel):
     self.checkbuttonVals = list()
     self.configure(background=BACKGROUND)
 
-    tk.Label(self, text="Select Display Columns", background=BACKGROUND).pack()
+    tk.Label(self, text="Select Display Columns", background=BACKGROUND, font=(SYSTEM_FONT, 13, 'bold')).pack(padx=8, pady=4)
     self.availableCols = self.parent.us.getColumns()
     self.__createCheckbuttons()
     
-    ttk.Button(self, text="Save", command=self.__updateSelections).pack()
+    ttk.Button(self, text="Save", command=self.__updateSelections).pack(padx=8, pady=4)
 
     self.wm_protocol("WM_DELETE_WINDOW", self.destroy)
 
   def __createCheckbuttons(self):
     for index, col in enumerate(self.availableCols):
       self.checkbuttonVals.append(tk.BooleanVar(self, value=self.availableCols[col]["Selected"]))
-      ttk.Checkbutton(self, text=self.availableCols[col]["Display Name"], variable=self.checkbuttonVals[index]).pack(anchor=tk.W)
+      ttk.Checkbutton(self, text=self.availableCols[col]["Display Name"], variable=self.checkbuttonVals[index]).pack(anchor=tk.W, padx=4)
 
   def __updateSelections(self):
     newValues = dict()

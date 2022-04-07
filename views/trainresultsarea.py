@@ -47,6 +47,7 @@ class TrainResultsArea(tk.Frame):
     self.background = self.parent.resultsBackground
     self.config(background=self.background)
     self.resultsArea = tk.Frame(self)
+    self.buttonsArea = tk.Frame(self, background=self.background)
     self.isSegmentSaved = False
     self.savedSegmentsIndices = list()
 
@@ -65,16 +66,18 @@ class TrainResultsArea(tk.Frame):
     self.results.bind("<Button-1>", lambda e: self.toggleSaveButton(True))
     self.results.bind("<Double-Button-1>", lambda e: self.__saveSelection)
 
-    self.saveButton = ttk.Button(self, text="Save Segment", state='disabled', command=self.__saveSelection)
-
-    self.findTrainsBtn = ttk.Button(self, text="Find Trains", command=self.startSearch)
-    self.findTrainsBtn.pack()
+    self.saveButton = ttk.Button(self.buttonsArea, text="Save Segment", state='disabled', command=self.__saveSelection)
+    self.saveButton.pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
+    self.findTrainsBtn = ttk.Button(self.buttonsArea, text="Find Trains", command=self.startSearch)
+    self.findTrainsBtn.pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
+    ttk.Button(self.buttonsArea, text="View Itinerary", command=self.parent.openItinerary).pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
+    
     self.progressBar = ttk.Progressbar(self, orient='horizontal', length=200, maximum=100, mode='determinate')
     self.tvScrollHoriz.pack(side=tk.BOTTOM, fill=tk.BOTH)
     self.results.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
     self.tvScroll.pack(side=tk.RIGHT, fill=tk.BOTH)
-    self.resultsArea.pack(fill=tk.BOTH, padx=8, pady=4, expand=True)
-    self.saveButton.pack()
+    self.buttonsArea.pack(side=tk.TOP, padx=8, expand=False)
+    self.resultsArea.pack(side=tk.BOTTOM, fill=tk.BOTH, padx=8, pady=4, expand=True)
 
   def toggleSaveButton(self, enabled=False):
     """
@@ -215,7 +218,7 @@ class TrainResultsArea(tk.Frame):
     from traintracks.train import Train
 
     # DEVELOPMENT
-    with open("TestTrainSearch.json", "r") as f:
+    with open("_retrieved/TestTrainSearch.json", "r") as f:
       temp = json.loads(f.read())
       for num in temp:
         response[int(num)] = Train(temp[num])

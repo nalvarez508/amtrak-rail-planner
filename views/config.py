@@ -5,7 +5,7 @@ SEARCH_URL = "https://www.amtrak.com/tickets/departure.html"
 IMAGE_DIMENSIONS = [300,225]
 if os.name == 'nt':
   SYSTEM_FONT = "Segoe UI"
-  GEOMETRY = "650x870+50+50"
+  GEOMETRY = "650x875+50+50"
   MINSIZE = [635, 730]
   BACKGROUND = "SystemButtonFace"
   WIDTH_DIV = 1
