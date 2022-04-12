@@ -54,7 +54,7 @@ class RailPass:
     """
     return self.segments
 
-  def createCsv(self):
+  def createCsv(self, path, cols):
     """
     Loads data into a dictionary for writing to a CSV file.
 
@@ -63,11 +63,33 @@ class RailPass:
     dict
         Dictionary with defined columns ready for writing to file.
     """
-    output = dict()
-    for segment, train in enumerate(self.segments):
-      output.update({segment:train.convertToCsvRow()})
-    return output
-  
+    output = str()
+    headerRow = "Segment,"
+    hasWrittenHeaders = False
+    try:
+      for segment in (self.segments): # For every train
+        thisTrain = self.segments[segment].organizationalUnit # Get its dictionary
+        output += str(str(segment) + ',')
+
+        for col in cols: # For every attribute
+          if cols[col]["Selected"] == True: # Check if it is selected
+            if not hasWrittenHeaders: headerRow += str(str(cols[col]["Header"]) + ',') # Add it to header row
+            output += str(str(thisTrain[col]).replace(',', ';') + ',') # Add train attribute
+
+        hasWrittenHeaders = True
+        output += '\n'
+
+      try:
+        with open(path, 'w') as f:
+          f.write(headerRow+output)
+        return True
+      except Exception as e:
+        print(e)
+        return False
+    except Exception as e:
+      print(e)
+      return False
+
   def createSegment(self, segment, searchResults):
     """
     Creates a saved Rail Pass segment.
@@ -82,6 +104,13 @@ class RailPass:
     self.segmentResults[self.numSegments] = searchResults
     self.numSegments += segment.numberOfSegments
   
+  def deleteSegment(self, segment):
+    self.segments.pop(segment)
+    for index in list(self.segments):
+      if index > segment:
+        self.segments[index-1] = self.segments.pop(index)
+    self.numSegments -= 1
+
   def getMostRecentSegment(self):
     """
     Returns the most recent segment object.
@@ -272,17 +301,6 @@ class Train:
         temp.append('')
         print(f"Attribute {col} is not recognized.")
     return temp
-
-  def convertToCsvRow(self):
-    """Returns a dictionary of items ready to be written to a spreadsheet."""
-    tempDict = dict()
-    tempDict["Origin"] = self.origin
-    tempDict["Destination"] = self.destination
-    tempDict["Train"] = f"{self.name} {self.number}"
-    tempDict["Departs"] = datetime.datetime.strftime(self.departure, "%a %d %I:%M%p")
-    tempDict["Arrives"] = datetime.datetime.strftime(self.arrival, "%a %d %I:%M%p")
-    tempDict["Duration"] = self.travelTime
-    return tempDict
 
   def __convertToDatetime(self, d, t):
     """
