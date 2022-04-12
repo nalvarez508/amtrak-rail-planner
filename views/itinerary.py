@@ -1,6 +1,10 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
+import easygui
 
+import os
+
+from views.columnsettings import ColumnSettings
 from views.config import WIDTH_DIV, BACKGROUND
 
 class Itinerary(tk.Toplevel):
@@ -59,13 +63,13 @@ class Itinerary(tk.Toplevel):
     self.tvScroll = ttk.Scrollbar(self.segmentsArea, orient='vertical', command=self.userSegments.yview)
     self.tvScrollHoriz = ttk.Scrollbar(self.segmentsArea, orient='horizontal', command=self.userSegments.xview)
     self.userSegments.configure(yscrollcommand=self.tvScroll.set, xscrollcommand=self.tvScrollHoriz.set)
-    self.__populateTreeview(self.parent.us.userSelections.getSegments())
+    #self.__populateTreeview(self.parent.us.userSelections.getSegments())
     self.userSegments.bind("<Button-1>", lambda e: self.__buttonStateChanges(True))
 
-    self.deleteButton = ttk.Button(self.buttonsArea, text="Delete")
+    self.deleteButton = ttk.Button(self.buttonsArea, text="Delete", command=self.__doDelete)
     self.moveUpButton = ttk.Button(self.buttonsArea, text="Move Up")
     self.moveDownButton = ttk.Button(self.buttonsArea, text="Move Down")
-    self.exportButton = ttk.Button(self.buttonsArea, text="Export Itinerary")
+    self.exportButton = ttk.Button(self.buttonsArea, text="Export Itinerary", command=self.doExport)
     self.openResultsButton = ttk.Button(self.buttonsArea, text="Search Results")
     self.__exportButtonCheck()
     self.__buttonStateChanges()
@@ -82,13 +86,41 @@ class Itinerary(tk.Toplevel):
     self.moveDownButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
 
     self.buttonsArea.pack(side=tk.BOTTOM, expand=False, padx=8, pady=4)
-
+    
+    self.updateItinerary()
     self.wm_protocol("WM_DELETE_WINDOW", self.__onClose)
 
   def __onClose(self):
     self.parent.closeItinerary()
     self.destroy()
   
+  def getSelection(self):
+    item = self.userSegments.focus()
+    if item != "":
+      myTrain = (self.inViewSavedSegments[self.userSegments.item(item, "text")]) # Train object
+      return {"Index": self.userSegments.item(item, "text"), "Train": myTrain}
+  
+  def __doDelete(self):
+    item = self.getSelection()
+    answer = messagebox.askyesno(title="Delete Segment", message=f"Are you sure you want to delete this {item['Train'].name} trip?")
+    if answer == True:
+      self.parent.us.userSelections.deleteSegment(item["Index"])
+      self.updateItinerary()
+
+  def doExport(self): # Move to main window?
+    defaultPath = os.path.join(os.path.expanduser('~/'), 'My Itinerary.csv')
+    exportPath = easygui.filesavebox(default=defaultPath, filetypes=['*.csv'])
+    if exportPath != None:
+      if not exportPath.endswith('.csv'):
+        exportPath += '.csv'
+      #ColumnSettings(self.parent)
+      #self.parent.update()
+      didSucceed = self.parent.us.userSelections.createCsv(exportPath, self.parent.us.exportColumns)
+      if didSucceed:
+        messagebox.showinfo(title='File Export', message=f'Saved to {exportPath}')
+      else:
+        messagebox.showwarning(title='File Export', message='Could not save the file.')
+
   def _test_getGeometry(self):
     print("Itinerary:", self.geometry(None))
 
@@ -97,7 +129,8 @@ class Itinerary(tk.Toplevel):
     Refreshes the treeview object with new information from the Rail Pass object.
     """
     self.__clearTree()
-    self.__populateTreeview(self.parent.us.userSelections.getSegments())
+    self.inViewSavedSegments = self.parent.us.userSelections.getSegments()
+    self.__populateTreeview(self.inViewSavedSegments)
     self.__exportButtonCheck()
     self.__buttonStateChanges()
     self.update_idletasks()
