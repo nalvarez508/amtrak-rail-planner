@@ -1,4 +1,5 @@
 import datetime
+from copy import deepcopy
 
 from tkinter import messagebox
 
@@ -43,6 +44,8 @@ class UserSelections:
       "Sleeper Price": {"Display Name": "Sleeper Price", "Header": "Sleeper ($)", "Width": 60, "Selected": False},
       "Number of Segments": {"Display Name": "Number of Segments", "Header": "Segments", "Width": 65, "Selected": True}
     }
+    self.exportColumns = deepcopy(self.columns)
+
   
   def setColumns(self, vals):
     """
@@ -66,6 +69,10 @@ class UserSelections:
         Columns.
     """
     return self.columns
+  
+  def setExportColumns(self, vals):
+    for col in vals:
+      self.exportColumns[col]["Selected"] = vals[col]
 
   def getDisplayColumns(self):
     """
