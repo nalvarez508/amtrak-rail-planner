@@ -128,6 +128,8 @@ class StationsArea(tk.Frame):
     e : tk.Event, optional
         Not used, by default None
     """
-    self.parent.us.set((widget.get()), side)
-    city = self.stations.returnCityState(widget.get())
-    self.parent.startThread(self.parent.imageArea.doRefresh, [city, side, isSwap])
+    if widget.get() != '':
+      self.parent.us.set((widget.get()), side)
+      city = self.stations.returnCityState(widget.get())
+      self.parent.startThread(self.parent.imageArea.doRefresh, [city, side, isSwap])
+    widget['values'] = self.stationKeys
