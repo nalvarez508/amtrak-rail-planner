@@ -193,9 +193,9 @@ class TrainResultsArea(tk.Frame):
       self.parent.resultsHeadingArea.numberOfTrains.set("0 trains found")
 
       # Updating UserSelection values
-      origin = self.parent.us.getOrigin()
-      dest = self.parent.us.getDestination()
-      date = self.parent.us.getSearchDate()
+      origin = self.parent.us.getOrigin() # As-is: Combobox
+      dest = self.parent.us.getDestination() # As-is: Combobox
+      date = self.parent.us.getSearchDate() # As-is: Calendar area
       prettyDate = self.parent.us.getPrettyDate()
 
       # Updating search labels
@@ -222,10 +222,21 @@ class TrainResultsArea(tk.Frame):
       temp = json.loads(f.read())
       for num in temp:
         response[int(num)] = Train(temp[num])
+    
+    self.__searchHandler(response)
 
+  def refreshHandler(self, response):
+    self.__clearTree()
+    self.inViewSegmentResults = response
+    self.__populateTreeview(response)
+    self.__resetWidgets()
+
+  def __searchHandler(self, response):
     if type(response) == dict: # Trains returned
       self.inViewSegmentResults = response
+      self.parent.us.userSelections.addSearch(self.parent.us.getOrigin(), self.parent.us.getDestination(), self.parent.us.getDate(), response)
       self.__populateTreeview(response)
+      self.parent.resultsHeadingArea.changeSearchView(-1)
     elif response != None: # Error returned
       messagebox.showerror(cfg.APP_NAME, message=response)
     self.__resetWidgets()
