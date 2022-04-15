@@ -24,9 +24,18 @@ class RailPass:
   """
   def __init__(self):
     self.numSegments = 1
+    self.numSearches = 0
     self.segments = dict()
     self.segmentResults = dict()
+    self.allResults = dict()
   
+  def addSearch(self, origin, destination, date, s):
+    self.numSearches += 1
+    self.allResults[self.numSearches] = {"Origin": origin, "Destination": destination, "Date": date, "Has Segment Saved": False, "Results": s}
+  
+  def getSearch(self, num):
+    return self.allResults[num]
+
   def getSegmentResult(self, index):
     """
     Returns the search results of a given segment.
@@ -101,6 +110,7 @@ class RailPass:
         This segment's search results (every train returned).
     """
     self.segments[self.numSegments] = segment
+    self.allResults[self.numSearches]["Has Segment Saved"] = True
     self.segmentResults[self.numSegments] = searchResults
     self.numSegments += segment.numberOfSegments
   
