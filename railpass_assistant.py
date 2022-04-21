@@ -67,7 +67,7 @@ class MainWindow(tk.Tk):
     self.geometry(cfg.GEOMETRY)
     self.minsize(width=cfg.MINSIZE[0], height=cfg.MINSIZE[1])
     self.config(background=cfg.BACKGROUND)
-    self.title("Rail Pass Planner")
+    self.title(cfg.APP_NAME)
     self.iconbitmap("Amtrak_square.ico")
     self.us = UserSelections()
     self.searcher = None

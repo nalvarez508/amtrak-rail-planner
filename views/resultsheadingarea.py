@@ -35,7 +35,6 @@ class ResultsHeadingArea(tk.Frame):
     self.segmentSearchFrame = tk.Frame(self, background=self.background)
 
     self.searchNum = 1
-    self.searchNumVar = tk.StringVar(self, value=f"Search {self.searchNum}")
     self.titleToAndFrom = tk.StringVar(self, value="Click \"Find Trains\" to start a search!")
     self.searchDate = tk.StringVar(self)
 
@@ -61,7 +60,6 @@ class ResultsHeadingArea(tk.Frame):
     self.titleInfoFrame.pack(padx=4)
   
   def __updateResultsWidgets(self, doTreeviewRefresh=True):
-    self.searchNumVar.set(f"Search {self.searchNum}")
     self.__searchButtonToggle()
 
     # Get updated values

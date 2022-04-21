@@ -69,6 +69,7 @@ class TrainResultsArea(tk.Frame):
     self.results.configure(yscrollcommand=self.tvScroll.set, xscrollcommand=self.tvScrollHoriz.set)
     self.results.bind("<Button-1>", lambda e: self.toggleSaveButton(True))
     self.results.bind("<Double-Button-1>", lambda e: self.__saveSelection)
+    self.results.bind("<Return>", lambda e: self.__saveSelection)
 
     self.saveButton = ttk.Button(self.buttonsArea, text="Save Segment", state='disabled', command=self.__saveSelection)
     self.saveButton.pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
@@ -113,7 +114,7 @@ class TrainResultsArea(tk.Frame):
     """Performs some validation for segments before saving them to the Rail Pass."""
     segment = self.getSelection()
     def doSave():
-      self.parent.us.userSelections.createSegment(segment["Train"], deepcopy(self.inViewSegmentResults))
+      self.parent.us.userSelections.createSegment(segment["Train"], self.parent.resultsHeadingArea.getSearchNum())
       self.isSegmentSaved = True
       self.savedSegmentsIndices.append(segment["Index"])
       self.parent.us.userSelections.updateSearch(self.parent.resultsHeadingArea.getSearchNum(), deepcopy(self.savedSegmentsIndices))
