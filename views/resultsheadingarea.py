@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, font
 
+from copy import deepcopy
+
 from . import config as cfg
 
 class ResultsHeadingArea(tk.Frame):
@@ -44,11 +46,11 @@ class ResultsHeadingArea(tk.Frame):
     self.leftSegmentButton = ttk.Button(self.segmentSearchFrame, text='<', state='disabled', command=self.__goLeft)
     self.rightSegmentButton = ttk.Button(self.segmentSearchFrame, text='>', state='disabled', command=self.__goRight)
 
-    self.leftSegmentButton.pack(side=tk.LEFT, anchor=tk.NW, padx=4)
+    self.leftSegmentButton.pack(side=tk.LEFT, anchor=tk.NW, padx=8)
     #tk.Label(self.segmentSearchFrame, textvariable=self.searchNum, background=self.background).pack(side=tk.LEFT, anchor=tk.CENTER, fill=tk.X, padx=4, expand=True)
     self.titleLabel = tk.Label(self.segmentSearchFrame, textvariable=self.titleToAndFrom, font=self.boldItalic, background=self.background)
     self.titleLabel.pack(side=tk.LEFT, anchor=tk.CENTER, fill=tk.X, padx=4, expand=True)
-    self.rightSegmentButton.pack(side=tk.LEFT, anchor=tk.NE)
+    self.rightSegmentButton.pack(side=tk.LEFT, anchor=tk.NE, padx=8)
 
     self.dateLabel = tk.Label(self.titleInfoFrame, textvariable=self.searchDate, font=(cfg.SYSTEM_FONT, 11, font.NORMAL), background=self.background)
     self.dateLabel.pack()
@@ -63,11 +65,12 @@ class ResultsHeadingArea(tk.Frame):
     self.__searchButtonToggle()
 
     # Get updated values
-    thisPreviousSearch = self.parent.us.userSelections.getSearch(self.searchNum)
+    thisPreviousSearch = deepcopy(self.parent.us.userSelections.getSearch(self.searchNum))
     o = thisPreviousSearch["Origin"]
     d = thisPreviousSearch["Destination"]
     t = thisPreviousSearch["Date"]
     r = thisPreviousSearch["Results"]
+    i = thisPreviousSearch["Saved Index"]
 
     # Set updated values
     self.parent.us.setOrigin(o)
@@ -77,14 +80,17 @@ class ResultsHeadingArea(tk.Frame):
     # Redraw widgets
     self.titleToAndFrom.set(f"{self.parent.stationsArea.stations.returnStationNameAndState(o)} to {self.parent.stationsArea.stations.returnStationNameAndState(d)}")
     self.searchDate.set(self.parent.us.getPrettyDate())
-    if doTreeviewRefresh: self.parent.trainResultsArea.refreshHandler(r)
+    if doTreeviewRefresh: self.parent.trainResultsArea.refreshHandler(r, i)
+
+  def getSearchNum(self):
+    return self.searchNum
 
   def changeSearchView(self, searchnum):
     if (searchnum <= self.parent.us.userSelections.numSearches) and (searchnum >= 1):
       self.searchNum = searchnum
     else:
       self.searchNum = self.parent.us.userSelections.numSearches
-    self.__updateResultsWidgets((False if searchnum == -1 else True))
+    self.__updateResultsWidgets(False if searchnum == -1 else True)
 
   def __goLeft(self):
     # Populate a treeview
