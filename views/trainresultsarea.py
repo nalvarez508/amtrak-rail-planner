@@ -1,6 +1,10 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 
+from copy import deepcopy
+from datetime import datetime
+from math import trunc
+
 from . import config as cfg
 
 class TrainResultsArea(tk.Frame):
@@ -109,9 +113,10 @@ class TrainResultsArea(tk.Frame):
     """Performs some validation for segments before saving them to the Rail Pass."""
     segment = self.getSelection()
     def doSave():
-      self.parent.us.userSelections.createSegment(segment["Train"], self.inViewSegmentResults)
+      self.parent.us.userSelections.createSegment(segment["Train"], deepcopy(self.inViewSegmentResults))
       self.isSegmentSaved = True
       self.savedSegmentsIndices.append(segment["Index"])
+      self.parent.us.userSelections.updateSearch(self.parent.resultsHeadingArea.getSearchNum(), deepcopy(self.savedSegmentsIndices))
       try: self.parent.itineraryWindow.updateItinerary()
       except: pass
     if self.isSegmentSaved == False:
@@ -149,12 +154,14 @@ class TrainResultsArea(tk.Frame):
     self.progressBar.pack_forget()
     self.findTrainsBtn.config(state='normal')
     self.parent.statusMessage.set("Ready")
-    self.isSegmentSaved = False
+    self.isSegmentSaved = (True if (len(self.savedSegmentsIndices) > 0) else False)
     self.parent.update_idletasks()
 
   def __clearTree(self):
     for item in self.results.get_children():
       self.results.delete(item)
+    self.inViewSegmentResults.clear()
+    self.savedSegmentsIndices.clear()
 
   def __makeHeadings(self):
     for index, col in enumerate(self.headerCols):
@@ -218,22 +225,25 @@ class TrainResultsArea(tk.Frame):
     from traintracks.train import Train
 
     # DEVELOPMENT
-    with open("_retrieved/TestTrainSearch.json", "r") as f:
+    fileToUse = trunc(datetime.now().timestamp()) % 3
+    with open(f"_retrieved/TestTrainSearch{fileToUse}.json", "r") as f:
       temp = json.loads(f.read())
       for num in temp:
         response[int(num)] = Train(temp[num])
     
     self.__searchHandler(response)
 
-  def refreshHandler(self, response):
+  def refreshHandler(self, response, saved):
     self.__clearTree()
-    self.inViewSegmentResults = response
+    self.inViewSegmentResults = deepcopy(response)
+    self.savedSegmentsIndices = deepcopy(saved)
     self.__populateTreeview(response)
     self.__resetWidgets()
+    self.update()
 
   def __searchHandler(self, response):
     if type(response) == dict: # Trains returned
-      self.inViewSegmentResults = response
+      self.inViewSegmentResults = deepcopy(response)
       self.parent.us.userSelections.addSearch(self.parent.us.getOrigin(), self.parent.us.getDestination(), self.parent.us.getDate(), response)
       self.__populateTreeview(response)
       self.parent.resultsHeadingArea.changeSearchView(-1)
