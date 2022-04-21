@@ -29,9 +29,14 @@ class RailPass:
     self.segmentResults = dict()
     self.allResults = dict()
   
+  def updateSearch(self, num, saved):
+    if saved == []: self.allResults[num]["Has Segment Saved"] = False
+    else: self.allResults[num]["Has Segment Saved"] = True
+    self.allResults[num]["Saved Index"] = saved
+
   def addSearch(self, origin, destination, date, s):
     self.numSearches += 1
-    self.allResults[self.numSearches] = {"Origin": origin, "Destination": destination, "Date": date, "Has Segment Saved": False, "Results": s}
+    self.allResults[self.numSearches] = {"Origin": origin, "Destination": destination, "Date": date, "Has Segment Saved": False, "Results": s, "Saved Index": []}
   
   def getSearch(self, num):
     return self.allResults[num]
@@ -115,11 +120,44 @@ class RailPass:
     self.numSegments += segment.numberOfSegments
   
   def deleteSegment(self, segment):
+    doBreak = False
+    affectedSearch = -1
+    for search in self.allResults: # Get indexes
+      if self.allResults[search]["Has Segment Saved"] == True:
+        for train in self.allResults[search]["Results"]:
+          if self.allResults[search]["Results"][train] == self.segments[segment]:
+            #indexInSearchResults = list(self.allResults[search]["Results"][train].keys().index(train))
+            try:
+              self.allResults[search]["Saved Index"].remove(train)
+              self.allResults[search]["Has Segment Saved"] == True
+              affectedSearch = search
+              # This will not update the treeview until the search is reloaded
+              # ie left then right in search results
+              doBreak = True
+              break
+            except ValueError:
+              pass
+        if doBreak: break
+
+    keys = list(self.segments.keys())
+    removing = keys.index(segment)
+    try:
+      after = keys[removing+1]
+      cutBy = after-segment
+    except: cutBy=1
+
+    self.segmentResults.pop(segment)
     self.segments.pop(segment)
-    for index in list(self.segments):
+
+    for num in (list(self.segments)):
+      if num > segment:
+        self.segments[num-cutBy] = self.segments.pop(num)
+  
+    for index in list(self.segmentResults):
       if index > segment:
-        self.segments[index-1] = self.segments.pop(index)
-    self.numSegments -= 1
+        self.segmentResults[index-1] = self.segmentResults.pop(index)
+    self.numSegments -= cutBy
+    return affectedSearch
 
   def getMostRecentSegment(self):
     """
@@ -131,7 +169,7 @@ class RailPass:
         The most recent saved segment as a Train object.
     """
     if self.numSegments > 1:
-      return self.segments[self.numSegments-1]
+      return list(self.segments.keys())[-2]
     else:
       return None
 
@@ -208,10 +246,12 @@ class Train:
       "Name":self.name,
       "Departure Time":self.departureTime,
       "Departure Date":self.departureDate,
+      "Departure Datetime":self.departure,
       "Departs":self.prettyDeparture,
       "Duration":self.travelTime,
       "Arrival Time":self.arrivalTime,
       "Arrival Date":self.arrivalDate,
+      "Arrival Datetime":self.arrival,
       "Arrives":self.prettyArrival,
       "Coach Price":self.coachPrice,
       "Business Price":self.businessPrice,
@@ -223,6 +263,15 @@ class Train:
   def __str__(self):
     return f"{self.organizationalUnit}"
   
+  def __eq__(self, other):
+    if other != None:
+      if self.number == other.number:
+        if self.departure == other.departure:
+          return True
+        else: return False
+      else: return False
+    else: return False
+
   def __findSegments(self):
     """
     Tries to find out how many segments this journey has.
@@ -258,7 +307,7 @@ class Train:
     elif compare == False:
       return doDayStringPrettification()
   
-  def __makePrettyDates(self):
+  def __makePrettyDates(self, obj=None, forcePretty=False):
     """
     Removes leading zeroes, potentially fixes the year, and adds a suffix to the date display string.
 
@@ -283,7 +332,9 @@ class Train:
         if dt.day < 10: doDate = f"%a. {dt.day}"
       return datetime.datetime.strftime(dt, f"{doDate}{suffix} %I:%M%p").strip()
 
-    if self.departure.day == self.arrival.day: # Only return the times
+    if forcePretty:
+      return doDayStringPrettification(obj, "%a. %d")
+    elif self.departure.day == self.arrival.day: # Only return the times
       return [doDayStringPrettification(self.departure), doDayStringPrettification(self.arrival)]
     elif self.departure < self.arrival: # Return day of week, date, time
       return [doDayStringPrettification(self.departure, "%a. %d"), doDayStringPrettification(self.arrival, "%a. %d")]
@@ -305,7 +356,11 @@ class Train:
     temp = list()
     for col in cols:
       try:
-        temp.append(self.organizationalUnit[col])
+        currentValue = self.organizationalUnit[col]
+        if type(currentValue) == datetime.datetime:
+          currentValue = self.__makePrettyDates(currentValue, forcePretty=True)
+        temp.append(currentValue)
+
       except KeyError:
       # Passed in an incorrect attribute name
         temp.append('')
