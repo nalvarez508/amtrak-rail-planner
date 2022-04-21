@@ -4,6 +4,7 @@ import easygui
 
 import os
 from copy import deepcopy
+from time import sleep
 
 from views.columnsettings import ColumnSettings
 from views.config import WIDTH_DIV, BACKGROUND
@@ -69,8 +70,8 @@ class Itinerary(tk.Toplevel):
     self.userSegments.bind("<Button-1>", lambda e: self.__buttonStateChanges(True))
 
     self.deleteButton = ttk.Button(self.buttonsArea, text="Delete", command=self.__doDelete)
-    self.moveUpButton = ttk.Button(self.buttonsArea, text="Move Up")
-    self.moveDownButton = ttk.Button(self.buttonsArea, text="Move Down")
+    self.moveUpButton = ttk.Button(self.buttonsArea, text="Move Up", command=self.__moveUp)
+    self.moveDownButton = ttk.Button(self.buttonsArea, text="Move Down", command=self.__moveDown)
     self.exportButton = ttk.Button(self.buttonsArea, text="Export Itinerary", command=self.doExport)
     self.openResultsButton = ttk.Button(self.buttonsArea, text="Search Results")
     self.__exportButtonCheck()
@@ -102,6 +103,16 @@ class Itinerary(tk.Toplevel):
       myTrain = (self.inViewSavedSegments[self.userSegments.item(item, "text")]) # Train object
       return {"Index": self.userSegments.item(item, "text"), "Train": myTrain}
   
+  def __move(self, item, dir):
+    self.parent.us.userSelections.swapSegment(item["Index"], dir)
+    self.updateItinerary()
+  def __moveUp(self):
+    item = self.getSelection()
+    self.__move(item, 'up')
+  def __moveDown(self):
+    item = self.getSelection()
+    self.__move(item, 'down')
+
   def __doDelete(self):
     item = self.getSelection()
     answer = messagebox.askyesno(title="Delete Segment", message=f"Are you sure you want to delete this {item['Train'].name} trip?")
@@ -145,14 +156,23 @@ class Itinerary(tk.Toplevel):
 
   def __buttonStateChanges(self, enabled=False):
     """Enables or disables every button besides Export."""
-    selectionBasedButtons = [self.deleteButton, self.moveDownButton, self.moveUpButton, self.openResultsButton]
-    if enabled:
-      for widget in selectionBasedButtons:
-        widget.configure(state='normal')
-    else:
-      for widget in selectionBasedButtons:
-        widget.configure(state='disabled')
+    def doChanges():
+      selectionBasedButtons = [self.deleteButton, self.moveDownButton, self.moveUpButton, self.openResultsButton]
 
+      if enabled:
+        sleep(0.05)
+        mySelection = self.getSelection()
+        for widget in selectionBasedButtons:
+          widget.configure(state='normal')
+        if mySelection["Index"] == 1: self.moveUpButton.configure(state='disabled')
+        elif mySelection["Index"] == len(self.inViewSavedSegments): self.moveDownButton.configure(state='disabled')
+      else:
+        for widget in selectionBasedButtons:
+          widget.configure(state='disabled')
+      self.update_idletasks()
+    
+    self.parent.startThread(doChanges)
+    
   def __makeHeadings(self):
     for index, col in enumerate(self.headerCols):
       self.userSegments.heading(self.columns[index], text=col, anchor='w')

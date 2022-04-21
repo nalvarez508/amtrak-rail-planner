@@ -1,4 +1,5 @@
 import datetime
+from copy import deepcopy
 
 class RailPass:
   """
@@ -40,22 +41,6 @@ class RailPass:
   
   def getSearch(self, num):
     return self.allResults[num]
-
-  def getSegmentResult(self, index):
-    """
-    Returns the search results of a given segment.
-
-    Parameters
-    ----------
-    index : int
-        The segment number.
-
-    Returns
-    -------
-    dict
-        A dictionary of Train objects.
-    """
-    return self.segmentResults[index]
 
   def getSegments(self):
     """
@@ -104,7 +89,7 @@ class RailPass:
       print(e)
       return False
 
-  def createSegment(self, segment, searchResults):
+  def createSegment(self, segment, searchNum):
     """
     Creates a saved Rail Pass segment.
 
@@ -116,9 +101,21 @@ class RailPass:
     """
     self.segments[self.numSegments] = segment
     self.allResults[self.numSearches]["Has Segment Saved"] = True
-    self.segmentResults[self.numSegments] = searchResults
+    self.segmentResults[self.numSegments] = searchNum
     self.numSegments += segment.numberOfSegments
   
+  def __adjust(self, segment):
+    keys = list(self.segments.keys())
+    removing = keys.index(segment)
+    _curr = self.segments[segment].numberOfSegments
+    try: _prev = self.segments[keys[removing-1]].numberOfSegments
+    except (IndexError, ValueError, KeyError): _prev=0
+    try: _next = self.segments[keys[removing+1]].numberOfSegments
+    except (IndexError, ValueError, KeyError): _next=0
+    return {"Previous": _prev,
+            "Current": _curr,
+            "Next": _next}
+
   def deleteSegment(self, segment):
     doBreak = False
     affectedSearch = -1
@@ -126,7 +123,6 @@ class RailPass:
       if self.allResults[search]["Has Segment Saved"] == True:
         for train in self.allResults[search]["Results"]:
           if self.allResults[search]["Results"][train] == self.segments[segment]:
-            #indexInSearchResults = list(self.allResults[search]["Results"][train].keys().index(train))
             try:
               self.allResults[search]["Saved Index"].remove(train)
               self.allResults[search]["Has Segment Saved"] == True
@@ -139,12 +135,7 @@ class RailPass:
               pass
         if doBreak: break
 
-    keys = list(self.segments.keys())
-    removing = keys.index(segment)
-    try:
-      after = keys[removing+1]
-      cutBy = after-segment
-    except: cutBy=1
+    cutBy = self.segments[segment].numberOfSegments
 
     self.segmentResults.pop(segment)
     self.segments.pop(segment)
@@ -155,9 +146,38 @@ class RailPass:
   
     for index in list(self.segmentResults):
       if index > segment:
-        self.segmentResults[index-1] = self.segmentResults.pop(index)
+        self.segmentResults[index-cutBy] = self.segmentResults.pop(index)
     self.numSegments -= cutBy
     return affectedSearch
+
+  def swapSegment(self, segment, direction):
+    def moveDown(container):
+      theUserSegment = container.pop(segment)
+      theSegmentGettingBumped = container.pop(segment+_curr)
+      container[segment] = theSegmentGettingBumped
+      container[segment+_next] = theUserSegment
+    
+    def moveUp(container):
+      theUserSegment = container.pop(segment)
+      theSegmentGettingBumped = container.pop(segment-_prev)
+      container[segment-_prev] = theUserSegment
+      container[segment-_prev+_curr] = theSegmentGettingBumped
+
+    _prev,_curr,_next = self.__adjust(segment).items()
+    _prev = _prev[1]
+    _curr = _curr[1]
+    _next = _next[1]
+
+    if direction == 'down': #Affect itself and after
+      moveDown(self.segments)
+      moveDown(self.segmentResults)
+
+    elif direction == 'up': #Affect itself and before
+      moveUp(self.segments)
+      moveUp(self.segmentResults)
+
+    self.segments = {key: value for key, value in sorted(self.segments.items())}
+    self.segmentResults = {key: value for key, value in sorted(self.segmentResults.items())}
 
   def getMostRecentSegment(self):
     """
