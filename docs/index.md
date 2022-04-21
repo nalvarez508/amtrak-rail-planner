@@ -12,7 +12,7 @@ Look no further than the Amtrak Rail Planner. Built because I was in that very s
 
 ### Abstract
 
-Traveling by train with a Rail Pass is a cost-efficient way to see the country in one month but planning the trip can be a time-consuming process. The Amtrak Rail Pass Assistant will provide travelers an easy way to plan their ten-segment journey to any of the destinations served by train in the United States. Manual work of searching the Amtrak website and inputting information into a spreadsheet will be eliminated. The Python application provides an efficient and easy way to create a travel itinerary which can be exported later. Novel features include full results in one list instead of pages, details of each train in the resulting spreadsheet, and pictures of each selected city in the search.
+Traveling by Amtrak train with a Rail Pass is a cost-efficient way to see the country in one month, but planning the trip can be a time-consuming process, due to the limitations of the Amtrak website. The Amtrak Rail Planner will provide travelers an easy way to formulate their ten-segment journey to any of the destinations served by train in the United States. The manual process of searching Amtrak's website for each travel leg and inputting information into a spreadsheet will be eliminated. This Python application provides an efficient and easy way to create a travel itinerary which can be exported later. Novel features include archival of previous searches for potential reference later, displaying multiple pages of results in a single list, links to relevant train maps, and photo displays of each selected cities.
 
 ## Notes
 ---
