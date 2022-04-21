@@ -1,0 +1,47 @@
+{
+    "0": {
+        "Number": "904",
+        "Name": "California Zephyr",
+        "Origin": "RNO",
+        "Departure Time": "4:05p",
+        "Departure Date": "04/03/2022",
+"Segment Type": "Direct",
+        "Travel Time": "28h 52m",
+        "Destination": "DEN",
+        "Arrival Time": "7:49p",
+        "Arrival Date": "04/04/2022",
+        "Coach Price": "$123",
+        "Business Price": "$205",
+        "Sleeper Price": null
+    },
+    "1": {
+        "Number": "916",
+        "Name": "Capitol Corridor",
+        "Origin": "RNO",
+        "Departure Time": "6:20a",
+        "Departure Date": "04/03/2022",
+"Segment Type": "Direct",
+        "Travel Time": "3h 40m",
+        "Destination": "DEN",
+        "Arrival Time": "10:00a",
+        "Arrival Date": "04/03/2022",
+        "Coach Price": "$69",
+        "Business Price": "$124",
+        "Sleeper Price": null
+    },
+    "2": {
+        "Number": "921",
+        "Name": "Acela",
+        "Origin": "RNO",
+        "Departure Time": "6:50a",
+        "Departure Date": "04/03/2022",
+"Segment Type": "Direct",
+        "Travel Time": "3h 2m",
+        "Destination": "DEN",
+        "Arrival Time": "9:52a",
+        "Arrival Date": "04/03/2022",
+        "Coach Price": null,
+        "Business Price": "$167",
+        "Sleeper Price": null
+    }
+}

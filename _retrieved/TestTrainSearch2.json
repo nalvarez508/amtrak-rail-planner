@@ -1,0 +1,62 @@
+{
+    "0": {
+        "Number": "2152",
+        "Name": "NA",
+        "Origin": "WAS",
+        "Departure Time": "5:50a",
+        "Departure Date": "03/28/2022",
+"Segment Type": "Direct",
+        "Travel Time": "2h 59m",
+        "Destination": "NYP",
+        "Arrival Time": "8:49a",
+        "Arrival Date": "03/28/2022",
+        "Coach Price": null,
+        "Business Price": "$205",
+        "Sleeper Price": null
+    },
+    "1": {
+        "Number": "56",
+        "Name": "Vermonter",
+        "Origin": "WAS",
+        "Departure Time": "8:00a",
+        "Departure Date": "03/28/2022",
+"Segment Type": "Direct",
+        "Travel Time": "3h 21m",
+        "Destination": "NYP",
+        "Arrival Time": "11:21a",
+        "Arrival Date": "03/28/2022",
+        "Coach Price": "$123",
+        "Business Price": "$251",
+        "Sleeper Price": null
+    },
+    "2": {
+        "Number": "20",
+        "Name": "Crescent",
+        "Origin": "WAS",
+        "Departure Time": "2:15p",
+        "Departure Date": "03/28/2022",
+"Segment Type": "Direct",
+        "Travel Time": "3h 53m",
+        "Destination": "NYP",
+        "Arrival Time": "6:08p",
+        "Arrival Date": "03/28/2022",
+        "Coach Price": "$123",
+        "Business Price": null,
+        "Sleeper Price": "$270"
+    },
+    "3": {
+        "Number": "90",
+        "Name": "Palmetto",
+        "Origin": "WAS",
+        "Departure Time": "7:57p",
+        "Departure Date": "03/28/2022",
+"Segment Type": "3 Segment",
+        "Travel Time": "3h 26m",
+        "Destination": "NYP",
+        "Arrival Time": "11:23p",
+        "Arrival Date": "03/28/2022",
+        "Coach Price": "$69",
+        "Business Price": "$124",
+        "Sleeper Price": null
+    }
+}
