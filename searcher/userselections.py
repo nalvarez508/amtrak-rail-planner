@@ -36,8 +36,8 @@ class UserSelections:
       "Destination": {"Display Name": "Destination", "Header": "Destination", "Width": 55, "Selected": False},
       "Number": {"Display Name": "Train Number", "Header": "#", "Width": 30, "Selected": True},
       "Name": {"Display Name": "Train Name", "Header": "Train", "Width": 175, "Selected": True},
-      "Departs": {"Display Name": "Departure Date/Time", "Header": "Departs", "Width": 130, "Selected": True},
-      "Arrives": {"Display Name": "Arrival Date/Time", "Header": "Arrives", "Width": 130, "Selected": True},
+      "Departs": {"Display Name": "Departure Date/Time", "Header": "Departs", "Width": 150, "Selected": True},
+      "Arrives": {"Display Name": "Arrival Date/Time", "Header": "Arrives", "Width": 150, "Selected": True},
       "Duration": {"Display Name": "Travel Time", "Header": "Duration", "Width": 65, "Selected": True},
       "Coach Price": {"Display Name": "Coach Price", "Header": "Coach ($)", "Width": 60, "Selected": False},
       "Business Price": {"Display Name": "Business Price", "Header": "Business ($)", "Width": 60, "Selected": False},
@@ -46,7 +46,6 @@ class UserSelections:
     }
     self.exportColumns = deepcopy(self.columns)
 
-  
   def setColumns(self, vals):
     """
     Updates the dictionary of selected columns.

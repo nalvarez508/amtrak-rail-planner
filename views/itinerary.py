@@ -3,6 +3,7 @@ from tkinter import ttk, messagebox
 import easygui
 
 import os
+from copy import deepcopy
 
 from views.columnsettings import ColumnSettings
 from views.config import WIDTH_DIV, BACKGROUND
@@ -48,10 +49,11 @@ class Itinerary(tk.Toplevel):
   def __init__(self, parent, *args, **kwargs):
     tk.Toplevel.__init__(self, parent, *args, **kwargs)
     self.parent = parent
-    self.geometry('700x330')
+    self.geometry('800x330')
     self.title("Itinerary")
+    self.config(background=BACKGROUND)
     self.inViewSavedSegments = dict()
-    self.segmentsArea = tk.Frame(self)
+    self.segmentsArea = tk.Frame(self, background=BACKGROUND)
     self.buttonsArea = tk.Frame(self, background=BACKGROUND)
 
     self.columns = list()
@@ -104,8 +106,9 @@ class Itinerary(tk.Toplevel):
     item = self.getSelection()
     answer = messagebox.askyesno(title="Delete Segment", message=f"Are you sure you want to delete this {item['Train'].name} trip?")
     if answer == True:
-      self.parent.us.userSelections.deleteSegment(item["Index"])
+      search = self.parent.us.userSelections.deleteSegment(item["Index"])
       self.updateItinerary()
+      self.parent.resultsHeadingArea.changeSearchView(search)
 
   def doExport(self): # Move to main window?
     defaultPath = os.path.join(os.path.expanduser('~/'), 'My Itinerary.csv')
@@ -168,7 +171,24 @@ class Itinerary(tk.Toplevel):
     self.update_idletasks()
 
   def __getDisplayColumns(self):
-    self.columns, self.headerCols, self.dispCols = self.parent.us.getDisplayColumns()
+    self.dispCols.append("Leg")
+    self.columns.append("Leg")
+    self.headerCols = {"Leg": 40}
+
+    columns, headerCols, dispCols = self.parent.us.getDisplayColumns()
+    self.columns.extend(columns)
+    self.headerCols.update(headerCols)
+    self.dispCols.extend(dispCols)
+
+    replacements = [('Arrives', 'Arrival Datetime'), ('Departs', 'Departure Datetime')]
+    for r in (replacements): # Replace with full dates and times, if selected in display cols
+      try:
+        thisColVal = self.columns.index(r[0])
+        self.columns[thisColVal] = r[1]
+        thisDispVal = self.dispCols.index(r[0])
+        self.dispCols[thisDispVal] = r[1]
+      except ValueError:
+        pass
   
   def __clearTree(self):
     for item in self.userSegments.get_children():
@@ -183,6 +203,9 @@ class Itinerary(tk.Toplevel):
     trains : dict
         A dict containing search element (key) and Train object.
     """
+    getCols = deepcopy(self.columns)
+    getCols.remove("Leg")
     for train in trains: # Every element of returned train dict
-      vals = trains[train].returnSelectedElements(self.columns)
+      vals = [train]
+      vals.extend(trains[train].returnSelectedElements(getCols)) # Need different date vals
       self.userSegments.insert('', tk.END, text=train, values=vals)
