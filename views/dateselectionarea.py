@@ -92,17 +92,3 @@ class DateSelectionArea(tk.Frame):
     if os.name == 'posix': cal.configure(font='TkDefaultFont 14', background='seashell3', selectforeground='red', foreground='black')
     cal.bind("<<CalendarSelected>>", self.__callbackCalendar)
     return cal
-
-  def __createCalendarPopupWindow(self):
-    def getCalDate():
-      date = cal.selection_get()
-      #date = datetime.datetime.strptime(date, "%m/%d/%Y")
-      #date = datetime.date(year=date.year, month=date.month, day=date.day)
-      self.__changeDate(cal.selection_get())
-    calWindow = tk.Toplevel(self.parent)
-    rightNow = self.parent.us.getDate()
-    cal = Cal(calWindow, selectmode='day', year=rightNow.year, month=rightNow.month, day=rightNow.day)
-    cal.pack()
-    tk.Button(cal, text="Select", command=getCalDate).pack()
-    calWindow.wm_protocol("WM_DELETE_WINDOW", calWindow.destroy)
-    calWindow.mainloop()

@@ -19,10 +19,23 @@ class ImageSearch:
   Attributes
   ----------
   driver : Driver
-  photo_city1 = PhotoImage
-  photo_city2 = PhotoImage
-  name_city1 = str
-  name_city2 = str
+  photo_city1 : PhotoImage
+  photo_city2 : PhotoImage
+  name_city1 : str
+  name_city2 : str
+
+  Methods
+  -------
+  loadImage(c, no, dims)
+      Returns an image object for a specified city.
+  doCitySwap
+      Swaps the city photo objects without finding new ones.
+  getCityName(cityNo)
+      Returns a city's name.
+  setCityPhoto(cityNo, data)
+      Sets a city's photo to `data`.
+  getCityPhoto(cityNo)
+      Returns a city's photo object.
   """
   def __init__(self):
     self.driver = Driver().driver

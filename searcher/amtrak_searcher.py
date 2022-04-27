@@ -38,10 +38,28 @@ class AmtrakSearch:
   -------
   preSearchSetup(origin, destination, departDate, pb, l)
       Initializes search variables in the class
-  oneWaySearch()
+  oneWaySearch
       Performs a search for the requested journey.
   """
   def __init__(self, root, driver, origin="WAS", destination="NYP", departDate="03/29/2022", status=None):
+    """
+    Initializes a searcher.
+
+    Parameters
+    ----------
+    root : tk.Tk
+        Parent window.
+    driver : WebDriver
+        The searching driver.
+    origin : str, optional
+        Origin station, by default "WAS"
+    destination : str, optional
+        Destination station, by default "NYP"
+    departDate : str, optional
+        Departure date as 'mm/dd/yyyy', by default "03/29/2022"
+    status : tk.Label, optional
+        Status bar object, by default None
+    """
     self.origin = origin
     self.destination = destination
     self.departDate = departDate
@@ -59,12 +77,23 @@ class AmtrakSearch:
     self.returnedError = False
 
   def __updateStatusMessage(self, message, amt=0):
+    """
+    Updates the parent window's status bar.
+
+    Parameters
+    ----------
+    message : str
+        Message to display
+    amt : int, optional
+        Amount out of 50 to increment the progress bar, by default 0
+    """
     self.status.set(message)
     self.progressbar['value'] += amt*2
     #self.progressbar.step(amt)
     self.root.update_idletasks()
 
   def __updateNumberTrainsLabel(self):
+    """Updates the number of trains found in the main window."""
     if self.numberTrainsFound == 1:
       self.numberTrainsLabel.set(f"{self.numberTrainsFound} train found")
     else:
@@ -302,6 +331,9 @@ class AmtrakSearch:
     inputField3.clear()
     inputField3.send_keys(f"{self.departDate}\t") #Depart Date
     #searchArea.find_element(by=By.XPATH, value="//input[@id='mat-input-4']").send_keys("03/27/2022") #Return Date
+
+  def __getSessionStorage(self, key):
+    return self.driver.execute_script("return window.sessionStorage.getItem(arguments[0]);", key)
 
   def oneWaySearch(self):
     """

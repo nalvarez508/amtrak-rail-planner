@@ -16,16 +16,28 @@ class ResultsHeadingArea(tk.Frame):
       
   Attributes
   ----------
+  titleInfoFrame : tk.Frame
+      Holds date and number of trains found.
+  segmentSearchFrame : tk.Frame
+      Holds left/right search arrows and the search title.
+  searchNum : int
   titleToAndFrom : StringVar
-      Heading for search title (to and from stations).
   searchDate : StringVar
-  background : str
   boldItalic : Font
       Custom heading style: large, bold, and italic.
   numberOfTrains : StringVar
+  leftSegmentButton : ttk.Button
+  rightSegmentButton : ttk.Button
   titleLabel = tk.Label
   dateLabel = tk.Label
   numberLabel = tk.Label
+
+  Methods
+  -------
+  getSearchNum
+      Returns search number currently in view.
+  changeSearchView(searchnum)
+      Updates header and refreshes results table. 
   """
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)
@@ -60,6 +72,7 @@ class ResultsHeadingArea(tk.Frame):
     self.titleInfoFrame.pack(padx=4)
   
   def __updateResultsWidgets(self, doTreeviewRefresh=True):
+    """Changes heading title and refreshes results treeview. Updates state of left/right buttons."""
     self.__searchButtonToggle()
 
     # Get updated values
@@ -81,9 +94,25 @@ class ResultsHeadingArea(tk.Frame):
     if doTreeviewRefresh: self.parent.trainResultsArea.refreshHandler(r, i)
 
   def getSearchNum(self):
+    """
+    Find the current search number that is in view.
+
+    Returns
+    -------
+    int
+        Search number.
+    """
     return self.searchNum
 
   def changeSearchView(self, searchnum):
+    """
+    Changes the currently displayed results to a specified search.
+
+    Parameters
+    ----------
+    searchnum : int
+        -1 if a new search, else the search number to see
+    """
     if (searchnum <= self.parent.us.userSelections.numSearches) and (searchnum >= 1):
       self.searchNum = searchnum
     else:
@@ -103,6 +132,7 @@ class ResultsHeadingArea(tk.Frame):
       self.__updateResultsWidgets()
 
   def __searchButtonToggle(self):
+    """Ensures user cannot navigate left or right when they hit the end on either side."""
     currentView = self.searchNum
     totalSearches = self.parent.us.userSelections.numSearches
 

@@ -22,7 +22,7 @@ class MenuOptions(tk.Menu):
   editmenu : Menu
   viewmenu : Menu
   otpmenu : Menu
-      On-time performance.
+      On-time performance, within View menu.
 
   Methods
   -------
