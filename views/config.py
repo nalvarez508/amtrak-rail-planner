@@ -9,9 +9,11 @@ if os.name == 'nt':
   MINSIZE = [635, 730]
   BACKGROUND = "SystemButtonFace"
   WIDTH_DIV = 1
+  ICON = "Amtrak_square.ico"
 elif os.name == 'posix':
   SYSTEM_FONT = "TkDefaultFont"
   GEOMETRY = "750x680+0+0"
   MINSIZE = [700, 680]
   BACKGROUND = "gray93"
   WIDTH_DIV = 1.5
+  ICON = "Amtrak_square.ico"
