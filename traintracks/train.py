@@ -9,19 +9,35 @@ class RailPass:
   ----------
   numSegments : int
       Number of currently saved segments, starting at 1, inclusive.
+  numSearches : int
+      Number of searches performed.
   segments : dict
       Holds an ordered dictionary of {Segment Number : Train object}.
   segmentResults : dict
-      Holds dictionaries of selected segments' search results.
+      Holds mapping from segment number to `allResults` index.
+  allResults : dict
+      Stores every search performed.
   
   Methods
   -------
-  getSegmentResult(index)
-      Returns search results for a given segment.
-  createCsv()
-      Creates a dictionary of `segments` for later writing to a file.
-  createSegment():
-      Undefined.
+  updateSearch(num, saved)
+      Updates `allResults` key with any new saved segments.
+  addSearch(origin, destination, date, s)
+      Adds a new search to `allResults`
+  getSearch(num)
+      Returns a the *n*-th search.
+  getSegmentSearchNum(segment)
+      Returns search results index in `allResults` for a given segment.
+  createCsv(path, cols)
+      Creates a dictionary of `segments` and writes to a file.
+  createSegment(segment, searchNum):
+      Creates a Rail Pass segment.
+  deleteSegment(segment)
+      Deletes the specified segment and updates the ordering.
+  swapSegment(segment, direction)
+      Moves a segment "up" or "down" in the ordering.
+  getMostRecentSegment
+      Returns the most recent segment.
   """
   def __init__(self):
     self.numSegments = 1
@@ -31,16 +47,68 @@ class RailPass:
     self.allResults = dict()
   
   def updateSearch(self, num, saved):
+    """
+    Updates a `allResults` key dict with any new saved segments.
+
+    Parameters
+    ----------
+    num : int
+        Search number.
+    saved : list
+        List of indices in the results with saved segments.
+    """
     if saved == []: self.allResults[num]["Has Segment Saved"] = False
     else: self.allResults[num]["Has Segment Saved"] = True
     self.allResults[num]["Saved Index"] = saved
 
   def addSearch(self, origin, destination, date, s):
+    """
+    Adds search results to `allResults`.
+
+    Parameters
+    ----------
+    origin : str
+        'Name, State (Code)'
+    destination : str
+        'Name, State (Code)'
+    date : datetime.date
+        Departure date.
+    s : dict
+        Search results.
+    """
     self.numSearches += 1
     self.allResults[self.numSearches] = {"Origin": origin, "Destination": destination, "Date": date, "Has Segment Saved": False, "Results": s, "Saved Index": []}
   
   def getSearch(self, num):
+    """
+    Gets a dictionary at search number.
+
+    Parameters
+    ----------
+    num : int
+        Search number.
+
+    Returns
+    -------
+    dict
+        Dictionary including "Results" key.
+    """
     return self.allResults[num]
+  def getSegmentSearchNum(self, segment):
+    """
+    Returns a search number for the given segment.
+
+    Parameters
+    ----------
+    segment : int
+        The segment number.
+
+    Returns
+    -------
+    int
+        Search number.
+    """
+    return self.segmentResults[segment]
 
   def getSegments(self):
     """
@@ -55,15 +123,22 @@ class RailPass:
 
   def createCsv(self, path, cols):
     """
-    Loads data into a dictionary for writing to a CSV file.
+    Writes data to a CSV file.
+
+    Parameters
+    ----------
+    path : os.path
+        Path to save the file at, including file name.
+    cols : dict
+        Columns as returned by `UserSelections.getExportColumns()`
 
     Returns
     -------
-    dict
-        Dictionary with defined columns ready for writing to file.
+    bool
+        Success of failure of writing the file.
     """
     output = str()
-    headerRow = "Segment,"
+    headerRow = "Leg,"
     hasWrittenHeaders = False
     try:
       for segment in (self.segments): # For every train
@@ -73,12 +148,16 @@ class RailPass:
         for col in cols: # For every attribute
           if cols[col]["Selected"] == True: # Check if it is selected
             if not hasWrittenHeaders: headerRow += str(str(cols[col]["Header"]) + ',') # Add it to header row
-            output += str(str(thisTrain[col]).replace(',', ';') + ',') # Add train attribute
+            item = thisTrain[col]
+            if type(item) == datetime.datetime:
+              item = self.segments[segment]._makePrettyDates(obj=item, forcePretty=True)
+            output += str(str(item).replace(',', ';') + ',') # Add train attribute
 
         hasWrittenHeaders = True
         output += '\n'
 
       try:
+        headerRow += '\n'
         with open(path, 'w') as f:
           f.write(headerRow+output)
         return True
@@ -96,8 +175,8 @@ class RailPass:
     Parameters
     ----------
     segment : Train
-    searchResults : dict
-        This segment's search results (every train returned).
+    searchNum : int
+        Current search number.
     """
     self.segments[self.numSegments] = segment
     self.allResults[self.numSearches]["Has Segment Saved"] = True
@@ -105,6 +184,7 @@ class RailPass:
     self.numSegments += segment.numberOfSegments
   
   def __adjust(self, segment):
+    """Finds segments around (left or right) a given segment number."""
     keys = list(self.segments.keys())
     removing = keys.index(segment)
     _curr = self.segments[segment].numberOfSegments
@@ -112,11 +192,22 @@ class RailPass:
     except (IndexError, ValueError, KeyError): _prev=0
     try: _next = self.segments[keys[removing+1]].numberOfSegments
     except (IndexError, ValueError, KeyError): _next=0
-    return {"Previous": _prev,
-            "Current": _curr,
-            "Next": _next}
+    return [_prev, _curr, _next]
 
   def deleteSegment(self, segment):
+    """
+    Deletes a segment from `segments` and reorders the dictionary.
+
+    Parameters
+    ----------
+    segment : int
+        Segment number.
+
+    Returns
+    -------
+    int
+        Search number that was affected, for reloading the treeview.
+    """
     doBreak = False
     affectedSearch = -1
     for search in self.allResults: # Get indexes
@@ -151,6 +242,16 @@ class RailPass:
     return affectedSearch
 
   def swapSegment(self, segment, direction):
+    """
+    Moves a segment "up" or "down" in the itinerary.
+
+    Parameters
+    ----------
+    segment : int
+        Segment number.
+    direction : str
+        'up' or 'down'
+    """
     def moveDown(container):
       theUserSegment = container.pop(segment)
       theSegmentGettingBumped = container.pop(segment+_curr)
@@ -163,10 +264,7 @@ class RailPass:
       container[segment-_prev] = theUserSegment
       container[segment-_prev+_curr] = theSegmentGettingBumped
 
-    _prev,_curr,_next = self.__adjust(segment).items()
-    _prev = _prev[1]
-    _curr = _curr[1]
-    _next = _next[1]
+    _prev,_curr,_next = self.__adjust(segment)
 
     if direction == 'down': #Affect itself and after
       moveDown(self.segments)
@@ -188,8 +286,9 @@ class RailPass:
     Train
         The most recent saved segment as a Train object.
     """
-    if self.numSegments > 1:
-      return list(self.segments.keys())[-2]
+    if len(self.segments.keys()) > 1: #Compare length dict keys
+      num = list(self.segments.keys())[-1]
+      return self.segments[num]
     else:
       return None
 
@@ -238,6 +337,14 @@ class Train:
       Gets a list of elements that match certain attributes in the `organizationalUnit`.
   """
   def __init__(self, key):
+    """
+    Initializes the Train object,
+
+    Parameters
+    ----------
+    key : dict
+        Train information.
+    """
     self.origin = key["Origin"]
     self.destination = key["Destination"]
     try:
@@ -252,7 +359,7 @@ class Train:
     self.arrivalTime = key["Arrival Time"]
     self.arrivalDate = key["Arrival Date"]
     self.arrival = self.__convertToDatetime(self.arrivalDate, self.arrivalTime)
-    self.prettyDeparture, self.prettyArrival = self.__makePrettyDates()
+    self.prettyDeparture, self.prettyArrival = self._makePrettyDates()
     self.coachPrice = key["Coach Price"]
     self.businessPrice = key["Business Price"]
     self.sleeperPrice = key["Sleeper Price"]
@@ -264,15 +371,15 @@ class Train:
       "Destination":self.destination,
       "Number":self.number,
       "Name":self.name,
-      "Departure Time":self.departureTime,
-      "Departure Date":self.departureDate,
-      "Departure Datetime":self.departure,
-      "Departs":self.prettyDeparture,
-      "Duration":self.travelTime,
       "Arrival Time":self.arrivalTime,
       "Arrival Date":self.arrivalDate,
       "Arrival Datetime":self.arrival,
       "Arrives":self.prettyArrival,
+      "Duration":self.travelTime,
+      "Departure Time":self.departureTime,
+      "Departure Date":self.departureDate,
+      "Departure Datetime":self.departure,
+      "Departs":self.prettyDeparture,
       "Coach Price":self.coachPrice,
       "Business Price":self.businessPrice,
       "Sleeper Price":self.sleeperPrice,
@@ -327,16 +434,16 @@ class Train:
     elif compare == False:
       return doDayStringPrettification()
   
-  def __makePrettyDates(self, obj=None, forcePretty=False):
+  def _makePrettyDates(self, obj=None, forcePretty=False):
     """
     Removes leading zeroes, potentially fixes the year, and adds a suffix to the date display string.
 
     Parameters
     ----------
-    dt : datetime.datetime
-        Object to turn into string.
-    compare : bool, optional
-        Compares `departure` to `arrival` to fix the year, by default False
+    obj : Train datetime.datetime attribute, optional
+        Object to modify, by default None
+    forcePretty : bool, optional
+        Forces to return a string with full date, by default False
     """
     def doDayStringPrettification(dt, doDate=""): # doDate is the strftime format for weekday and day#
       suffix = ""
@@ -378,7 +485,7 @@ class Train:
       try:
         currentValue = self.organizationalUnit[col]
         if type(currentValue) == datetime.datetime:
-          currentValue = self.__makePrettyDates(currentValue, forcePretty=True)
+          currentValue = self._makePrettyDates(currentValue, forcePretty=True)
         temp.append(currentValue)
 
       except KeyError:
