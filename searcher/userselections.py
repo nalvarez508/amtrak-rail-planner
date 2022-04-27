@@ -21,9 +21,22 @@ class UserSelections:
       Holds selected trip segments.
   columns : dict
       Defines columns for treeview objects and the column picker.
+  exportColumns : dict
+      Defines columns for output spreadsheet.
   
-  getPrettyDate()
+  setColumns(vals)
+      Updates the "Selected" state of the `columns` object.
+  getColumns
+      Returns the columns.
+  setExportColumns(vals)
+      Updates the export columns, changing the date related columns.
+  getDisplayColumns
+      Creates elements for a treeview object.
+  isSearchOkay
+      Performs search validation.
+  getPrettyDate
       Returns `departDate` as a pretty string.
+  And plenty of other fun get/set methods...
   """
   def __init__(self):
     self.origin = None
@@ -70,8 +83,23 @@ class UserSelections:
     return self.columns
   
   def setExportColumns(self, vals):
+    """
+    Updates the columns to be used when exporting a spreadsheet. Date columns are turned into datetime objects.
+
+    Parameters
+    ----------
+    vals : dict
+        True or False for "Selected."
+    """
     for col in vals:
       self.exportColumns[col]["Selected"] = vals[col]
+    replacements = [('Arrives', 'Arrival Datetime'), ('Departs', 'Departure Datetime')]
+    for r in (replacements): # Replace with full dates and times, if selected in display cols
+      try:
+        thisColVal = self.exportColumns.pop(r[0])
+        self.exportColumns[r[1]] = thisColVal
+      except ValueError:
+        pass
 
   def getDisplayColumns(self):
     """
@@ -209,7 +237,7 @@ class UserSelections:
     Parameters
     ----------
     city : str
-        City name in the form 'Code | Name, State'.
+        City name in the form 'Name, State (Code)'.
     side : int
         Accepts 1 (left/origin) or 2 (right/destination).
     """
@@ -225,7 +253,7 @@ class UserSelections:
     Parameters
     ----------
     o : str
-        'Code | Name, State'
+        'Name, State (Code)'
     """
     self.origin = o
   def getOrigin(self):
@@ -235,7 +263,7 @@ class UserSelections:
     Returns
     -------
     str
-        'Code | Name, State'
+        'Name, State (Code)'
     """
     return self.origin
   
@@ -246,7 +274,7 @@ class UserSelections:
     Parameters
     ----------
     d : str
-        'Code | Name, State'
+        'Name, State (Code)'
     """
     self.destination = d
   def getDestination(self):
@@ -256,9 +284,17 @@ class UserSelections:
     Returns
     -------
     str
-        'Code | Name State'
+        'Name, State (Code)'
     """
     return self.destination
   
   def addSegment(self, t):
+    """
+    Adds a segment to the railpass.
+    
+    Parameters
+    ----------
+    t : Train
+        The segment object.
+    """
     self.userSelections.createSegment(t)
