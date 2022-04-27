@@ -4,6 +4,7 @@ from tkinter import ttk, messagebox
 from copy import deepcopy
 from datetime import datetime
 from math import trunc
+import webbrowser
 
 from . import config as cfg
 
@@ -18,9 +19,10 @@ class TrainResultsArea(tk.Frame):
 
   Attributes
   ----------
-  background : str
   resultsArea : tk.Frame
       Holds `results` and `tvScroll`.
+  buttonsArea : tk.Frame
+  trainMenu : tk.Menu
   isSegmentSaved : bool
   savedSegmentIndices : list
   inViewSegmentResults : dict
@@ -42,8 +44,16 @@ class TrainResultsArea(tk.Frame):
 
   Methods
   -------
+  toggleSaveButton(enabled=False)
+      Enables/disables the Save Segment button.
+  updateDisplayColumns
+      Refreshes the table's display columns.
+  getSelection
+      Retrieves currently selected item.
   startSearch
       Prepares UI elements for a search and starts a searching thread.
+  refreshHandler(response, saved)
+      Loads the table with existing search results.
   """
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)
@@ -52,9 +62,11 @@ class TrainResultsArea(tk.Frame):
     self.config(background=self.background)
     self.resultsArea = tk.Frame(self)
     self.buttonsArea = tk.Frame(self, background=self.background)
+    self.trainMenu = tk.Menu(self, tearoff=0)
+    self.trainMenu.add_command(label="Save Segment", command=self.__saveSelection)
+    self.trainMenu.add_command(label="Train Info", command=self.__openTrainLink)
     self.isSegmentSaved = False
     self.savedSegmentsIndices = list()
-
     self.inViewSegmentResults = dict()#self.parent.searcher._test_returnSearchData() # AmtrakSearch thisSearchResultsAsTrain
 
     self.columns = list()
@@ -70,6 +82,7 @@ class TrainResultsArea(tk.Frame):
     self.results.bind("<Button-1>", lambda e: self.toggleSaveButton(True))
     self.results.bind("<Double-Button-1>", lambda e: self.__saveSelection)
     self.results.bind("<Return>", lambda e: self.__saveSelection)
+    self.results.bind("<Button-3>", self.__trainContextMenu)
 
     self.saveButton = ttk.Button(self.buttonsArea, text="Save Segment", state='disabled', command=self.__saveSelection)
     self.saveButton.pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
@@ -109,6 +122,25 @@ class TrainResultsArea(tk.Frame):
 
   def __getDisplayColumns(self):
     self.columns, self.headerCols, self.dispCols = self.parent.us.getDisplayColumns()
+
+  def __trainContextMenu(self, event):
+    iid = self.results.identify_row(event.y)
+    if iid:
+      self.results.selection_set(iid)
+      try:
+        self.trainMenu.tk_popup(event.x_root, event.y_root)
+      finally:
+        self.trainMenu.grab_release()
+  
+  def __openTrainLink(self):
+    item = self.getSelection()
+    trainName = item["Train"].name
+    trainName.replace(' ', '-')
+    if trainName != "NA":
+      url = f"https://www.amtrak.com/{trainName}-train"
+      webbrowser.open(url, new=1, autoraise=True)
+    else:
+      messagebox.showwarning(title=cfg.APP_NAME, message="Cannot view information about multiple segments.")
 
   def __saveSelection(self, *args):
     """Performs some validation for segments before saving them to the Rail Pass."""
@@ -159,6 +191,7 @@ class TrainResultsArea(tk.Frame):
     self.parent.update_idletasks()
 
   def __clearTree(self):
+    """Wipes out all tree elements."""
     for item in self.results.get_children():
       self.results.delete(item)
     self.inViewSegmentResults.clear()
@@ -176,6 +209,7 @@ class TrainResultsArea(tk.Frame):
 
     Extended Summary
     ----------------
+    Checks if the search is OK with user, depending on station and date selections.
     Disables search button, sets status, and enables/resets progress bar.
     Clears the current search results and shows that 0 trains have been found.
     Updates UserSelection variables.
@@ -235,6 +269,16 @@ class TrainResultsArea(tk.Frame):
     self.__searchHandler(response)
 
   def refreshHandler(self, response, saved):
+    """
+    Refreshes the table with existing results.
+
+    Parameters
+    ----------
+    response : dict
+        Prev. search Train objects with indexes.
+    saved : list
+        Prev. search saved segments indices for validation.
+    """
     self.__clearTree()
     self.inViewSegmentResults = deepcopy(response)
     self.savedSegmentsIndices = deepcopy(saved)
