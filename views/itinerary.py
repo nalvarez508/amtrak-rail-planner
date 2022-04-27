@@ -7,7 +7,7 @@ from copy import deepcopy
 from time import sleep
 
 from views.columnsettings import ColumnSettings
-from views.config import WIDTH_DIV, BACKGROUND
+from views.config import ICON, WIDTH_DIV, BACKGROUND
 
 class Itinerary(tk.Toplevel):
   """
@@ -22,6 +22,7 @@ class Itinerary(tk.Toplevel):
   inViewSavedSegments : dict
   segmentsArea : tk.Frame
       Holds Treeview and scrollbars.
+  buttonsArea : tk.Frame
   columns = list
       Selected column names from `Train.organizationalUnit`.
   headerCols = dict
@@ -42,6 +43,10 @@ class Itinerary(tk.Toplevel):
   
   Methods
   -------
+  getSelection
+      Returns the current user selection (highlighted).
+  doExport
+      Asks for a file location and saves the itinerary.
   updateItinerary
       Refreshes the treeview object with new information.
   updateDisplayColumns
@@ -52,6 +57,7 @@ class Itinerary(tk.Toplevel):
     self.parent = parent
     self.geometry('800x330')
     self.title("Itinerary")
+    self.iconbitmap(ICON)
     self.config(background=BACKGROUND)
     self.inViewSavedSegments = dict()
     self.segmentsArea = tk.Frame(self, background=BACKGROUND)
@@ -73,7 +79,7 @@ class Itinerary(tk.Toplevel):
     self.moveUpButton = ttk.Button(self.buttonsArea, text="Move Up", command=self.__moveUp)
     self.moveDownButton = ttk.Button(self.buttonsArea, text="Move Down", command=self.__moveDown)
     self.exportButton = ttk.Button(self.buttonsArea, text="Export Itinerary", command=self.doExport)
-    self.openResultsButton = ttk.Button(self.buttonsArea, text="Search Results")
+    self.openResultsButton = ttk.Button(self.buttonsArea, text="Search Results", command=self.__openResults)
     self.__exportButtonCheck()
     self.__buttonStateChanges()
 
@@ -98,14 +104,29 @@ class Itinerary(tk.Toplevel):
     self.destroy()
   
   def getSelection(self):
+    """
+    Retrieves the currently highlighted item.
+
+    Returns
+    -------
+    dict
+        Index of item, Train object
+    """
     item = self.userSegments.focus()
     if item != "":
       myTrain = (self.inViewSavedSegments[self.userSegments.item(item, "text")]) # Train object
       return {"Index": self.userSegments.item(item, "text"), "Train": myTrain}
   
+  def __openResults(self):
+    # Finds search results index for this segment
+    item = self.getSelection()
+    num = self.parent.us.userSelections.getSegmentSearchNum(item["Index"])
+    self.parent.resultsHeadingArea.changeSearchView(num)
+
   def __move(self, item, dir):
     self.parent.us.userSelections.swapSegment(item["Index"], dir)
     self.updateItinerary()
+    self.focus(item)
   def __moveUp(self):
     item = self.getSelection()
     self.__move(item, 'up')
@@ -119,21 +140,26 @@ class Itinerary(tk.Toplevel):
     if answer == True:
       search = self.parent.us.userSelections.deleteSegment(item["Index"])
       self.updateItinerary()
+      # Refreshes treeview so we can save the segment again
       self.parent.resultsHeadingArea.changeSearchView(search)
 
   def doExport(self): # Move to main window?
+    """
+    Prompts the user for a directory to save to, the desired attributes, and saves the itinerary.
+    """
     defaultPath = os.path.join(os.path.expanduser('~/'), 'My Itinerary.csv')
     exportPath = easygui.filesavebox(default=defaultPath, filetypes=['*.csv'])
     if exportPath != None:
       if not exportPath.endswith('.csv'):
         exportPath += '.csv'
-      #ColumnSettings(self.parent)
-      #self.parent.update()
-      didSucceed = self.parent.us.userSelections.createCsv(exportPath, self.parent.us.exportColumns)
-      if didSucceed:
-        messagebox.showinfo(title='File Export', message=f'Saved to {exportPath}')
-      else:
-        messagebox.showwarning(title='File Export', message='Could not save the file.')
+
+      cs = ColumnSettings(self.parent, isExport=True)
+      if cs.hasCheckedOne():
+        didSucceed = self.parent.us.userSelections.createCsv(exportPath, self.parent.us.exportColumns)
+        if didSucceed:
+          messagebox.showinfo(title='File Export', message=f'Saved to {exportPath}')
+        else:
+          messagebox.showwarning(title='File Export', message='Could not save the file.')
 
   def _test_getGeometry(self):
     print("Itinerary:", self.geometry(None))
@@ -164,8 +190,12 @@ class Itinerary(tk.Toplevel):
         mySelection = self.getSelection()
         for widget in selectionBasedButtons:
           widget.configure(state='normal')
-        if mySelection["Index"] == 1: self.moveUpButton.configure(state='disabled')
-        elif mySelection["Index"] == len(self.inViewSavedSegments): self.moveDownButton.configure(state='disabled')
+        try:
+          if mySelection["Index"] == 1: self.moveUpButton.configure(state='disabled')
+          elif mySelection["Index"] == len(self.inViewSavedSegments): self.moveDownButton.configure(state='disabled')
+        except TypeError:
+          self.moveUpButton.configure(state='disabled')
+          self.moveDownButton.configure(state='disabled')
       else:
         for widget in selectionBasedButtons:
           widget.configure(state='disabled')
