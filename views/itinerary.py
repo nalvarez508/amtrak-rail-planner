@@ -5,6 +5,7 @@ import easygui
 import os
 from copy import deepcopy
 from time import sleep
+import webbrowser
 
 from views.columnsettings import ColumnSettings
 from views.config import ICON, WIDTH_DIV, BACKGROUND
@@ -52,12 +53,12 @@ class Itinerary(tk.Toplevel):
   updateDisplayColumns
       Changes which columns are shown in the table.
   """
-  def __init__(self, parent, *args, **kwargs):
+  def __init__(self, parent, spawnExport=False, *args, **kwargs):
     tk.Toplevel.__init__(self, parent, *args, **kwargs)
     self.parent = parent
     self.geometry('800x330')
     self.title("Itinerary")
-    self.iconbitmap(ICON)
+    if os.name == 'nt': self.iconbitmap(ICON)
     self.config(background=BACKGROUND)
     self.inViewSavedSegments = dict()
     self.segmentsArea = tk.Frame(self, background=BACKGROUND)
@@ -75,6 +76,7 @@ class Itinerary(tk.Toplevel):
     #self.__populateTreeview(self.parent.us.userSelections.getSegments())
     self.userSegments.bind("<Button-1>", lambda e: self.__buttonStateChanges(True))
 
+    self.trainInfoButton = ttk.Button(self.buttonsArea, text="Train Info", command=self.__openTrainLink)
     self.deleteButton = ttk.Button(self.buttonsArea, text="Delete", command=self.__doDelete)
     self.moveUpButton = ttk.Button(self.buttonsArea, text="Move Up", command=self.__moveUp)
     self.moveDownButton = ttk.Button(self.buttonsArea, text="Move Down", command=self.__moveDown)
@@ -90,6 +92,7 @@ class Itinerary(tk.Toplevel):
 
     self.exportButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
     self.openResultsButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
+    self.trainInfoButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
     self.deleteButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
     self.moveUpButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
     self.moveDownButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
@@ -97,6 +100,7 @@ class Itinerary(tk.Toplevel):
     self.buttonsArea.pack(side=tk.BOTTOM, expand=False, padx=8, pady=4)
     
     self.updateItinerary()
+    if spawnExport: self.doExport()
     self.wm_protocol("WM_DELETE_WINDOW", self.__onClose)
 
   def __onClose(self):
@@ -123,16 +127,28 @@ class Itinerary(tk.Toplevel):
     num = self.parent.us.userSelections.getSegmentSearchNum(item["Index"])
     self.parent.resultsHeadingArea.changeSearchView(num)
 
-  def __move(self, item, dir):
+  def __openTrainLink(self):
+    item = self.userSegments.item(self.userSegments.focus())
+    trainName = self.inViewSavedSegments[item['text']].name.lower()
+    trainName = trainName.replace(' ', '-')
+    if ' ' not in trainName:
+      if trainName != "NA":
+        url = f"https://www.amtrak.com/{trainName}-train"
+        webbrowser.open(url, new=1, autoraise=True)
+      elif trainName == 'NA':
+        messagebox.showwarning(title="Itinerary", message="Cannot view information about multiple segments.")
+
+  def __move(self, item, dir, iid):
     self.parent.us.userSelections.swapSegment(item["Index"], dir)
     self.updateItinerary()
-    self.focus(item)
+    self.userSegments.focus(iid) # Can't find IID
+    self.userSegments.selection_set(iid)
   def __moveUp(self):
     item = self.getSelection()
-    self.__move(item, 'up')
+    self.__move(item, 'up', self.userSegments.focus())
   def __moveDown(self):
     item = self.getSelection()
-    self.__move(item, 'down')
+    self.__move(item, 'down', self.userSegments.focus())
 
   def __doDelete(self):
     item = self.getSelection()
@@ -147,6 +163,7 @@ class Itinerary(tk.Toplevel):
     """
     Prompts the user for a directory to save to, the desired attributes, and saves the itinerary.
     """
+    self.update()
     defaultPath = os.path.join(os.path.expanduser('~/'), 'My Itinerary.csv')
     exportPath = easygui.filesavebox(default=defaultPath, filetypes=['*.csv'])
     if exportPath != None:
