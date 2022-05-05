@@ -1,8 +1,12 @@
+from tkinter import messagebox
+
 import logging
 import os
 import sys
 
 from selenium.webdriver.remote.remote_connection import LOGGER as seleniumLogger
+
+from views.config import APP_NAME
 seleniumLogger.setLevel(logging.WARNING)
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
@@ -43,5 +47,7 @@ class Driver:
       else: self.driver = webdriver.Chrome(ChromeDriverManager().install(),service_log_path=LOG_PATH, options=chrome_options)
       self.driver.maximize_window()
       self.driver.get(url)
-    except WebDriverException:
+    except WebDriverException as e:
+      messagebox.showerror(title=APP_NAME, message=e)
+      messagebox.showinfo(title=APP_NAME, message="Looks like your Chrome version does not match what the program is trying to use.\nPlease update your Chrome browser.\n\n1. Click the three dots at the top right of the browser.\n2. In the Help menu, click \"About Google Chrome.\"\nUpdates should begin installing automatically.")
       sys.exit(1)
