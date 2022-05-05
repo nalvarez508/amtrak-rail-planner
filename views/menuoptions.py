@@ -51,7 +51,7 @@ class MenuOptions(tk.Menu):
 
     self.filemenu = tk.Menu(self, tearoff=0)
     self.filemenu.add_command(label="Import")
-    self.filemenu.add_command(label="Export")
+    self.filemenu.add_command(label="Export", command=self.__openItineraryWithExport)
 
     self.editmenu = tk.Menu(self, tearoff=0)
     self.editmenu.add_command(label="Display Columns", command=lambda: ColumnSettings(self.parent))
@@ -74,6 +74,12 @@ class MenuOptions(tk.Menu):
     # Restart both drivers
     # Open station list
     # Column selection for treeview
+
+  def __openItineraryWithExport(self):
+    try:
+      self.parent.itineraryWindow.doExport()
+    except: # Itinerary window not open
+      self.parent.openItinerary(True)
 
   def openLink(self, l):
     """
