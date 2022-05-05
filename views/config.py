@@ -16,4 +16,4 @@ elif os.name == 'posix':
   MINSIZE = [700, 680]
   BACKGROUND = "gray93"
   WIDTH_DIV = 1.5
-  ICON = "Amtrak_square.ico"
+  ICON = "Amtrak_square.icns"
