@@ -3,6 +3,7 @@ title: "Usage"
 ---
 
 ## Intent
+---
 > You're traveling with a Rail Pass.  
 > You have some idea of where you want to go, at least a start and end.  
 > You're not sure how schedules would line up.

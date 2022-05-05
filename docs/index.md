@@ -12,7 +12,7 @@ Look no further than the Amtrak Rail Planner. Built because I was in that very s
 
 ### Abstract
 
-Traveling by Amtrak train with a Rail Pass is a cost-efficient way to see the country in one month, but planning the trip can be a time-consuming process, due to the limitations of the Amtrak website. The Amtrak Rail Planner will provide travelers an easy way to formulate their ten-segment journey to any of the destinations served by train in the United States. The manual process of searching Amtrak's website for each travel leg and inputting information into a spreadsheet will be eliminated. This Python application provides an efficient and easy way to create a travel itinerary which can be exported later. Novel features include archival of previous searches for potential reference later, displaying multiple pages of results in a single list, links to relevant train maps, and photo displays of each selected cities.
+Traveling by Amtrak train with a Rail Pass is a cost-efficient way to see the country in one month, but planning the trip can be a time-consuming process, due to the limitations of the Amtrak website. The Amtrak Rail Planner will provide travelers an easy way to formulate their multi-segment journey to any of the destinations served by train in the United States. The manual process of searching Amtrak's website for each travel leg and inputting information into an itinerary spreadsheet will be eliminated. Novel features include “click once” searching on Amtrak’s site, archival of previous searches for potential reference later, displaying multiple pages of results in a single list, links to relevant train maps, and photo displays of each selected cities. This Python application provides an efficient and easy way to search for trains and create a travel itinerary which can be exported to a file.
 
 ## Notes
 ---
@@ -25,6 +25,8 @@ Basically, it's a side project, but it's still my work.
 ### Issues with App
 If there are problems with running the application, please submit an issue. I cannot test for everything but tried to make it as resilient as possible during normal use.
 
+The most common thing I would expect to see is Amtrak blocking the underlying search feature (a web scraper), which would break the application. At that point, I might investigate loading timetables into the app and attempting to "search" manually.
+
 ### Future Work
 Lots of you have reached out with suggestions for the application. That's great!  
 However, I cannot necessarily implement them all, as much as I would love to. This may be due to a technical roadblock, infeasability, or lack of public interest. I'm still a college student with other things to keep up on, and this was always a side project for me.
@@ -32,9 +34,9 @@ However, I cannot necessarily implement them all, as much as I would love to. Th
 With that being said, here are some suggestions I've received.
 - Accessible timetables for each route
 - App schedules with layovers/connections in mind
-- Train filtering during search
+- Train filtering during search*
 - Note-taking area for each train in itinerary window
-- Map displaying markers for origin/destination and route
+- Map displaying markers for origin/destination and route*
 - Station info
   - Attractions in destination cities
   - Places to eat
@@ -45,5 +47,7 @@ With that being said, here are some suggestions I've received.
   - Distance to final location
 - Train info
   - Number and names of stops along a route
-  - Amenities on-board
+  - Amenities on-board*
   - On-time performance, or if prone to delays
+  
+\* seems possible based on what I've found
