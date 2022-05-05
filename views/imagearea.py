@@ -40,13 +40,13 @@ class ImageArea(tk.Frame):
     self.imageCatcher = ImageSearch()
     self.imageDriverLock = Lock()
 
-    self.leftImage = tk.Label(self, image=self.imageCatcher.getCityPhoto(1), width=cfg.IMAGE_DIMENSIONS[0], height=cfg.IMAGE_DIMENSIONS[1], cursor='hand2')
+    self.leftImage = tk.Label(self, image=self.imageCatcher.getCityPhoto(1), width=cfg.IMAGE_DIMENSIONS[0], height=cfg.IMAGE_DIMENSIONS[1], cursor='hand1')
     self.leftImage.grid(row=0, column=0, padx=4, pady=4)
-    self.leftImage.bind("<Button-1>", command=lambda e: self.__photoClickCallback(1))
+    self.leftImage.bind("<Button-1>", lambda e: self.__photoClickCallback(1))
 
-    self.rightImage = tk.Label(self, image=self.imageCatcher.getCityPhoto(2), width=cfg.IMAGE_DIMENSIONS[0], height=cfg.IMAGE_DIMENSIONS[1], cursor='hand2')
+    self.rightImage = tk.Label(self, image=self.imageCatcher.getCityPhoto(2), width=cfg.IMAGE_DIMENSIONS[0], height=cfg.IMAGE_DIMENSIONS[1], cursor='hand1')
     self.rightImage.grid(row=0, column=1, padx=4, pady=4)
-    self.rightImage.bind("<Button-1>", command=lambda e: self.__photoClickCallback(2))
+    self.rightImage.bind("<Button-1>", lambda e: self.__photoClickCallback(2))
 
   def __test_widgetDims(self):
     self.leftInfo.config(text=f"{self.leftImage.winfo_width()}x{self.leftImage.winfo_height()}")
