@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 
+import os
+
 from views.config import APP_NAME, BACKGROUND, ICON, SYSTEM_FONT
 
 class ColumnSettings(tk.Toplevel):
@@ -28,7 +30,7 @@ class ColumnSettings(tk.Toplevel):
     tk.Toplevel.__init__(self, parent, *args, **kwargs)
     self.parent = parent
     self.title("Column Settings")
-    self.iconbitmap(ICON)
+    if os.name == 'nt': self.iconbitmap(ICON)
     self.checkbuttonVals = list()
     self.isExport = isExport
     self.hasAtLeastOneChecked = False
