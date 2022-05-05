@@ -5,6 +5,7 @@ from copy import deepcopy
 from datetime import datetime
 from math import trunc
 import webbrowser
+import os
 
 from . import config as cfg
 
@@ -63,9 +64,10 @@ class TrainResultsArea(tk.Frame):
     self.resultsArea = tk.Frame(self)
     self.buttonsArea = tk.Frame(self, background=self.background)
     self.trainMenu = tk.Menu(self, tearoff=0)
-    self.trainMenu.add_command(label="Save Segment", command=self.__saveSelection)
+    self.trainMenu.add_command(label="Save Segment", command=lambda: self.__saveSelection(self.selectedIID))
     self.trainMenu.add_command(label="Train Info", command=self.__openTrainLink)
     self.isSegmentSaved = False
+    self.selectedIID = ''
     self.savedSegmentsIndices = list()
     self.inViewSegmentResults = dict()#self.parent.searcher._test_returnSearchData() # AmtrakSearch thisSearchResultsAsTrain
 
@@ -82,7 +84,8 @@ class TrainResultsArea(tk.Frame):
     self.results.bind("<Button-1>", lambda e: self.toggleSaveButton(True))
     self.results.bind("<Double-Button-1>", lambda e: self.__saveSelection)
     self.results.bind("<Return>", lambda e: self.__saveSelection)
-    self.results.bind("<Button-3>", self.__trainContextMenu)
+    if os.name == 'nt': self.results.bind("<Button-3>", self.__trainContextMenu)
+    elif os.name == 'posix': self.results.bind("<Button-2>", self.__trainContextMenu)
 
     self.saveButton = ttk.Button(self.buttonsArea, text="Save Segment", state='disabled', command=self.__saveSelection)
     self.saveButton.pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
@@ -127,24 +130,28 @@ class TrainResultsArea(tk.Frame):
     iid = self.results.identify_row(event.y)
     if iid:
       self.results.selection_set(iid)
+      self.selectedIID = iid
+      self.update_idletasks()
       try:
         self.trainMenu.tk_popup(event.x_root, event.y_root)
       finally:
         self.trainMenu.grab_release()
   
   def __openTrainLink(self):
-    item = self.getSelection()
-    trainName = item["Train"].name
-    trainName.replace(' ', '-')
-    if trainName != "NA":
-      url = f"https://www.amtrak.com/{trainName}-train"
-      webbrowser.open(url, new=1, autoraise=True)
-    else:
-      messagebox.showwarning(title=cfg.APP_NAME, message="Cannot view information about multiple segments.")
+    item = self.results.item(self.selectedIID)
+    trainName = self.inViewSegmentResults[item['text']].name.lower()
+    trainName = trainName.replace(' ', '-')
+    if ' ' not in trainName:
+      if trainName != "NA":
+        url = f"https://www.amtrak.com/{trainName}-train"
+        webbrowser.open(url, new=1, autoraise=True)
+      elif trainName == 'NA':
+        messagebox.showwarning(title=cfg.APP_NAME, message="Cannot view information about multiple segments.")
 
-  def __saveSelection(self, *args):
+  def __saveSelection(self, iid='', *args):
     """Performs some validation for segments before saving them to the Rail Pass."""
-    segment = self.getSelection()
+    if iid == '': segment = self.getSelection()
+    else: segment = self.getSelection(iid)
     def doSave():
       self.parent.us.userSelections.createSegment(segment["Train"], self.parent.resultsHeadingArea.getSearchNum())
       self.isSegmentSaved = True
@@ -164,7 +171,7 @@ class TrainResultsArea(tk.Frame):
         else:
           pass
 
-  def getSelection(self, *args):
+  def getSelection(self, iid='', *args):
     """
     Gets the currently selected item from the results table.
 
@@ -173,7 +180,8 @@ class TrainResultsArea(tk.Frame):
     dict
         Index (int): Train (Train)
     """
-    item = self.results.focus()
+    if iid != '': item = iid # Right click menu
+    else: item = self.results.focus() # Single click
     if item != "":
       myTrain = (self.inViewSegmentResults[self.results.item(item, "text")]) # Train object
       return {"Index": self.results.item(item, "text"), "Train": myTrain}
