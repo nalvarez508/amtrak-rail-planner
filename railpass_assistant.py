@@ -4,6 +4,7 @@ from tkcalendar import Calendar
 
 import sys
 from threading import Thread
+import os
 
 from searcher.driver import Driver
 from searcher.userselections import UserSelections
@@ -68,7 +69,7 @@ class MainWindow(tk.Tk):
     self.minsize(width=cfg.MINSIZE[0], height=cfg.MINSIZE[1])
     self.config(background=cfg.BACKGROUND)
     self.title(cfg.APP_NAME)
-    self.iconbitmap("Amtrak_square.ico")
+    if os.name == 'nt': self.iconbitmap(cfg.ICON)
     self.us = UserSelections()
     self.searcher = None
     self.statusMessage = tk.StringVar(self, "Ready")
@@ -82,7 +83,7 @@ class MainWindow(tk.Tk):
     self.__setBackground()
     self.resultsHeadingArea = ResultsHeadingArea(self)
     self.trainResultsArea = TrainResultsArea(self)
-    self.devTools = DevTools(self)
+    #self.devTools = DevTools(self)
     self.itineraryWindow = None
     self.config(menu=MenuOptions(self))
 
@@ -99,9 +100,9 @@ class MainWindow(tk.Tk):
 
     self.update()
 
-  def openItinerary(self):
+  def openItinerary(self, spawnExport=False):
     if self.itineraryWindow == None:
-      self.itineraryWindow = Itinerary(self)
+      self.itineraryWindow = Itinerary(self, spawnExport)
     else:
       self.itineraryWindow.lift()
   
@@ -155,7 +156,8 @@ class MainWindow(tk.Tk):
 
   def onClose(self):
     """Closes webdrivers and any windows."""
-    self.devTools.destroy()
+    try: self.devTools.destroy()
+    except: pass
     self.destroy()
     # Close webdrivers
     self.imageArea.imageCatcher.driver.close()
@@ -172,7 +174,3 @@ if __name__ == "__main__":
   app.wm_protocol("WM_DELETE_WINDOW", app.onClose)
   app.lift()
   app.mainloop()
-  #am = AmtrakSearch(None)
-  #fakeresults = am._test_returnSearchData()
-  #for train in fakeresults:
-  #  vals = train.returnSelectedElements(["#", "Train", "Departs", "Arrives", "Duration"])
