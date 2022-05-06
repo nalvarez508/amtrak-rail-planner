@@ -29,12 +29,13 @@ class Itinerary(tk.Toplevel):
   headerCols = dict
       Selected column display names and their widths. Corresponds to `columns`.
   dispCols : list
-      Currently displayed columns.
+      Currently displayed columns by name.
   userSegments : ttk.Treeview
   tvScroll : ttk.Scrollbar
       Y-axis.
   tvScrollHoriz : ttk.Scrollbar
       X-axis.
+  trainInfoButton : ttk.Button
   deleteButton : ttk.Button
   moveUpButton : ttk.Button
   moveDownButton : ttk.Button
@@ -139,10 +140,11 @@ class Itinerary(tk.Toplevel):
         messagebox.showwarning(title="Itinerary", message="Cannot view information about multiple segments.")
 
   def __move(self, item, dir, iid):
+    """Moves an treeview `item` up or down."""
     self.parent.us.userSelections.swapSegment(item["Index"], dir)
     self.updateItinerary()
-    self.userSegments.focus(iid) # Can't find IID
-    self.userSegments.selection_set(iid)
+    #self.userSegments.focus(iid) # Can't find IID
+    #self.userSegments.selection_set(iid)
   def __moveUp(self):
     item = self.getSelection()
     self.__move(item, 'up', self.userSegments.focus())
@@ -157,7 +159,7 @@ class Itinerary(tk.Toplevel):
       search = self.parent.us.userSelections.deleteSegment(item["Index"])
       self.updateItinerary()
       # Refreshes treeview so we can save the segment again
-      self.parent.resultsHeadingArea.changeSearchView(search)
+      self.parent.resultsHeadingArea.changeSearchView(self.parent.resultsHeadingArea.searchNum)
 
   def doExport(self): # Move to main window?
     """
@@ -200,7 +202,7 @@ class Itinerary(tk.Toplevel):
   def __buttonStateChanges(self, enabled=False):
     """Enables or disables every button besides Export."""
     def doChanges():
-      selectionBasedButtons = [self.deleteButton, self.moveDownButton, self.moveUpButton, self.openResultsButton]
+      selectionBasedButtons = [self.deleteButton, self.moveDownButton, self.moveUpButton, self.openResultsButton, self.trainInfoButton]
 
       if enabled:
         sleep(0.05)
@@ -209,7 +211,8 @@ class Itinerary(tk.Toplevel):
           widget.configure(state='normal')
         try:
           if mySelection["Index"] == 1: self.moveUpButton.configure(state='disabled')
-          elif mySelection["Index"] == len(self.inViewSavedSegments): self.moveDownButton.configure(state='disabled')
+          # elif mySelection["Index"] == len(self.inViewSavedSegments): self.moveDownButton.configure(state='disabled')
+          elif mySelection["Index"] == len(self.userSegments.get_children()): self.moveDownButton.configure(state='disabled')
         except TypeError:
           self.moveUpButton.configure(state='disabled')
           self.moveDownButton.configure(state='disabled')

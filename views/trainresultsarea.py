@@ -25,6 +25,7 @@ class TrainResultsArea(tk.Frame):
   buttonsArea : tk.Frame
   trainMenu : tk.Menu
   isSegmentSaved : bool
+  selectedIID : str
   savedSegmentIndices : list
   inViewSegmentResults : dict
       Currently displayed results.
@@ -33,7 +34,7 @@ class TrainResultsArea(tk.Frame):
   headerCols : dict
       Selected column display names and their widths. Corresponds to `columns`.
   dispCols : list
-      Columns to be shown in the table.
+      Columns to be shown in the table, by name.
   results : ttk.Treeview
   tvScroll : ttk.Scrollbar
       Controls `results` yview.
@@ -49,7 +50,7 @@ class TrainResultsArea(tk.Frame):
       Enables/disables the Save Segment button.
   updateDisplayColumns
       Refreshes the table's display columns.
-  getSelection
+  getSelection(iid='')
       Retrieves currently selected item.
   startSearch
       Prepares UI elements for a search and starts a searching thread.
@@ -291,6 +292,7 @@ class TrainResultsArea(tk.Frame):
     self.inViewSegmentResults = deepcopy(response)
     self.savedSegmentsIndices = deepcopy(saved)
     self.__populateTreeview(response)
+    self.update_idletasks()
     self.__resetWidgets()
     self.update()
 

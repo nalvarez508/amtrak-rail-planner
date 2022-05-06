@@ -28,6 +28,8 @@ class RailPass:
       Returns a the *n*-th search.
   getSegmentSearchNum(segment)
       Returns search results index in `allResults` for a given segment.
+  getSegments
+      Returns all saved segments.
   createCsv(path, cols)
       Creates a dictionary of `segments` and writes to a file.
   createSegment(segment, searchNum):

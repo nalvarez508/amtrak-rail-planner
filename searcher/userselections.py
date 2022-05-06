@@ -24,6 +24,8 @@ class UserSelections:
   exportColumns : dict
       Defines columns for output spreadsheet.
   
+  Methods
+  -------
   setColumns(vals)
       Updates the "Selected" state of the `columns` object.
   getColumns
@@ -34,6 +36,8 @@ class UserSelections:
       Creates elements for a treeview object.
   isSearchOkay
       Performs search validation.
+  addSegment(t)
+      Adds a Rail Pass segment.
   getPrettyDate
       Returns `departDate` as a pretty string.
   And plenty of other fun get/set methods...
