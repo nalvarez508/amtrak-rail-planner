@@ -14,6 +14,10 @@ Look no further than the Amtrak Rail Planner. Built because I was in that very s
 
 Traveling by Amtrak train with a Rail Pass is a cost-efficient way to see the country in one month, but planning the trip can be a time-consuming process, due to the limitations of the Amtrak website. The Amtrak Rail Planner will provide travelers an easy way to formulate their multi-segment journey to any of the destinations served by train in the United States. The manual process of searching Amtrak's website for each travel leg and inputting information into an itinerary spreadsheet will be eliminated. Novel features include “click once” searching on Amtrak’s site, archival of previous searches for potential reference later, displaying multiple pages of results in a single list, links to relevant train maps, and photo displays of each selected cities. This Python application provides an efficient and easy way to search for trains and create a travel itinerary which can be exported to a file.
 
+### Motivation
+
+I was taking a cross-country trip with the Rail Pass, with less than three weeks to do it, and had multiple routes I wanted to try. Searching Amtrak's site required me to input all train information into a spreadsheet so I could consult it later. This was a slow, tedious process, and I set out to create a simpler way to accomplish this.
+
 ## Notes
 ---
 
