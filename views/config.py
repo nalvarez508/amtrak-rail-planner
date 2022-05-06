@@ -1,6 +1,7 @@
 import os
 
 APP_NAME = "Amtrak Rail Planner"
+APP_VERSION = "0.9.0"
 SEARCH_URL = "https://www.amtrak.com/tickets/departure.html"
 IMAGE_DIMENSIONS = [300,225]
 if os.name == 'nt':
