@@ -20,6 +20,8 @@ I was taking a cross-country trip with the Rail Pass, with less than three weeks
 
 ## Notes
 ---
+### Paper
+You can read the initial paper regarding the application design and structure [here](https://github.com/nalvarez508/amtrak-rail-planner/raw/master/Rail%20Planner.pdf).
 
 ### License
 Licensed under GNU General Public License v3. Read it - sure - but here's what I want you to take away: If you want to package it with something, credit the project and include the source, as mentioned. You want to improve it? Awesome, create a pull request so we can all benefit.
@@ -50,7 +52,7 @@ With that being said, here are some suggestions I've received.
   - In-station amenities
   - Distance to final location
 - Train info
-  - Number and names of stops along a route
+  - Number and names of stops along a route*
   - Amenities on-board*
   - On-time performance, or if prone to delays
   
