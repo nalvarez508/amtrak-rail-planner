@@ -70,13 +70,13 @@ class TrainResultsArea(tk.Frame):
     self.isSegmentSaved = False
     self.selectedIID = ''
     self.savedSegmentsIndices = list()
-    self.inViewSegmentResults = dict()#self.parent.searcher._test_returnSearchData() # AmtrakSearch thisSearchResultsAsTrain
+    self.inViewSegmentResults = dict()
 
     self.columns = list()
     self.headerCols = dict()
     self.dispCols = list()
     self.__getDisplayColumns()
-    #self.numberOfTrains = tk.StringVar(self, value="0 trains found") # Pass this in to searcher?
+
     self.results = ttk.Treeview(self.resultsArea, columns=self.columns, show='headings', cursor="hand2", selectmode='browse', height=12/cfg.WIDTH_DIV)
     self.__makeHeadings()
     self.tvScroll = ttk.Scrollbar(self.resultsArea, orient='vertical', command=self.results.yview)
@@ -260,25 +260,26 @@ class TrainResultsArea(tk.Frame):
       self.update_idletasks()
       try:
         # Starting search thread
-        #self.parent.searcher.preSearchSetup(self.parent.stationsArea.stations.getStationCode(origin), self.parent.stationsArea.stations.getStationCode(dest), date, self.progressBar, self.parent.resultsHeadingArea.numberOfTrains)
+        self.parent.searcher.preSearchSetup(self.parent.stationsArea.stations.getStationCode(origin), self.parent.stationsArea.stations.getStationCode(dest), date, self.progressBar, self.parent.resultsHeadingArea.numberOfTrains)
         self.parent.startThread(self.__doSearchCall)
       except Exception as e:
         print(e)
         messagebox.showerror(cfg.APP_NAME, message="Unable to search right now. Try again in just a few seconds.")
         self.__resetWidgets()
 
-  def __doSearchCall(self):
-    #response = self.parent.searcher.oneWaySearch()
-    response = dict()
-    import json
-    from traintracks.train import Train
+  def __doSearchCall(self, dev=False):
+    if dev == False: response = self.parent.searcher.oneWaySearch()
+    if dev == True:
+      response = dict()
+      import json
+      from traintracks.train import Train
 
-    # DEVELOPMENT
-    fileToUse = trunc(datetime.now().timestamp()) % 3
-    with open(f"_retrieved/TestTrainSearch{fileToUse}.json", "r") as f:
-      temp = json.loads(f.read())
-      for num in temp:
-        response[int(num)] = Train(temp[num])
+      # DEVELOPMENT
+      fileToUse = trunc(datetime.now().timestamp()) % 3
+      with open(f"_retrieved/TestTrainSearch{fileToUse}.json", "r") as f:
+        temp = json.loads(f.read())
+        for num in temp:
+          response[int(num)] = Train(temp[num])
     
     self.__searchHandler(response)
 

@@ -73,7 +73,7 @@ class MainWindow(tk.Tk):
     self.us = UserSelections()
     self.searcher = None
     self.statusMessage = tk.StringVar(self, "Ready")
-    #self.startThread(self.__startup)
+    self.startThread(self.__startup)
     self.resultsBackground = "gainsboro"
 
     self.titleArea = TitleArea(self)
@@ -121,9 +121,7 @@ class MainWindow(tk.Tk):
         self.__setBackground(child)
       else:
         try:
-          #print(f"Before check: ///{f, child}///\n")
           if type(child) not in DONOTCHANGETHESE:
-            #print(f"Child {child} made it through.\n\n")
             child.config(background=cfg.BACKGROUND)
         except tk.TclError as e:
           print(e)
