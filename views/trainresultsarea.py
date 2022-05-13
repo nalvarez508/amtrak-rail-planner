@@ -120,11 +120,15 @@ class TrainResultsArea(tk.Frame):
     self.__getDisplayColumns()
     self.results["displaycolumns"] = self.dispCols
     if self.inViewSegmentResults != {}:
-      self.__clearTree()
+      self.__clearTree(wipeout=False)
       self.__populateTreeview(self.inViewSegmentResults)
     self.update_idletasks()
 
   def __getDisplayColumns(self):
+    self.dispCols.clear()
+    self.columns.clear()
+    self.headerCols.clear()
+
     self.columns, self.headerCols, self.dispCols = self.parent.us.getDisplayColumns()
 
   def __trainContextMenu(self, event):
@@ -199,12 +203,13 @@ class TrainResultsArea(tk.Frame):
     self.isSegmentSaved = (True if (len(self.savedSegmentsIndices) > 0) else False)
     self.parent.update_idletasks()
 
-  def __clearTree(self):
+  def __clearTree(self, wipeout=True):
     """Wipes out all tree elements."""
     for item in self.results.get_children():
       self.results.delete(item)
-    self.inViewSegmentResults.clear()
-    self.savedSegmentsIndices.clear()
+    if wipeout:
+      self.inViewSegmentResults.clear()
+      self.savedSegmentsIndices.clear()
 
   def __makeHeadings(self):
     for index, col in enumerate(self.headerCols):

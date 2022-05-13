@@ -241,6 +241,10 @@ class Itinerary(tk.Toplevel):
     self.update_idletasks()
 
   def __getDisplayColumns(self):
+    self.dispCols.clear()
+    self.columns.clear()
+    self.headerCols.clear()
+    
     self.dispCols.append("Leg")
     self.columns.append("Leg")
     self.headerCols = {"Leg": 40}
