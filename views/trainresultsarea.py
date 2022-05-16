@@ -6,6 +6,7 @@ from datetime import datetime
 from math import trunc
 import webbrowser
 import os
+from urllib.parse import quote
 
 from . import config as cfg
 
@@ -67,6 +68,7 @@ class TrainResultsArea(tk.Frame):
     self.trainMenu = tk.Menu(self, tearoff=0)
     self.trainMenu.add_command(label="Save Segment", command=lambda: self.__saveSelection(self.selectedIID))
     self.trainMenu.add_command(label="Train Info", command=self.__openTrainLink)
+    self.trainMenu.add_command(label="Timetable", command=self.__openTimetable)
     self.isSegmentSaved = False
     self.selectedIID = ''
     self.savedSegmentsIndices = list()
@@ -152,6 +154,17 @@ class TrainResultsArea(tk.Frame):
         webbrowser.open(url, new=1, autoraise=True)
       elif trainName == 'NA':
         messagebox.showwarning(title=cfg.APP_NAME, message="Cannot view information about multiple segments.")
+  
+  def __openTimetable(self):
+    item = self.results.item(self.selectedIID)
+    trainName = self.inViewSegmentResults[item['text']].name.lower()
+
+    if trainName != "NA":
+      baseUrl = "https://duckduckgo.com/?q=!ducky+"
+      trainSuffix = quote((trainName + " train timetable schedule Amtrak filetype:pdf"))
+      webbrowser.open((baseUrl + trainSuffix), new=1, autoraise=True)
+    elif trainName == 'NA':
+      messagebox.showwarning(title=cfg.APP_NAME, message="Cannot view information about multiple segments.")
 
   def __saveSelection(self, iid='', *args):
     """Performs some validation for segments before saving them to the Rail Pass."""
@@ -264,7 +277,7 @@ class TrainResultsArea(tk.Frame):
         self.parent.startThread(self.__doSearchCall)
       except Exception as e:
         print(e)
-        messagebox.showerror(cfg.APP_NAME, message="Unable to search right now. Try again in just a few seconds.")
+        messagebox.showerror(cfg.APP_NAME, message="Unable to search right now. The automated browser has not loaded. Try again in a few seconds.")
         self.__resetWidgets()
 
   def __doSearchCall(self, dev=False):

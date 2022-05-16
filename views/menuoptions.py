@@ -1,6 +1,10 @@
 import tkinter as tk
 
 import webbrowser
+import json
+from urllib.parse import quote
+from copy import deepcopy
+from time import sleep
 
 from views.columnsettings import ColumnSettings
 from . import config as cfg
@@ -34,6 +38,8 @@ class MenuOptions(tk.Menu):
   def __init__(self, parent, *args, **kwargs):
     tk.Menu.__init__(self, parent)
     self.parent = parent
+    self.timetableUrls = {}
+
     self.helpmenu = tk.Menu(self, tearoff=0)
     self.helpmenu.add_command(label="About", command=lambda: self.openBox(f"Amtrak Rail Pass Assistant\nv{cfg.APP_VERSION}"))
     self.helpmenu.add_command(label="Github", command=lambda: self.openLink("https://github.com/nalvarez508/amtrak-rail-planner"))
@@ -102,3 +108,35 @@ class MenuOptions(tk.Menu):
         The message to display.
     """
     tk.messagebox.showinfo(cfg.APP_NAME, message=m)
+  
+  def _loadTimetables(self):
+    # Get some data from session storage
+    # For each of the datas, create a menu item
+    traincodes = None
+    while(traincodes == None):
+      traincodes = json.loads(self.parent.searcher._getSessionStorage('traincodes'))
+      sleep(0.1)
+
+    trainnames = list(traincodes.values())
+    trainnames_unique = []
+    [trainnames_unique.append(x) for x in trainnames if x not in trainnames_unique]
+
+    trainnames_unique_excludes = []
+    excludes = ['Connecting Bus', 'Acela Nonstop', 'Self Transfer', 'Coast Starlight Bus', 'ACE Commuter Train', 'Winter Park Express Shuttle', 'Connecting Van', 'Seastreak Ferry', 'Victoria Clipper Ferry', 'Connecting Taxi', 'NJ Transit Train', 'Grand Canyon Railway', 'Lincoln Service Missouri River Runner']
+    [trainnames_unique_excludes.append(y) for y in trainnames_unique if y not in excludes]
+
+    for train in sorted(trainnames_unique_excludes):
+      baseUrl = "https://duckduckgo.com/?q=!ducky+"
+      trainSuffix = quote((train + " train timetable schedule Amtrak filetype:pdf"))
+      thisUrl = baseUrl + trainSuffix
+      self.timetableUrls[train] = deepcopy(thisUrl)
+    
+    self._createTimetableMenu()
+      
+  def _createTimetableMenu(self):
+    timetablesMenu = tk.Menu(self, tearoff=0)
+    for train in self.timetableUrls:
+      timetablesMenu.add_command(label=train, command=lambda url=self.timetableUrls[train]: self.openLink((url)))
+    self.viewmenu.add_cascade(label="Timetables", menu=timetablesMenu)
+    self.update()
+    self.parent.update()

@@ -73,7 +73,6 @@ class MainWindow(tk.Tk):
     self.us = UserSelections()
     self.searcher = None
     self.statusMessage = tk.StringVar(self, "Ready")
-    self.startThread(self.__startup)
     self.resultsBackground = "gainsboro"
 
     self.titleArea = TitleArea(self)
@@ -85,7 +84,9 @@ class MainWindow(tk.Tk):
     self.trainResultsArea = TrainResultsArea(self)
     #self.devTools = DevTools(self)
     self.itineraryWindow = None
-    self.config(menu=MenuOptions(self))
+    self.menuOptions = MenuOptions(self)
+    self.startThread(self.__startup)
+    self.config(menu=self.menuOptions)
 
     self.statusBar = tk.Label(self, textvariable=self.statusMessage, bd=1, relief=tk.SUNKEN, anchor=tk.W)
     self.statusBar.pack(side=tk.BOTTOM, fill=tk.BOTH)
@@ -166,6 +167,7 @@ class MainWindow(tk.Tk):
 
   def __startup(self):
     self.searcher = AmtrakSearch(self, Driver(cfg.SEARCH_URL, undetected=True).driver, status=self.statusMessage)
+    self.menuOptions._loadTimetables()
 
 if __name__ == "__main__":
   app = MainWindow()

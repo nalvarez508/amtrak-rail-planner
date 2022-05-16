@@ -332,7 +332,7 @@ class AmtrakSearch:
     inputField3.send_keys(f"{self.departDate}\t") #Depart Date
     #searchArea.find_element(by=By.XPATH, value="//input[@id='mat-input-4']").send_keys("03/27/2022") #Return Date
 
-  def __getSessionStorage(self, key):
+  def _getSessionStorage(self, key):
     return self.driver.execute_script("return window.sessionStorage.getItem(arguments[0]);", key)
 
   def oneWaySearch(self):
