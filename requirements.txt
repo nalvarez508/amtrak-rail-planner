@@ -7,3 +7,4 @@ webbrowser
 pillow
 easygui
 urllib3
+tkintermapview

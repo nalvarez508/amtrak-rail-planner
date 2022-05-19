@@ -63,7 +63,8 @@ class MenuOptions(tk.Menu):
     self.editmenu.add_command(label="Display Columns", command=lambda: ColumnSettings(self.parent))
 
     self.viewmenu = tk.Menu(self, tearoff=0)
-    self.viewmenu.add_command(label="Current Itinerary", command=lambda: self.parent.openItinerary())
+    self.viewmenu.add_command(label="Itinerary", command=lambda: self.parent.openItinerary())
+    self.viewmenu.add_command(label="Current Journey", command=self.parent.openMap)
     self.viewmenu.add_command(label="Route Map", command=lambda: self.openLink("https://www.amtrak.com/content/dam/projects/dotcom/english/public/documents/Maps/Amtrak-System-Map-1018.pdf"))
     
     self.otpmenu = tk.Menu(self, tearoff=0)

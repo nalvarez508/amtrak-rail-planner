@@ -20,6 +20,7 @@ from views.resultsheadingarea import ResultsHeadingArea
 from views.trainresultsarea import TrainResultsArea
 from views.menuoptions import MenuOptions
 from views.devtools import DevTools
+from views.map import Map
 
 class MainWindow(tk.Tk):
   """
@@ -63,7 +64,7 @@ class MainWindow(tk.Tk):
   onClose
       Quits the application and closes the webdrivers.
   """
-  def __init__(self):
+  def __init__(self) -> None:
     super().__init__()
     self.geometry(cfg.GEOMETRY)
     self.minsize(width=cfg.MINSIZE[0], height=cfg.MINSIZE[1])
@@ -84,8 +85,9 @@ class MainWindow(tk.Tk):
     self.trainResultsArea = TrainResultsArea(self)
     #self.devTools = DevTools(self)
     self.itineraryWindow = None
+    self.mapWindow = Map(self)
     self.menuOptions = MenuOptions(self)
-    self.startThread(self.__startup)
+    #self.startThread(self.__startup)
     self.config(menu=self.menuOptions)
 
     self.statusBar = tk.Label(self, textvariable=self.statusMessage, bd=1, relief=tk.SUNKEN, anchor=tk.W)
@@ -101,14 +103,23 @@ class MainWindow(tk.Tk):
 
     self.update()
 
-  def openItinerary(self, spawnExport=False):
+  def openItinerary(self, spawnExport=False) -> None:
     if self.itineraryWindow == None:
       self.itineraryWindow = Itinerary(self, spawnExport)
     else:
       self.itineraryWindow.lift()
   
-  def closeItinerary(self):
+  def closeItinerary(self) -> None:
     self.itineraryWindow = None
+  
+  def openMap(self) -> None:
+    if self.mapWindow == None:
+      self.mapWindow = Map(self)
+    else:
+      self.mapWindow.lift()
+  
+  def closeMap(self) -> None:
+    self.mapWindow = None
 
   def __setBackground(self, f=None):
     """Sets the background to `cfg.BACKGROUND` for all non-results and non-ttk elements."""
@@ -137,7 +148,7 @@ class MainWindow(tk.Tk):
     bg = s1.lookup("TButton", "background")
     print(bg)
 
-  def startThread(self, function, args=None):
+  def startThread(self, function, args=None) -> None:
     """
     Starts a thread to run the given function.
 

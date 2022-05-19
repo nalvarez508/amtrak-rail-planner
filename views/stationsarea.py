@@ -49,9 +49,10 @@ class StationsArea(tk.Frame):
     self.swapButton.grid(row=1, column=1, padx=12)
 
     self.parent.imageArea.doRefresh(self.stations.returnCityState(self.origin.get()), 1)
-    if os.name == 'posix': self.parent.imageArea.doRefresh(self.stations.returnCityState(self.destination.get()), 2)
+    self.parent.imageArea.doRefresh(self.stations.returnCityState(self.destination.get()), 2)
+    #if os.name == 'posix': self.parent.imageArea.doRefresh(self.stations.returnCityState(self.destination.get()), 2)
     #self.parent.startThread(self.parent.doRefresh, [self.stations.returnCityState(self.origin.get()), 1])
-    elif os.name == 'nt': self.parent.startThread(self.parent.imageArea.doRefresh, [self.stations.returnCityState(self.destination.get()), 2])
+    #elif os.name == 'nt': self.parent.startThread(self.parent.imageArea.doRefresh, [self.stations.returnCityState(self.destination.get()), 2])
 
   def __swapStations(self):
     """Swaps the origin and destination, both Combobox objects and ImageArea labels."""
@@ -132,4 +133,5 @@ class StationsArea(tk.Frame):
       self.parent.us.set((widget.get()), side)
       city = self.stations.returnCityState(widget.get())
       self.parent.startThread(self.parent.imageArea.doRefresh, [city, side, isSwap])
+      self.parent.startThread(self.parent.mapWindow.updateMarker, [side])
     widget['values'] = self.stationKeys
