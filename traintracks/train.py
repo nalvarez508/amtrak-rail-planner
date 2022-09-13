@@ -400,6 +400,14 @@ class Train:
         else: return False
       else: return False
     else: return False
+  
+  def __lt__(self, other):
+    if self.departure < other.arrival: return True
+    else: return False
+  
+  def __gt__(self, other):
+    if self.departure > other.arrival: return True
+    else: return False
 
   def __findSegments(self):
     """
