@@ -216,6 +216,10 @@ class Itinerary(tk.Toplevel):
         except TypeError:
           self.moveUpButton.configure(state='disabled')
           self.moveDownButton.configure(state='disabled')
+        try:
+          if mySelection["Train"]["Name"] == "Mixed Service": self.trainInfoButton.configure(state='disabled')
+        except TypeError:
+          pass
       else:
         for widget in selectionBasedButtons:
           widget.configure(state='disabled')
