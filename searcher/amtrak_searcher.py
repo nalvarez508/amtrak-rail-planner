@@ -154,8 +154,8 @@ class AmtrakSearch:
         Price was not found, either it was sold out or isn't available to begin with. Returns None for that price.
     """
     try:
-      area = searcher.find_element(By.XPATH, f".//button[@amt-test-id='{xpath}']")
-      return area.find_element(By.XPATH, ".//span[@class='amount ng-star-inserted']").text
+      area = searcher.find_element(By.XPATH, f".//button[contains(@amt-test-id, '{xpath}')]")
+      return area.find_element(By.XPATH, ".//span[starts-with(@class, 'amount ng-star-inserted')]").text
     except NoSuchElementException:
       return None
   
@@ -210,7 +210,7 @@ class AmtrakSearch:
     # Get info from each train in search
     for train in trains:
       try:
-        data = train.find_element(By.XPATH, ".//div[@class='search-results-leg d-flex']")
+        data = train.find_element(By.XPATH, ".//div[starts-with(@class, 'search-results-leg d-flex')]")
 
         try: # Named train service
           number, name = data.find_element(By.XPATH, ".//div[@amt-auto-test-id='search-result-train-name']").text.split("\n")
@@ -220,18 +220,18 @@ class AmtrakSearch:
           number = "N/A"
           name = data.find_element(By.XPATH, ".//div[@amt-auto-test-id='search-result-train-name']").text.split("\n")[0]
 
-        depart = data.find_element(By.XPATH, ".//div[@class='departure-inner']") # Search area
-        departTime = depart.find_element(By.XPATH, ".//div[@class='time mt-2 pt-1 d-flex align-items-baseline']").text.replace("\n","")
+        depart = data.find_element(By.XPATH, ".//div[starts-with(@class, 'departure-inner')]") # Search area
+        departTime = depart.find_element(By.XPATH, ".//div[contains(@class, 'align-items-baseline')]").text.replace("\n","")
 
-        potentialDelay = depart.find_element(By.XPATH, ".//div[@class='delay-alerts']") # Search area
+        potentialDelay = depart.find_element(By.XPATH, ".//div[starts-with(@class, 'delay-alerts')]") # Search area
         try: # Train is canceled or delayed
           potentialDelay.find_element(By.XPATH, ".//span[@class='ng-star-inserted']").text
 
         except: # Train is running
-          tripType = data.find_element(By.XPATH, ".//div[@class='travel-time d-flex flex-grow-1']") # Search area
+          tripType = data.find_element(By.XPATH, ".//div[starts-with(@class, 'travel-time d-flex')]") # Search area
           try: # Found trip duration and service level (direct, 2 segments, etc)
             travelTime = tripType.find_element(By.XPATH, ".//span[@class='text-center']").text
-            segmentType = tripType.find_element(By.XPATH, ".//span[@class='segment-display text-center font-semi mt-2 d-block ng-star-inserted']").text
+            segmentType = tripType.find_element(By.XPATH, ".//span[starts-with(@class, 'segment-display text-center')]").text
           except:
             try: # Get trip duration and skip Covid info
               travelTime = tripType.text.split("\n")[1]
@@ -239,20 +239,22 @@ class AmtrakSearch:
               travelTime = tripType.text.split("\n")[0]
             segmentType = "1"
 
-          arrive = data.find_element(By.XPATH, ".//div[@class='arrival-inner']") # Search area
-          arrivalTime = arrive.find_element(By.XPATH, ".//div[@class='time mt-2 pt-1 d-flex align-items-baseline']").text.replace("\n", "")
+          arrive = data.find_element(By.XPATH, ".//div[starts-with(@class, 'arrival-inner')]") # Search area
+          arrivalTime = arrive.find_element(By.XPATH, ".//div[contains(@class, 'align-items-baseline')]").text.replace("\n", "")
           arrivalDate = None
           try: # Multi-day trip
-            arrivalInfo = arrive.find_element(By.XPATH, ".//div[@class='travel-next-day']").text
+            arrivalInfo = arrive.find_element(By.XPATH, ".//div[starts-with(@class, 'travel-next-day')]").text
             arrivalDate = arrivalInfo
             if arrivalInfo == '': arrivalDate = self.departDate # One day trip
           except NoSuchElementException: # One day trip
             arrivalDate = self.departDate
+          
+          # Trip details contains train amenities and station stops (in groups of ten)
 
-          prices = data.find_element(By.XPATH, ".//div[@class='row col-12 p-0 m-0']") # Search area
-          coachPrice = self.__findPrice(prices, 'jl-0-op-0-coach')
-          businessPrice = self.__findPrice(prices, 'jl-0-op-0-business')
-          sleeperPrice = self.__findPrice(prices, 'jl-0-op-0-sleeper')
+          prices = data.find_element(By.XPATH, ".//div[starts-with(@class, 'search-results-leg-travel-service')]") # Search area
+          coachPrice = self.__findPrice(prices, 'coach')
+          businessPrice = self.__findPrice(prices, 'business')
+          sleeperPrice = self.__findPrice(prices, 'sleeper')
 
           if not(self.__isSoldOut(coachPrice, businessPrice, sleeperPrice)):
             outputDict = {"Number":number, "Name":name, "Origin":self.origin, "Departure Time":departTime, "Departure Date":self.departDate, "Travel Time":travelTime, "Destination":self.destination, "Arrival Time":arrivalTime, "Arrival Date":arrivalDate, "Coach Price":coachPrice, "Business Price":businessPrice, "Sleeper Price":sleeperPrice, "Segment Type":segmentType}
@@ -287,8 +289,8 @@ class AmtrakSearch:
       WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, f".//a[text()='{page}']//ancestor::li[@class='pagination-page page-item active ng-star-inserted']")))
       time.sleep(1)
 
-      searchResultsTable = self.driver.find_element(By.XPATH, "//div[@class='row ng-tns-c6-1 ng-trigger ng-trigger-searchList ng-star-inserted']") # Search area
-      trainList = searchResultsTable.find_elements(By.XPATH, ".//div[@class='col-sm-6 col-lg-12 ng-tns-c6-1 ng-trigger ng-trigger-searchItems ng-star-inserted']") # List of train results
+      searchResultsTable = self.driver.find_element(By.XPATH, "//div[contains(@class, 'trigger-searchList')]") # Search area
+      trainList = searchResultsTable.find_elements(By.XPATH, ".//div[contains(@class, 'trigger-searchItems')]") # List of train results
       self.__findTrainInfo(trainList)
 
   def __enterStationInfo(self, area):
@@ -301,7 +303,7 @@ class AmtrakSearch:
         Area that contains input fields.
     """
     # Entering departure station info
-    fromStationSearchArea = area.find_element(By.XPATH, "//div[@class='from-station flex-grow-1']")
+    fromStationSearchArea = self.driver.find_element(By.XPATH, "//div[@class='from-station flex-grow-1']")
     fromStationSearchArea.find_element(By.XPATH, "//station-search[@amt-auto-test-id='fare-finder-from-station-field-page']").click()
     inputField1 = fromStationSearchArea.find_element(By.XPATH, "//input[@id='mat-input-0']")
     inputField1.clear()
@@ -309,7 +311,7 @@ class AmtrakSearch:
     WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, "//button[contains(@aria-label,'From')]"))) # Station name autofilled
 
     # Entering destination station info
-    toStationSearchArea = area.find_element(By.XPATH, "//div[@class='to-station flex-grow-1']")
+    toStationSearchArea = self.driver.find_element(By.XPATH, "//div[@class='to-station flex-grow-1']")
     toStationSearchArea.find_element(By.XPATH, "//station-search[@amt-auto-test-id='fare-finder-to-station-field-page']").click()
     inputField2 = toStationSearchArea.find_element(By.XPATH, "//input[@id='mat-input-1']")
     inputField2.clear()
@@ -333,7 +335,12 @@ class AmtrakSearch:
     #searchArea.find_element(by=By.XPATH, value="//input[@id='mat-input-4']").send_keys("03/27/2022") #Return Date
 
   def _getSessionStorage(self, key):
-    return self.driver.execute_script("return window.sessionStorage.getItem(arguments[0]);", key)
+    _tc = self.driver.execute_script("return window.sessionStorage.getItem(arguments[0]);", key)
+    if _tc == None:
+      self.driver.refresh()
+      time.sleep(2)
+      _tc = self.driver.execute_script("return window.sessionStorage.getItem(arguments[0]);", key)
+    return _tc
 
   def oneWaySearch(self):
     """
@@ -363,18 +370,18 @@ class AmtrakSearch:
       self.driver.execute_script("window.scrollTo(document.body.scrollHeight, 0)") # Reset after previous search
 
       # Make sure the page loads and the New Search button is available to us
-      WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, "//button[@class='am-btn btn--secondary btn--transparent-blue-border']")))
+      WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, "//button[starts-with(@class, 'am-btn btn--secondary')]")))
 
       try: # Clicking the new search button
         self.__updateStatusMessage("Searching - opening input fields", 5)
-        newSearchButton = self.driver.find_element(By.XPATH, "//button[@class='am-btn btn--secondary btn--transparent-blue-border']")
+        newSearchButton = self.driver.find_element(By.XPATH, "//button[starts-with(@class, 'am-btn btn--secondary')]")
         newSearchButton.click()
         time.sleep(1)
 
         try: # Entering to/from stations
           self.__updateStatusMessage("Searching - entering stations", 1)
           searchArea = self.driver.find_element(By.XPATH, "//div[@id='refineSearch']")
-          searchArea = searchArea.find_element(By.XPATH, "//div[@class='row align-items-center']")
+          searchArea = searchArea.find_element(By.XPATH, "//div[starts-with(@class, 'row align-items-center')]")
           self.__enterStationInfo(searchArea)
 
           try: # Entering departure date
@@ -383,16 +390,16 @@ class AmtrakSearch:
 
             # Wait until "Find Trains" button is enabled, then click it
             self.__updateStatusMessage("Searching - retrieving results", 2)
-            WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, "//button[@class='search-btn ng-star-inserted' and @aria-disabled='false']")))
-            searchArea.find_element(By.XPATH, "//div[@class='amtrak-ff-body']").click() # Get calendar popup out of the way
-            searchArea.find_element(by=By.XPATH, value="//button[@class='search-btn ng-star-inserted' and @aria-disabled='false']").click() # Click search button
+            WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, "//button[@aria-label='FIND TRAINS' and @aria-disabled='false']")))
+            searchArea.find_element(By.XPATH, "//div[starts-with(@class, 'amtrak-ff-body')]").click() # Get calendar popup out of the way
+            searchArea.find_element(by=By.XPATH, value="//button[@aria-label='FIND TRAINS' and @aria-disabled='false']").click() # Click search button
 
             # Search has been completed, but there is no service
             try:
               self.__updateStatusMessage("Searching - loading results", 2)
               time.sleep(2)
               self.__updateStatusMessage("Searching - checking results", 10)
-              potentialError = self.driver.find_element(By.XPATH, "//div[@class='alert-yellow-text']").text
+              potentialError = self.driver.find_element(By.XPATH, "//div[starts-with(@class, 'alert-yellow-text')]").text
               print(potentialError)
               self.returnedError = True
               self.__updateStatusMessage("Error")
@@ -402,7 +409,7 @@ class AmtrakSearch:
             except NoSuchElementException:
               try:
                 potentialError = self.driver.find_element(By.XPATH, "//div[@amt-auto-test-id='am-dialog']")
-                newDate = potentialError.find_element(By.XPATH, ".//div[@class='pb-0 mb-5 ng-star-inserted']").text
+                newDate = potentialError.find_element(By.XPATH, ".//div[starts-with(@class, 'pb-0 mb-5 ng-star-inserted')]").text
                 newDateError = '\n'.join(newDate.split("\n")[0:2])
                 print(newDateError)
                 self.returnedError = True
@@ -413,9 +420,9 @@ class AmtrakSearch:
               except NoSuchElementException:
                 try:
                   self.__updateStatusMessage("Searching - parsing results page", 3)
-                  WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, "//div[@class='row ng-tns-c6-1 ng-trigger ng-trigger-searchList ng-star-inserted']")))
-                  searchResultsTable = self.driver.find_element(By.XPATH, "//div[@class='row ng-tns-c6-1 ng-trigger ng-trigger-searchList ng-star-inserted']") # Table of results
-                  nextPage = searchResultsTable.find_element(By.XPATH, ".//ul[@class='pagination paginator__pagination ng-tns-c6-1']") # Page links area
+                  WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, "//div[contains(@class, 'trigger-searchList')]")))
+                  searchResultsTable = self.driver.find_element(By.XPATH, "//div[contains(@class, 'trigger-searchList')]") # Table of results
+                  nextPage = searchResultsTable.find_element(By.XPATH, ".//ul[starts-with(@class, 'pagination paginator__pagination')]") # Page links area
                   numberSearchPages = int((len(nextPage.find_elements(By.XPATH, ".//*"))-4)/2) # Find out how many pages exist
                   self.__checkEveryPage(nextPage, numberSearchPages)
                   self.__updateStatusMessage("Done", 100)
