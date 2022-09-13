@@ -41,7 +41,10 @@ class Driver:
     # Chrome options to disable logging in terminal
     chrome_options = Options()
     chrome_options.add_argument("--headless")
-    chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
+    chrome_options.add_argument("--disable-logging")
+    chrome_options.add_argument("--log-level=0")
+    #chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
+    
     try:
       if undetected: self.driver = uc.Chrome(executable_path=ChromeDriverManager().install(), service_log_path=LOG_PATH)
       else: self.driver = webdriver.Chrome(ChromeDriverManager().install(),service_log_path=LOG_PATH, options=chrome_options)
