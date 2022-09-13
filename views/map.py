@@ -37,10 +37,10 @@ class Map(tk.Toplevel):
   def __getCoords(self, name) -> tuple:
     code = self.parent.stationsArea.stations.getStationCode(name)
     address = self._amtrakAddressRequest(code)
-    try: coords = mapview.convert_address_to_coordinates(f"{address[0]}, {address[1]}")
+    try: coords = mapview.convert_address_to_coordinates(f"{address[0].strip()}, {address[1].strip()}")
     except TypeError: coords = None
     if coords == None:
-      coords = mapview.convert_address_to_coordinates(address[1])
+      coords = mapview.convert_address_to_coordinates(f"{address[1]}, United States")
     return coords
 
   def updateOrigin(self):
@@ -90,8 +90,11 @@ class Map(tk.Toplevel):
       webinfo = requests.get(f"https://www.amtrak.com/stations/{stationCode.lower()}")
       soup = BeautifulSoup(webinfo.content, "html.parser")
       dom = etree.HTML(str(soup))
-      addr1 = dom.xpath("//*[@class='hero-banner-and-info__card_block-address']")[0].text
-      addr2 = dom.xpath("//*[@class='hero-banner-and-info__card_block-address']")[1].text
+      try:
+        addr1 = dom.xpath("//*[@class='hero-banner-and-info__card_block-address']")[0].text
+        addr2 = dom.xpath("//*[@class='hero-banner-and-info__card_block-address']")[2].text
+      except IndexError:
+        addr2 = dom.xpath("//*[@class='hero-banner-and-info__card_block-address']")[1].text
       return [addr1, addr2]
     except:
       return None
