@@ -3,7 +3,6 @@ webdriver_manager
 undetected_chromedriver
 selenium
 bs4
-webbrowser
 pillow
 easygui
 urllib3
