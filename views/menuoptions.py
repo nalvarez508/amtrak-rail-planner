@@ -115,8 +115,11 @@ class MenuOptions(tk.Menu):
     # For each of the datas, create a menu item
     traincodes = None
     while(traincodes == None):
-      traincodes = json.loads(self.parent.searcher._getSessionStorage('traincodes'))
-      sleep(0.1)
+      try:
+        traincodes = json.loads(self.parent.searcher._getSessionStorage('traincodes'))
+      except TypeError:
+        print("Tried to load train codes")
+        sleep(1)
 
     trainnames = list(traincodes.values())
     trainnames_unique = []
