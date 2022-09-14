@@ -1,13 +1,16 @@
 import tkinter as tk
 from attr import Attribute
-import tkintermapview as mapview
+import railmapview as mapview
 
 import os
 import requests
 from bs4 import BeautifulSoup
 from lxml import etree
+from traintracks.route import RouteCollection
 
 from views.config import ICON
+
+from traintracks.maputils import getCoords, amtrakAddressRequest
 
 class Map(tk.Toplevel):
   def __init__(self, parent, *args, **kwargs):
@@ -20,6 +23,10 @@ class Map(tk.Toplevel):
     self.originMarker = None
     self.destinationMarker = None
     self.travelPath = None
+    self.currentRoute = None
+    self.currentStops = None
+    self.subsidiaryStopMarkers = []
+    self.subsidiaryPaths = []
 
     self.map = mapview.TkinterMapView(self, width=700, height=500)
 
@@ -29,6 +36,12 @@ class Map(tk.Toplevel):
     self.map.set_zoom(4)
 
     self.wm_protocol("WM_DELETE_WINDOW", self.__onClose)
+
+  def __rapidDelete(self, obj):
+    if obj != []:
+      for widget in obj:
+        self.map.delete(widget)
+      obj.clear()
 
   def __onClose(self):
     self.parent.closeMap()
@@ -45,7 +58,8 @@ class Map(tk.Toplevel):
 
   def updateOrigin(self):
     name = self.parent.us.getOrigin()
-    coords = self.__getCoords(name)
+    _code = self.parent.stationsArea.stations.getStationCode(name)
+    coords = getCoords(_code)
     if coords != None:
       try: self.originMarker.delete()
       except AttributeError as e: print(e) # Object does not exist yet
@@ -55,7 +69,8 @@ class Map(tk.Toplevel):
   
   def updateDestination(self):
     name = self.parent.us.getDestination()
-    coords = self.__getCoords(name)
+    _code = self.parent.stationsArea.stations.getStationCode(name)
+    coords = getCoords(_code)
     if coords != None:
       try: self.destinationMarker.delete()
       except AttributeError as e: print(e) # Object does not exist yet
@@ -66,6 +81,9 @@ class Map(tk.Toplevel):
   def __updatePath(self):
     try: self.travelPath.delete()
     except AttributeError: pass # Object does not exist yet
+    self.__rapidDelete(self.subsidiaryPaths)
+    self.__rapidDelete(self.subsidiaryStopMarkers)
+    self.subsidiaryStopMarkers, self.subsidiaryPaths = [[], []]
     try:
       self.travelPath = self.map.set_path([self.originMarker.position, self.destinationMarker.position])
       latt = []
@@ -83,6 +101,43 @@ class Map(tk.Toplevel):
     if side==1: self.updateOrigin()
     elif side==2: self.updateDestination()
   
+  def drawTrainRoute(self, name, stops):
+    if type(name) == str:
+      _curr = self.parent.routes[name]
+    elif type(name) == list:
+      _curr = RouteCollection(self.parent.routes)
+      _curr.combineRoutes(name)
+    self.map.delete(self.travelPath)
+    self.map.delete(self.originMarker)
+    self.map.delete(self.destinationMarker)
+    if self.currentRoute != name:
+      self.__rapidDelete(self.subsidiaryPaths)
+      for coll in _curr.tupCoords:
+        self.subsidiaryPaths.append(self.map.set_path(coll, color='black'))
+      self.currentRoute = name
+
+      #_myStopsMarker = []
+      self.__rapidDelete(self.subsidiaryStopMarkers)
+      for item in _curr.stops:
+        _this = _curr.stops[item]
+        if item not in stops:
+          self.subsidiaryStopMarkers.append(self.map.set_marker(_this["Lat"],
+                              _this["Long"],
+                              text=item,
+                              marker_color_outside='',
+                              marker_color_circle='orange',
+                              font='Helvetica 12 bold'))
+        elif item in stops:
+          #_myStopsMarker.append([_this["Lat"], _this["Long"], item, 'red', 'red', 'Helvetica 18 bold', 'blue'])
+          self.subsidiaryStopMarkers.append(self.map.set_marker(_this["Lat"],
+                              _this["Long"],
+                              text=_this["Name"],
+                              marker_color_outside='red',
+                              marker_color_circle='red',
+                              font='Helvetica 18 bold', text_color='blue'))
+      self.currentStops = sorted(stops)
+    self.update()
+
   def _amtrakAddressRequest(self, stationCode) -> list:
     # Find station page
     # Parse for address
