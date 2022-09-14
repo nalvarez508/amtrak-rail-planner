@@ -95,6 +95,8 @@ class TrainResultsArea(tk.Frame):
     self.findTrainsBtn = ttk.Button(self.buttonsArea, text="Find Trains", command=self.startSearch)
     self.findTrainsBtn.pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
     ttk.Button(self.buttonsArea, text="View Itinerary", command=self.parent.openItinerary).pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
+    self.mapBtn = ttk.Button(self.buttonsArea, text="Route Map", command=self._callMapUpdate)
+    self.mapBtn.pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
     
     self.progressBar = ttk.Progressbar(self, orient='horizontal', length=200, maximum=100, mode='determinate')
     self.tvScrollHoriz.pack(side=tk.BOTTOM, fill=tk.BOTH)
@@ -114,6 +116,18 @@ class TrainResultsArea(tk.Frame):
     """
     if enabled: self.saveButton.config(state='normal')
     else: self.saveButton.config(state='disabled')
+
+  def _callMapUpdate(self):
+    _thisSelect = self.getSelection()
+    _name = _thisSelect["Train"].name
+    self.parent.openMap()
+    if _thisSelect["Train"].numberOfSegments > 1:
+      if _thisSelect["Train"].segmentInfo != []:
+        self.parent.mapWindow.drawTrainRoute(_thisSelect["Train"].segmentInfo, [_thisSelect["Train"].origin, _thisSelect["Train"].destination])
+      else:
+        self.parent.mapWindow.drawTrainRoute(_name, [_thisSelect["Train"].origin, _thisSelect["Train"].destination])
+    else:
+      self.parent.mapWindow.drawTrainRoute(_name, [_thisSelect["Train"].origin, _thisSelect["Train"].destination])
 
   def updateDisplayColumns(self):
     """
@@ -274,7 +288,7 @@ class TrainResultsArea(tk.Frame):
       try:
         # Starting search thread
         self.parent.searcher.preSearchSetup(self.parent.stationsArea.stations.getStationCode(origin), self.parent.stationsArea.stations.getStationCode(dest), date, self.progressBar, self.parent.resultsHeadingArea.numberOfTrains)
-        self.parent.startThread(self.__doSearchCall)
+        self.parent.startThread(self.__doSearchCall, [False])
       except Exception as e:
         print(e)
         messagebox.showerror(cfg.APP_NAME, message="Unable to search right now. The automated browser has not loaded. Try again in a few seconds.")
@@ -325,7 +339,7 @@ class TrainResultsArea(tk.Frame):
       messagebox.showerror(cfg.APP_NAME, message=response)
     self.__resetWidgets()
 
-  def __populateTreeview(self, trains):
+  def __populateTreeview(self, _trains):
     """
     Populates the Treeview object with a list of trains.
 
@@ -334,9 +348,10 @@ class TrainResultsArea(tk.Frame):
     trains : dict
         A dict containing search element (key) and Train object.
     """
-    for train in trains: # Every element of returned train dict
+    #trains = sorted(_trains) # This sorts IDs not the Trains
+    for train in _trains: # Every element of returned train dict
       num = train+1 # Dict starts at zero
-      vals = trains[train].returnSelectedElements(self.columns)
+      vals = _trains[train].returnSelectedElements(self.columns)
       self.results.insert('', tk.END, text=train, values=vals)
       if num == 1: # Display of s for plural elements
         self.parent.resultsHeadingArea.numberOfTrains.set(f"{num} train found")
