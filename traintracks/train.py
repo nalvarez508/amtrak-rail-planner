@@ -367,6 +367,8 @@ class Train:
     self.sleeperPrice = key["Sleeper Price"]
     self.segmentType = key["Segment Type"]
     self.numberOfSegments = self.__findSegments()
+    try: self.segmentInfo = key["Segment Info"]
+    except KeyError: self.segmentInfo = []
 
     self.organizationalUnit = {
       "Origin":self.origin,
@@ -386,7 +388,8 @@ class Train:
       "Business Price":self.businessPrice,
       "Sleeper Price":self.sleeperPrice,
       "Segment Type":self.segmentType,
-      "Number of Segments":self.numberOfSegments
+      "Number of Segments":self.numberOfSegments,
+      "Segment Info":self.segmentInfo
     }
 
   def __str__(self):
