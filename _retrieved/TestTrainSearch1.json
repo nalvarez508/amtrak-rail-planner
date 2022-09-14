@@ -331,7 +331,7 @@
     },
     "22": {
         "Number": "90",
-        "Name": "Palmetto",
+        "Name": "Multiple Trains",
         "Origin": "WAS",
         "Departure Time": "7:57p",
         "Departure Date": "03/28/2022",
@@ -342,6 +342,7 @@
         "Arrival Date": "03/28/2022",
         "Coach Price": "$69",
         "Business Price": "$124",
-        "Sleeper Price": null
+        "Sleeper Price": null,
+        "Segment Info": ["Palmetto", "Cardinal"]
     }
 }
