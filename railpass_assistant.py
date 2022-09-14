@@ -6,6 +6,8 @@ import sys
 from threading import Thread
 import os
 
+from traintracks.maputils import _loadAllRoutes
+
 from searcher.driver import Driver
 from searcher.userselections import UserSelections
 from searcher.amtrak_searcher import AmtrakSearch
@@ -87,7 +89,7 @@ class MainWindow(tk.Tk):
     self.itineraryWindow = None
     self.mapWindow = Map(self)
     self.menuOptions = MenuOptions(self)
-    #self.startThread(self.__startup)
+    self.startThread(self.__startup)
     self.config(menu=self.menuOptions)
 
     self.statusBar = tk.Label(self, textvariable=self.statusMessage, bd=1, relief=tk.SUNKEN, anchor=tk.W)
@@ -178,6 +180,7 @@ class MainWindow(tk.Tk):
 
   def __startup(self):
     self.searcher = AmtrakSearch(self, Driver(cfg.SEARCH_URL, undetected=True).driver, status=self.statusMessage)
+    self.routes = _loadAllRoutes()
     self.menuOptions._loadTimetables()
 
 if __name__ == "__main__":
