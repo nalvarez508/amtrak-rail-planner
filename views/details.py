@@ -12,9 +12,9 @@ class DetailWindow(tk.Toplevel):
   def __init__(self, parent, data, *args, **kwargs):
     tk.Toplevel.__init__(self, parent, *args, **kwargs)
     self.parent = parent
-    self.data = self._dataClean(data)
+    self.data = data
     self.geometry('400x600')
-    self.title(f"Detail View")
+    self.title(f"Detail View - {self.data['Name']}")
     if os.name == 'nt': self.iconbitmap(ICON)
     self.config(background=BACKGROUND)
 
@@ -33,9 +33,10 @@ class DetailWindow(tk.Toplevel):
     self.texto.pack(expand=True, fill=tk.BOTH)
     
 
-    _data = json.dumps(self.data, indent=2)
+    _data = json.dumps(self.data, indent=4)
     _data = _data.replace('"', '')
     self.texto.insert('end', _data)
+    self._thatsPrettyBold()
     self.texto.configure(state=tk.DISABLED)
 
     self.dataView.pack(side=tk.TOP, expand=True, fill=tk.BOTH)
@@ -46,12 +47,32 @@ class DetailWindow(tk.Toplevel):
   def _dataClean(self, data) -> dict:
     _t = {}
     d = deepcopy(data)
-    for key in d:
+    for key in d["Segment Info"]:
       try:
-        _t[f"Segment {int(key)+1}"] = d[key]
+        _t["Segment Info"][f"Segment {int(key)+1}"] = d["Segment Info"][key]
       except ValueError:
         _t[key] = d[key]
     return _t
+  
+  def _thatsPrettyBold(self):
+    def findKeys(k, before):
+      nonlocal _pos
+      try:
+        for key in before[k].keys():
+          _pos = self.texto.search(key, _pos, stopindex="end", count=count)
+          self.texto.tag_add("bold", _pos, f"{_pos} + {int(count.get())+1}c")
+          #_pos = str(float(_pos)+1)
+          findKeys(key, before[k])
+      except AttributeError:
+        pass
+    _pos = "1.0"
+    count = tk.StringVar()
+    for key in self.data.keys():
+      _pos = self.texto.search(key, _pos, stopindex="end", count=count)
+      self.texto.tag_add("bold", _pos, f"{_pos} + {int(count.get())+1}c")
+      #_pos = str(float(_pos)+1)
+      findKeys(key, self.data)
+    self.texto.tag_config("bold", font=("Arial", 14, "bold"))
 
   def exportData(self):
     _def = os.path.expanduser("~")
@@ -65,6 +86,6 @@ class DetailWindow(tk.Toplevel):
 
 if __name__ == "__main__":
   root = tk.Tk()
-  _d = {0: {"Name": "California Zephyr", "Number": 6}}
+  _d = {"Name": "California Zephyr", "Number": 6}
   DetailWindow(root, _d)
   root.mainloop()
