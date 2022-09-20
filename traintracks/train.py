@@ -1,4 +1,5 @@
 import datetime
+import json
 from copy import deepcopy
 
 class RailPass:
@@ -349,51 +350,57 @@ class Train:
     """
     self.origin = key["Origin"]
     self.destination = key["Destination"]
-    try:
-      self.number = int(key["Number"])
-    except ValueError:
-      self.number = key["Number"]
+    try: self.number = int(key["Number"])
+    except ValueError: self.number = key["Number"]
     self.name = key["Name"]
-    self.departureTime = key["Departure Time"]
-    self.departureDate = key["Departure Date"]
-    self.departure = self.__convertToDatetime(self.departureDate, self.departureTime)
+
+    try:
+      self.departure = datetime.datetime.fromisoformat(key["Departure"])
+      self.arrival = datetime.datetime.fromisoformat(key["Arrival"])
+    except KeyError:
+      self.departureTime = key["Departure Time"]
+      self.departureDate = key["Departure Date"]
+      self.departure = self.__convertToDatetime(self.departureDate, self.departureTime)
+      self.arrivalTime = key["Arrival Time"]
+      self.arrivalDate = key["Arrival Date"]
+      self.arrival = self.__convertToDatetime(self.arrivalDate, self.arrivalTime)
+    
     self.travelTime = key["Travel Time"]
-    self.arrivalTime = key["Arrival Time"]
-    self.arrivalDate = key["Arrival Date"]
-    self.arrival = self.__convertToDatetime(self.arrivalDate, self.arrivalTime)
     self.prettyDeparture, self.prettyArrival = self._makePrettyDates()
     self.coachPrice = key["Coach Price"]
     self.businessPrice = key["Business Price"]
     self.sleeperPrice = key["Sleeper Price"]
-    self.segmentType = key["Segment Type"]
-    self.numberOfSegments = self.__findSegments()
+
+    try:
+      self.numberOfSegments = key["Segments"]
+    except KeyError:
+      self.segmentType = key["Segment Type"]
+      self.numberOfSegments = self.__findSegments()
     try: self.segmentInfo = key["Segment Info"]
-    except KeyError: self.segmentInfo = []
+    except KeyError: self.segmentInfo = {}
+    try: self.citySegments = key["City Segments"]
+    except KeyError: self.citySegments = [self.origin, self.destination]
 
     self.organizationalUnit = {
       "Origin":self.origin,
       "Destination":self.destination,
       "Number":self.number,
       "Name":self.name,
-      "Arrival Time":self.arrivalTime,
-      "Arrival Date":self.arrivalDate,
       "Arrival Datetime":self.arrival,
       "Arrives":self.prettyArrival,
       "Duration":self.travelTime,
-      "Departure Time":self.departureTime,
-      "Departure Date":self.departureDate,
       "Departure Datetime":self.departure,
       "Departs":self.prettyDeparture,
       "Coach Price":self.coachPrice,
       "Business Price":self.businessPrice,
       "Sleeper Price":self.sleeperPrice,
-      "Segment Type":self.segmentType,
       "Number of Segments":self.numberOfSegments,
-      "Segment Info":self.segmentInfo
+      "Segment Info":self.segmentInfo,
+      "City Segments":self.citySegments
     }
 
   def __str__(self):
-    return f"{self.organizationalUnit}"
+    return f"{json.dumps(self.organizationalUnit, indent=2)}"
   
   def __eq__(self, other):
     if other != None:
