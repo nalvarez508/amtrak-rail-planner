@@ -6,17 +6,33 @@ class RouteCollection:
     self.tupCoords = []
     self.stops = {}
   
-  def combineRoutes(self, names: dict):
+  def combineJourneyRoutes(self, segments: list):
+    _ephemRouteCoords = []
+    _ephemRouteStops = {}
+    for train in segments:
+      _coords, _stops = self._combineRoutes(train)
+      _ephemRouteCoords.extend(_coords)
+      _ephemRouteStops.update(_stops)
+    
+    self.tupCoords = _ephemRouteCoords
+    self.stops = _ephemRouteStops
+  
+  def combineRoutesHelper(self, names: dict):
+    self.tupCoords, self.stops = self._combineRoutes(names)
+
+  def _combineRoutes(self, names: dict):
     _ephemRouteCoords = []
     _ephemRouteStops = {}
     for name in names:
       _this = names[name]["Name"]
       if names[name]["Type"].upper() == "TRAIN":
-        _ephemRouteCoords.extend(self.routeGroup[_this].tupCoords)
-        _ephemRouteStops.update(self.routeGroup[_this].stops)
+        try:
+          _ephemRouteCoords.extend(self.routeGroup[_this].tupCoords)
+          _ephemRouteStops.update(self.routeGroup[_this].stops)
+        except KeyError:
+          pass
     
-    self.tupCoords = _ephemRouteCoords
-    self.stops = _ephemRouteStops
+    return [_ephemRouteCoords, _ephemRouteStops]
 
 
 class Route:

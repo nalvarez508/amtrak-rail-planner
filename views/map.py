@@ -27,6 +27,7 @@ class Map(tk.Toplevel):
     self.currentStops = None
     self.subsidiaryStopMarkers = []
     self.subsidiaryPaths = []
+    self.importantStopMarkers = []
 
     self.map = mapview.TkinterMapView(self, width=700, height=500)
 
@@ -83,17 +84,25 @@ class Map(tk.Toplevel):
     except AttributeError: pass # Object does not exist yet
     self.__rapidDelete(self.subsidiaryPaths)
     self.__rapidDelete(self.subsidiaryStopMarkers)
+    self.importantStopMarkers.clear()
     self.subsidiaryStopMarkers, self.subsidiaryPaths = [[], []]
     try:
       self.travelPath = self.map.set_path([self.originMarker.position, self.destinationMarker.position])
+    except AttributeError: pass
+    self.__updateView([self.originMarker, self.destinationMarker])
+  
+  def __updateView(self, markers):
+    try:
+      _thesePositions = [x.position for x in markers]
+      _numCoords = float(len(_thesePositions))
       latt = []
       longt = []
-      for l in [self.originMarker.position, self.destinationMarker.position]:
+      for l in _thesePositions:
         latt.append(l[0])
         longt.append(l[1])
-      centerLatt = sum(latt)/2.
-      centerLongt = sum(longt)/2.
-      self.map.set_zoom(4)
+      centerLatt = sum(latt)/_numCoords
+      centerLongt = sum(longt)/_numCoords
+      self.map.set_zoom(5)
       self.map.set_position(centerLatt, centerLongt)
     except AttributeError: pass # A marker does not have a position yet
 
@@ -107,11 +116,21 @@ class Map(tk.Toplevel):
       self.updateDestination()
   
   def drawTrainRoute(self, name, stops):
+    areStopsShown = True
     if type(name) == str:
       _curr = self.parent.routes[name]
     elif type(name) == dict:
       _curr = RouteCollection(self.parent.routes)
-      _curr.combineRoutes(name)
+      _curr.combineRoutesHelper(name)
+    elif type(name) == list:
+      areStopsShown = False
+      _curr = RouteCollection(self.parent.routes)
+      _curr.combineJourneyRoutes(name)
+      _stopIndex = {}
+      for index, code in enumerate(stops):
+        try: _stopIndex[code].append(index+1)
+        except KeyError: _stopIndex[code] = [index+1]
+
     self.map.delete(self.travelPath)
     self.map.delete(self.originMarker)
     self.map.delete(self.destinationMarker)
@@ -123,10 +142,10 @@ class Map(tk.Toplevel):
 
       #_myStopsMarker = []
       self.__rapidDelete(self.subsidiaryStopMarkers)
-      _notPresent = []
+      self.importantStopMarkers.clear()
       for item in _curr.stops:
         _this = _curr.stops[item]
-        if item not in stops:
+        if item not in stops and areStopsShown:
           self.subsidiaryStopMarkers.append(self.map.set_marker(
             _this["Lat"],
             _this["Long"],
@@ -136,14 +155,18 @@ class Map(tk.Toplevel):
             font='Tahoma 12 bold'))
         elif item in stops:
           #_myStopsMarker.append([_this["Lat"], _this["Long"], item, 'red', 'red', 'Helvetica 18 bold', 'blue'])
-          self.subsidiaryStopMarkers.append(self.map.set_marker(
+          _label = self.parent.stationsArea.stations.returnCityStateByCode(item)
+          if areStopsShown == False: _label = f"{_stopIndex[item]} {_label}"
+          _newImportantMarker = (self.map.set_marker(
             _this["Lat"],
             _this["Long"],
-            text=self.parent.stationsArea.stations.returnCityStateByCode(item),
+            text=_label,
             marker_color_outside='red',
             marker_color_circle='red',
             font='Tahoma 18 bold',
             text_color='blue'))
+          self.subsidiaryStopMarkers.append(_newImportantMarker)
+          self.importantStopMarkers.append(_newImportantMarker)
 
       for item in stops:
         if item not in _curr.stops:
@@ -159,6 +182,7 @@ class Map(tk.Toplevel):
               text_color='blue'))
 
       self.currentStops = sorted(stops)
+      self.__updateView(self.importantStopMarkers)
     self.update()
 
   def _amtrakAddressRequest(self, stationCode) -> list:
