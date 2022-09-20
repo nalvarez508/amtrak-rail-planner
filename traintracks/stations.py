@@ -106,6 +106,14 @@ class Stations:
     """
     return self.stations[key]["Code"]
 
+  def returnCityStateByCode(self, code):
+    _key = ''
+    for name in self.stations:
+      if code == self.stations[name]["Code"]:
+        _key = name
+        break
+    return self.returnCityState(_key)
+
   def __test_writeToFile(self):
     with open("Stations.json", "w") as f:
       f.write(json.dumps(self.stations, indent=4))
