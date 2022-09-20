@@ -16,9 +16,10 @@ def amtrakAddressRequest(stationCode):
     dom = etree.HTML(str(soup))
     try:
       addr1 = dom.xpath("//*[@class='hero-banner-and-info__card_block-address']")[0].text
-      addr2 = dom.xpath("//*[@class='hero-banner-and-info__card_block-address']")[2].text
+      _addr2 = dom.xpath("//*[@class='hero-banner-and-info__card_block-address']")[2].text
     except IndexError:
-      addr2 = dom.xpath("//*[@class='hero-banner-and-info__card_block-address']")[1].text
+      _addr2 = dom.xpath("//*[@class='hero-banner-and-info__card_block-address']")[1].text
+    addr2 = _addr2.replace('  ','').replace('\r\n', ' ')
     return [addr1, addr2]
   except:
     return None
@@ -31,7 +32,18 @@ def getCoords(code) -> list:
     print(f"Could not find coordinates for station {code}: {address}")
   if coords == None:
     try:
-      coords = convert_address_to_coordinates(f"{address[1]}, United States")
+      _isCA = None
+      canadianStates = ['ON', 'QC', 'NS', 'NB', 'MB', 'BC', 'PE', 'SK', 'AB', 'NL']
+      for state in canadianStates:
+        if state in address[1]:
+          _isCA = state
+          break
+
+      if _isCA != None:
+        address[1] = address[1].split(_isCA)[0]+_isCA
+        coords = convert_address_to_coordinates(f"{address[0]}, {address[1]}, Canada")
+      else:
+        coords = convert_address_to_coordinates(f"{address[1]}, United States")
     except IndexError:
       coords = None
       print(f"Could not find coordinates for station {code}: {address}")
