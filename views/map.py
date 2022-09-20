@@ -98,13 +98,18 @@ class Map(tk.Toplevel):
     except AttributeError: pass # A marker does not have a position yet
 
   def updateMarker(self, side):
-    if side==1: self.updateOrigin()
-    elif side==2: self.updateDestination()
+    if self.subsidiaryPaths != []:
+      self.updateOrigin()
+      self.updateDestination()
+    elif side == 1:
+      self.updateOrigin()
+    elif side == 2:
+      self.updateDestination()
   
   def drawTrainRoute(self, name, stops):
     if type(name) == str:
       _curr = self.parent.routes[name]
-    elif type(name) == list:
+    elif type(name) == dict:
       _curr = RouteCollection(self.parent.routes)
       _curr.combineRoutes(name)
     self.map.delete(self.travelPath)
@@ -118,23 +123,41 @@ class Map(tk.Toplevel):
 
       #_myStopsMarker = []
       self.__rapidDelete(self.subsidiaryStopMarkers)
+      _notPresent = []
       for item in _curr.stops:
         _this = _curr.stops[item]
         if item not in stops:
-          self.subsidiaryStopMarkers.append(self.map.set_marker(_this["Lat"],
-                              _this["Long"],
-                              text=item,
-                              marker_color_outside='',
-                              marker_color_circle='orange',
-                              font='Helvetica 12 bold'))
+          self.subsidiaryStopMarkers.append(self.map.set_marker(
+            _this["Lat"],
+            _this["Long"],
+            text=item,
+            marker_color_outside='',
+            marker_color_circle='orange',
+            font='Tahoma 12 bold'))
         elif item in stops:
           #_myStopsMarker.append([_this["Lat"], _this["Long"], item, 'red', 'red', 'Helvetica 18 bold', 'blue'])
-          self.subsidiaryStopMarkers.append(self.map.set_marker(_this["Lat"],
-                              _this["Long"],
-                              text=_this["Name"],
-                              marker_color_outside='red',
-                              marker_color_circle='red',
-                              font='Helvetica 18 bold', text_color='blue'))
+          self.subsidiaryStopMarkers.append(self.map.set_marker(
+            _this["Lat"],
+            _this["Long"],
+            text=self.parent.stationsArea.stations.returnCityStateByCode(item),
+            marker_color_outside='red',
+            marker_color_circle='red',
+            font='Tahoma 18 bold',
+            text_color='blue'))
+
+      for item in stops:
+        if item not in _curr.stops:
+          coords = getCoords(item)
+          if coords != None:
+            self.subsidiaryStopMarkers.append(self.map.set_marker(
+              coords[0],
+              coords[1],
+              text=self.parent.stationsArea.stations.returnCityStateByCode(item),
+              marker_color_outside='red',
+              marker_color_circle='red',
+              font='Tahoma 18 bold',
+              text_color='blue'))
+
       self.currentStops = sorted(stops)
     self.update()
 
