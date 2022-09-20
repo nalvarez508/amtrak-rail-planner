@@ -1,6 +1,8 @@
 import time
 import json
 import traceback
+from datetime import datetime
+from math import trunc
 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
@@ -131,6 +133,19 @@ class AmtrakSearch:
       self.thisSearchResultsAsTrain.update({index : Train(self.thisSearchResultsAsDict[item])})
     return self.thisSearchResultsAsTrain
 
+  def _test_search(self):
+    self.numberTrainsFound = 0
+    self.thisSearchResultsAsTrain.clear()
+    self.thisSearchResultsAsDict.clear()
+
+    _suffix = ['single', 'multiple', 'triservice', 'segments']
+    fileToUse = trunc(datetime.now().timestamp()) % 4
+    with open(f"_retrieved/searchresults_{_suffix[fileToUse]}.json", "r") as f:
+      temp = json.loads(f.read())
+    self.__processTrainJson(temp)
+    self.__updateStatusMessage("Done", 100)
+    return self.thisSearchResultsAsTrain
+
   # Retrives price information from search page
   def __findPrice(self, searcher, xpath):
     """
@@ -187,6 +202,20 @@ class AmtrakSearch:
         return False
     else:
       return False
+  
+  def __checkTripDetails(self, xpath):
+    try:
+      xpath.find_element(By.XPATH, ".//button[@amt-auto-test-id='trip-details-link']").click()
+      dropdown = xpath.find_element(By.XPATH, "//div[contains(@class, 'am-dropdown-content am-dropdown-content--bottom-right')]")
+      trainSegs = dropdown.find_elements(By.XPATH, "//div[@class='travel-type-service']")
+      _names = []
+      for train in trainSegs:
+        _this = train.find_element(By.XPATH, "//span[@class='ng-star-inserted']").text
+        _names.append(_this.split(' ', 1)[1])
+
+      dropdown.find_element(By.XPATH, "//button[@class='close pull-right']").click()
+    except NoSuchElementException:
+      return []
 
   def __findTrainInfo(self, trains):
     """
@@ -249,6 +278,10 @@ class AmtrakSearch:
           except NoSuchElementException: # One day trip
             arrivalDate = self.departDate
           
+          if name == "Multiple Trains":
+            segmentInfo = self.__checkTripDetails(arrive)
+          else: segmentInfo = []
+
           # Trip details contains train amenities and station stops (in groups of ten)
 
           prices = data.find_element(By.XPATH, ".//div[starts-with(@class, 'search-results-leg-travel-service')]") # Search area
@@ -257,7 +290,7 @@ class AmtrakSearch:
           sleeperPrice = self.__findPrice(prices, 'sleeper')
 
           if not(self.__isSoldOut(coachPrice, businessPrice, sleeperPrice)):
-            outputDict = {"Number":number, "Name":name, "Origin":self.origin, "Departure Time":departTime, "Departure Date":self.departDate, "Travel Time":travelTime, "Destination":self.destination, "Arrival Time":arrivalTime, "Arrival Date":arrivalDate, "Coach Price":coachPrice, "Business Price":businessPrice, "Sleeper Price":sleeperPrice, "Segment Type":segmentType}
+            outputDict = {"Number":number, "Name":name, "Origin":self.origin, "Departure Time":departTime, "Departure Date":self.departDate, "Travel Time":travelTime, "Destination":self.destination, "Arrival Time":arrivalTime, "Arrival Date":arrivalDate, "Coach Price":coachPrice, "Business Price":businessPrice, "Sleeper Price":sleeperPrice, "Segment Type":segmentType, "Segment Info":segmentInfo}
             if USE_TRAIN_CLASSES:
               self.thisSearchResultsAsTrain.update({self.numberTrainsFound : (Train(outputDict))})
             else:
@@ -269,7 +302,7 @@ class AmtrakSearch:
         print(traceback.format_exc())
         print(e) #Reached end of list but there is a second page
 
-  def __checkEveryPage(self, area, pages):
+  def __checkEveryPage(self, area, pages, isScrape=True):
     """
     Checks every page of search results. If there is one, it does not loop.
 
@@ -280,18 +313,137 @@ class AmtrakSearch:
     pages : int
         Number of pages of results.
     """
-    for page in range(1,pages+1): # Starts at 1 (page 1) and goes up to pages
-      self.__updateStatusMessage(f"Searching - checking page {page}", 22./pages)
-      self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight)") # Puts page links in view
-      
-      # Loads next page and waits until elements load
-      area.find_element(By.XPATH, f".//*[text()='{page}']").click()
-      WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, f".//a[text()='{page}']//ancestor::li[@class='pagination-page page-item active ng-star-inserted']")))
-      time.sleep(1)
+    
+    def scrapingMethod():
+      for page in range(1,pages+1): # Starts at 1 (page 1) and goes up to pages
+        self.__updateStatusMessage(f"Searching - checking page {page}", 22./pages)
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight)") # Puts page links in view
+        
+        # Loads next page and waits until elements load
+        area.find_element(By.XPATH, f".//*[text()='{page}']").click()
+        WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, f".//a[text()='{page}']//ancestor::li[@class='pagination-page page-item active ng-star-inserted']")))
+        time.sleep(1)
+        
+        searchResultsTable = self.driver.find_element(By.XPATH, "//div[contains(@class, 'trigger-searchList')]") # Search area
+        trainList = searchResultsTable.find_elements(By.XPATH, ".//div[contains(@class, 'trigger-searchItems')]") # List of train results
+        self.__findTrainInfo(trainList)
+    
+    if isScrape:
+      scrapingMethod() # We don't need this.
+    else:
+      if self.__processTrainJson() != True:
+        scrapingMethod()
 
-      searchResultsTable = self.driver.find_element(By.XPATH, "//div[contains(@class, 'trigger-searchList')]") # Search area
-      trainList = searchResultsTable.find_elements(By.XPATH, ".//div[contains(@class, 'trigger-searchItems')]") # List of train results
-      self.__findTrainInfo(trainList)
+  def __processTrainJson(self, file=None) -> bool:
+    # Need error handling (service interruptions)
+    try:
+      if file == None:
+        j = json.loads(self._getSessionStorage("searchresults", True))
+      else: j = file
+
+      _journeySolutionOption = j["journeySolutionOption"]
+      _journeyLegs = _journeySolutionOption["journeyLegs"][0]
+      _journeyLegOptionsMultiple = _journeyLegs["journeyLegOptions"] #All segments
+
+      for index, opt in enumerate(_journeyLegOptionsMultiple):
+        self.__updateStatusMessage(f"Processing results", 22./len(_journeyLegOptionsMultiple))
+        try:
+          if len(opt["reservableAccommodations"]) > 0:
+            # Basic Data Gathering // Compare to __findTrainInfo()
+            segmentType = len(opt["travelLegs"])
+            if opt["isMultiSegment"] == True: #Multi-segment
+              number = "N/A"
+              name = "Multiple Trains"
+              for leg in opt["travelLegs"]:
+                if leg["travelService"]["type"].upper() != "TRAIN":
+                  name = "Mixed Service"
+            elif opt["isMultiSegment"] == False: #Single segment
+              number = opt["travelLegs"][0]["travelService"]["number"]
+              name = opt["travelLegs"][0]["travelService"]["name"]
+            
+            origin = opt["origin"]["code"]
+            destination = opt["destination"]["code"]
+
+            departure = opt["origin"]["schedule"]["departureDateTime"]
+            arrival = opt["destination"]["schedule"]["arrivalDateTime"]
+            travelTime = opt["duration"]
+
+            coachPrice = opt["coach"]["lowestPrice"]
+            businessPrice = opt["business"]["lowestPrice"]
+            sleeperPrice = opt["rooms"]["lowestPrice"]
+            
+            # Initial data update
+            outputDict = {
+              "Number":number,
+              "Name":name,
+              "Origin":origin,
+              "Departure":departure,
+              "Travel Time":travelTime,
+              "Destination":destination,
+              "Arrival":arrival,
+              "Coach Price":coachPrice,
+              "Business Price":businessPrice,
+              "Sleeper Price":sleeperPrice,
+              "Segments":segmentType,
+              #"Segment Info":segmentInfo,
+              "Raw":opt}
+
+            # Advanced Data Gathering
+            try:
+              extra = {}
+              for index, seg in enumerate(opt["segments"]):
+                _thisAmenities = []
+                for amenity in seg["travelLeg"]["travelService"]["amenities"]:
+                  _thisAmenities.append(amenity["name"])
+
+                _thisNum = seg["travelLeg"]["travelService"]["number"]
+                _thisName = seg["travelLeg"]["travelService"]["name"]
+                _thisType = seg["travelLeg"]["travelService"]["type"]
+
+                _thisDest = seg["travelLeg"]["destination"]["code"]
+                _thisArrive = seg["travelLeg"]["destination"]["schedule"]["arrivalDateTime"]
+                _thisOrigin = seg["travelLeg"]["origin"]["code"]
+                _thisDepart = seg["travelLeg"]["origin"]["schedule"]["departureDateTime"]
+
+                _thisDuration = seg["travelLeg"]["elapsedTime"]
+                _thisSeatsAvailable = opt["seatCapacityInfo"]["seatCapacityTravelClasses"][index]["availableInventory"]
+
+                extra[seg["travelLegIndex"]] = {
+                  "Name": _thisName,
+                  "Number":_thisNum,
+                  "Type":_thisType,
+                  "Origin":_thisOrigin,
+                  "Destination":_thisDest,
+                  "Departure":_thisDepart,
+                  "Arrival":_thisArrive,
+                  "Duration":_thisDuration,
+                  "Amenities":_thisAmenities,
+                  "Available Seats":_thisSeatsAvailable}
+              
+              citySegments = opt["citySegments"]
+
+              outputDict.update({
+                "City Segments":citySegments,
+                "Segment Info":extra})
+
+            except (KeyError, IndexError) as e:
+              print(e)
+
+            if USE_TRAIN_CLASSES:
+              self.thisSearchResultsAsTrain.update({self.numberTrainsFound : (Train(outputDict))})
+            else:
+              self.thisSearchResultsAsDict[self.numberTrainsFound] = outputDict
+            self.numberTrainsFound += 1
+            self.__updateNumberTrainsLabel()
+        except Exception as e:
+          print(e)
+
+    except (KeyError, TypeError) as e:
+      print(e)
+      return False
+    if self.numberTrainsFound > 0: # Interim
+      return True
+    else: return False
 
   def __enterStationInfo(self, area):
     """
@@ -334,15 +486,16 @@ class AmtrakSearch:
     inputField3.send_keys(f"{self.departDate}\t") #Depart Date
     #searchArea.find_element(by=By.XPATH, value="//input[@id='mat-input-4']").send_keys("03/27/2022") #Return Date
 
-  def _getSessionStorage(self, key):
+  def _getSessionStorage(self, key, beCareful=False):
+    time.sleep(1)
     _tc = self.driver.execute_script("return window.sessionStorage.getItem(arguments[0]);", key)
-    if _tc == None:
+    if _tc == None and beCareful == False:
       self.driver.refresh()
       time.sleep(2)
       _tc = self.driver.execute_script("return window.sessionStorage.getItem(arguments[0]);", key)
     return _tc
 
-  def oneWaySearch(self):
+  def oneWaySearch(self, isScrape=True):
     """
     Performs a search for Amtrak trains on a one-way journey.
 
@@ -424,7 +577,7 @@ class AmtrakSearch:
                   searchResultsTable = self.driver.find_element(By.XPATH, "//div[contains(@class, 'trigger-searchList')]") # Table of results
                   nextPage = searchResultsTable.find_element(By.XPATH, ".//ul[starts-with(@class, 'pagination paginator__pagination')]") # Page links area
                   numberSearchPages = int((len(nextPage.find_elements(By.XPATH, ".//*"))-4)/2) # Find out how many pages exist
-                  self.__checkEveryPage(nextPage, numberSearchPages)
+                  self.__checkEveryPage(nextPage, numberSearchPages, isScrape)
                   self.__updateStatusMessage("Done", 100)
                   
                   #print(json.dumps(self.thisSearchResults, indent=4))
