@@ -83,6 +83,7 @@ class Itinerary(tk.Toplevel):
     self.moveDownButton = ttk.Button(self.buttonsArea, text="Move Down", command=self.__moveDown)
     self.exportButton = ttk.Button(self.buttonsArea, text="Export Itinerary", command=self.doExport)
     self.openResultsButton = ttk.Button(self.buttonsArea, text="Search Results", command=self.__openResults)
+    self.mapButton = ttk.Button(self.buttonsArea, text="Journey Map", command=self._callJourneyMap)
     self.__exportButtonCheck()
     self.__buttonStateChanges()
 
@@ -94,6 +95,7 @@ class Itinerary(tk.Toplevel):
     self.exportButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
     self.openResultsButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
     self.trainInfoButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
+    self.mapButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
     self.deleteButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
     self.moveUpButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
     self.moveDownButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
@@ -122,6 +124,18 @@ class Itinerary(tk.Toplevel):
       myTrain = (self.inViewSavedSegments[self.userSegments.item(item, "text")]) # Train object
       return {"Index": self.userSegments.item(item, "text"), "Train": myTrain}
   
+  def _callJourneyMap(self):
+    self.parent.openMap()
+    _allSegmentInfo = []
+    _allCitySegments = []
+
+    _saved = self.parent.us.userSelections.segments
+    for segment in _saved:
+      _allSegmentInfo.append(_saved[segment].segmentInfo)
+      _allCitySegments.extend(_saved[segment].citySegments)
+    
+    self.parent.mapWindow.drawTrainRoute(_allSegmentInfo, _allCitySegments)
+
   def __openResults(self):
     # Finds search results index for this segment
     item = self.getSelection()
@@ -130,14 +144,15 @@ class Itinerary(tk.Toplevel):
 
   def __openTrainLink(self):
     item = self.userSegments.item(self.userSegments.focus())
-    trainName = self.inViewSavedSegments[item['text']].name.lower()
-    trainName = trainName.replace(' ', '-')
-    if ' ' not in trainName:
-      if trainName != "NA":
-        url = f"https://www.amtrak.com/{trainName}-train"
-        webbrowser.open(url, new=1, autoraise=True)
-      elif trainName == 'NA':
-        messagebox.showwarning(title="Itinerary", message="Cannot view information about multiple segments.")
+    segmentInfo = self.inViewSavedSegments[item['text']].segmentInfo
+    for segment in segmentInfo:
+      if segmentInfo[segment]["Type"].upper() == "TRAIN":
+        trainName = segmentInfo[segment]["Name"].lower()
+        trainName = trainName.replace(' ', '-')
+        if ' ' not in trainName:
+          if trainName != "NA":
+            url = f"https://www.amtrak.com/{trainName}-train"
+            webbrowser.open(url, new=1, autoraise=True)
 
   def __move(self, item, dir, iid):
     """Moves an treeview `item` up or down."""
@@ -196,8 +211,12 @@ class Itinerary(tk.Toplevel):
 
   def __exportButtonCheck(self):
     """If there are no segments present, do not allow an export."""
-    if self.userSegments.get_children() != (): self.exportButton.configure(state='normal')
-    else: self.exportButton.configure(state='disabled')
+    if self.userSegments.get_children() != ():
+      self.exportButton.configure(state='normal')
+      self.mapButton.configure(state='normal')
+    else:
+      self.exportButton.configure(state='disabled')
+      self.mapButton.configure(state='disabled')
 
   def __buttonStateChanges(self, enabled=False):
     """Enables or disables every button besides Export."""
@@ -212,14 +231,11 @@ class Itinerary(tk.Toplevel):
         try:
           if mySelection["Index"] == 1: self.moveUpButton.configure(state='disabled')
           # elif mySelection["Index"] == len(self.inViewSavedSegments): self.moveDownButton.configure(state='disabled')
-          elif mySelection["Index"] == len(self.userSegments.get_children()): self.moveDownButton.configure(state='disabled')
+          elif mySelection["Index"] > len(self.userSegments.get_children()): self.moveDownButton.configure(state='disabled')
+          print(len(self.userSegments.get_children()), mySelection["Index"])
         except TypeError:
           self.moveUpButton.configure(state='disabled')
           self.moveDownButton.configure(state='disabled')
-        try:
-          if mySelection["Train"]["Name"] == "Mixed Service": self.trainInfoButton.configure(state='disabled')
-        except TypeError:
-          pass
       else:
         for widget in selectionBasedButtons:
           widget.configure(state='disabled')
