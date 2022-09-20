@@ -6,12 +6,14 @@ class RouteCollection:
     self.tupCoords = []
     self.stops = {}
   
-  def combineRoutes(self, names: list):
+  def combineRoutes(self, names: dict):
     _ephemRouteCoords = []
     _ephemRouteStops = {}
     for name in names:
-      _ephemRouteCoords.extend(self.routeGroup[name].tupCoords)
-      _ephemRouteStops.update(self.routeGroup[name].stops)
+      _this = names[name]["Name"]
+      if names[name]["Type"].upper() == "TRAIN":
+        _ephemRouteCoords.extend(self.routeGroup[_this].tupCoords)
+        _ephemRouteStops.update(self.routeGroup[_this].stops)
     
     self.tupCoords = _ephemRouteCoords
     self.stops = _ephemRouteStops
@@ -31,4 +33,7 @@ class Route:
     
     for item in data["features"][0]["properties"]["route_stops"]:
       _thisCoords = (item["stop"]["geometry"]["coordinates"][1], item["stop"]["geometry"]["coordinates"][0])
-      self.stops[item["stop"]["stop_id"]] = {"Name": item["stop"]["stop_name"].replace("Amtrak Station", "").replace("Amtrak", "").strip(), "Lat": _thisCoords[0], "Long": _thisCoords[1]}
+      self.stops[item["stop"]["stop_id"]] = {
+        "Name": item["stop"]["stop_name"].replace("Amtrak Station", "").replace("Amtrak", "").strip(),
+        "Lat": _thisCoords[0],
+        "Long": _thisCoords[1]}
