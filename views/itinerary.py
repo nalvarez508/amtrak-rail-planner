@@ -9,6 +9,7 @@ import webbrowser
 
 from views.columnsettings import ColumnSettings
 from views.config import ICON, WIDTH_DIV, BACKGROUND
+from views.menuoptions import TrainMenu
 
 class Itinerary(tk.Toplevel):
   """
@@ -76,6 +77,8 @@ class Itinerary(tk.Toplevel):
     self.userSegments.configure(yscrollcommand=self.tvScroll.set, xscrollcommand=self.tvScrollHoriz.set)
     #self.__populateTreeview(self.parent.us.userSelections.getSegments())
     self.userSegments.bind("<Button-1>", lambda e: self.__buttonStateChanges(True))
+    if os.name == 'nt': self.userSegments.bind("<Button-3>", self.__trainContextMenu)
+    elif os.name == 'posix': self.userSegments.bind("<Button-2>", self.__trainContextMenu)
 
     self.trainInfoButton = ttk.Button(self.buttonsArea, text="Train Info", command=self.__openTrainLink)
     self.deleteButton = ttk.Button(self.buttonsArea, text="Delete", command=self.__doDelete)
@@ -93,14 +96,16 @@ class Itinerary(tk.Toplevel):
     self.segmentsArea.pack(fill=tk.BOTH, padx=8, pady=4, expand=True)
 
     self.exportButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
-    self.openResultsButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
-    self.trainInfoButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
+    #self.openResultsButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
+    #self.trainInfoButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
     self.mapButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
     self.deleteButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
     self.moveUpButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
     self.moveDownButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
 
     self.buttonsArea.pack(side=tk.BOTTOM, expand=False, padx=8, pady=4)
+
+    self.trainMenu = TrainMenu(self, self.userSegments, self.inViewSavedSegments)
     
     self.updateItinerary()
     if spawnExport: self.doExport()
@@ -110,20 +115,33 @@ class Itinerary(tk.Toplevel):
     self.parent.closeItinerary()
     self.destroy()
   
-  def getSelection(self):
+  def getSelection(self, iid=''):
     """
-    Retrieves the currently highlighted item.
+    Gets the currently selected item from the results table.
 
     Returns
     -------
     dict
-        Index of item, Train object
+        Index (int): Train (Train)
     """
-    item = self.userSegments.focus()
+    if iid != '': item = iid # Right click menu
+    else: item = self.userSegments.selection()[0] # Single click
     if item != "":
       myTrain = (self.inViewSavedSegments[self.userSegments.item(item, "text")]) # Train object
       return {"Index": self.userSegments.item(item, "text"), "Train": myTrain}
   
+  def __trainContextMenu(self, event):
+    iid = self.userSegments.identify_row(event.y)
+    if iid:
+      self.userSegments.selection_set(iid)
+      self.trainMenu.selectedIID = iid
+      self.trainMenu.inview = self.inViewSavedSegments
+      self.update_idletasks()
+      try:
+        self.trainMenu.tk_popup(event.x_root, event.y_root)
+      finally:
+        self.trainMenu.grab_release()
+
   def _callJourneyMap(self):
     self.parent.openMap()
     _allSegmentInfo = []
@@ -143,7 +161,7 @@ class Itinerary(tk.Toplevel):
     self.parent.resultsHeadingArea.changeSearchView(num)
 
   def __openTrainLink(self):
-    item = self.userSegments.item(self.userSegments.focus())
+    item = self.userSegments.item(self.userSegments.selection()[0])
     segmentInfo = self.inViewSavedSegments[item['text']].segmentInfo
     for segment in segmentInfo:
       if segmentInfo[segment]["Type"].upper() == "TRAIN":
@@ -162,10 +180,10 @@ class Itinerary(tk.Toplevel):
     #self.userSegments.selection_set(iid)
   def __moveUp(self):
     item = self.getSelection()
-    self.__move(item, 'up', self.userSegments.focus())
+    self.__move(item, 'up', self.userSegments.selection()[0])
   def __moveDown(self):
     item = self.getSelection()
-    self.__move(item, 'down', self.userSegments.focus())
+    self.__move(item, 'down', self.userSegments.selection()[0])
 
   def __doDelete(self):
     item = self.getSelection()
@@ -226,13 +244,13 @@ class Itinerary(tk.Toplevel):
       if enabled:
         sleep(0.05)
         mySelection = self.getSelection()
+        idx = self.userSegments.index(self.userSegments.selection()[0])
         for widget in selectionBasedButtons:
           widget.configure(state='normal')
         try:
-          if mySelection["Index"] == 1: self.moveUpButton.configure(state='disabled')
+          if idx == 0: self.moveUpButton.configure(state='disabled')
           # elif mySelection["Index"] == len(self.inViewSavedSegments): self.moveDownButton.configure(state='disabled')
-          elif mySelection["Index"] > len(self.userSegments.get_children()): self.moveDownButton.configure(state='disabled')
-          print(len(self.userSegments.get_children()), mySelection["Index"])
+          elif idx == len(self.userSegments.get_children())-1: self.moveDownButton.configure(state='disabled')
         except TypeError:
           self.moveUpButton.configure(state='disabled')
           self.moveDownButton.configure(state='disabled')
