@@ -59,7 +59,7 @@ class DetailWindow(tk.Toplevel):
       nonlocal _pos
       try:
         for key in before[k].keys():
-          _pos = self.texto.search(key, _pos, stopindex="end", count=count)
+          _pos = self.texto.search(str(key), _pos, stopindex="end", count=count)
           self.texto.tag_add("bold", _pos, f"{_pos} + {int(count.get())+1}c")
           #_pos = str(float(_pos)+1)
           findKeys(key, before[k])
@@ -68,7 +68,7 @@ class DetailWindow(tk.Toplevel):
     _pos = "1.0"
     count = tk.StringVar()
     for key in self.data.keys():
-      _pos = self.texto.search(key, _pos, stopindex="end", count=count)
+      _pos = self.texto.search(str(key), _pos, stopindex="end", count=count)
       self.texto.tag_add("bold", _pos, f"{_pos} + {int(count.get())+1}c")
       #_pos = str(float(_pos)+1)
       findKeys(key, self.data)
