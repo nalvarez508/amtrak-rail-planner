@@ -106,6 +106,7 @@ class StationsArea(tk.Frame):
     temp.bind("<Shift-MouseWheel>", self.ignoreHorizontalScroll)
     temp.bind("<KeyRelease>", self.__autocomplete)
     temp.bind("<Return>", lambda e: temp.event_generate("<Down>"))
+    temp.bind("<Tab>", lambda e: temp.event_generate("<Down>"))
     #temp.configure(xscrollcommand=self.ignoreHorizontalScroll)
     self.parent.us.set(temp.get(), side)
     return temp
