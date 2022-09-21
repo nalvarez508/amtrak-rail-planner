@@ -18,15 +18,14 @@ class TrainResultsArea(tk.Frame):
 
   Parameters
   ----------
-  tk : Tk
-      The parent frame.
+  tk : Frame
 
   Attributes
   ----------
   resultsArea : tk.Frame
       Holds `results` and `tvScroll`.
   buttonsArea : tk.Frame
-  trainMenu : tk.Menu
+  trainMenu : TrainMenu
   isSegmentSaved : bool
   selectedIID : str
   savedSegmentIndices : list
@@ -53,6 +52,8 @@ class TrainResultsArea(tk.Frame):
       Enables/disables the Save Segment button.
   updateDisplayColumns
       Refreshes the table's display columns.
+  saveSelection(iid='')
+      Performs validation and saves selection to Rail Pass.
   getSelection(iid='')
       Retrieves currently selected item.
   startSearch
@@ -60,7 +61,15 @@ class TrainResultsArea(tk.Frame):
   refreshHandler(response, saved)
       Loads the table with existing search results.
   """
-  def __init__(self, parent, *args, **kwargs):
+  def __init__(self, parent: tk.Tk, *args, **kwargs) -> None:
+    """
+    Initializes the results area.
+
+    Parameters
+    ----------
+    parent : tk.Tk
+        Parent window.
+    """
     tk.Frame.__init__(self, parent, *args, **kwargs)
     self.parent = parent
     self.background = self.parent.resultsBackground
@@ -107,7 +116,7 @@ class TrainResultsArea(tk.Frame):
 
     self.trainMenu = TrainMenu(self, self.results, self.inViewSegmentResults, self.saveSelection)
 
-  def toggleSaveButton(self, enabled=False):
+  def toggleSaveButton(self, enabled: bool=False) -> None:
     """
     Enables or disables the "Save Segment" button.
 
@@ -119,7 +128,7 @@ class TrainResultsArea(tk.Frame):
     if enabled: self.saveButton.config(state='normal')
     else: self.saveButton.config(state='disabled')
 
-  def updateDisplayColumns(self):
+  def updateDisplayColumns(self) -> None:
     """
     Refreshes currently displayed columns in `results`.
     """
@@ -130,14 +139,15 @@ class TrainResultsArea(tk.Frame):
       self.__populateTreeview(self.inViewSegmentResults)
     self.update_idletasks()
 
-  def __getDisplayColumns(self):
+  def __getDisplayColumns(self) -> None:
     self.dispCols.clear()
     self.columns.clear()
     self.headerCols.clear()
 
     self.columns, self.headerCols, self.dispCols = self.parent.us.getDisplayColumns()
 
-  def __trainContextMenu(self, event):
+  def __trainContextMenu(self, event) -> None:
+    """Loads the right-click context menu."""
     iid = self.results.identify_row(event.y)
     if iid:
       self.results.selection_set(iid)
@@ -150,10 +160,11 @@ class TrainResultsArea(tk.Frame):
       finally:
         self.trainMenu.grab_release()
 
-  def saveSelection(self, iid='', *args):
+  def saveSelection(self, iid: str='', *args) -> None:
     """Performs some validation for segments before saving them to the Rail Pass."""
     if iid == '': segment = self.getSelection()
     else: segment = self.getSelection(iid)
+
     def doSave():
       self.parent.us.userSelections.createSegment(segment["Train"], self.parent.resultsHeadingArea.getSearchNum())
       self.isSegmentSaved = True
@@ -161,6 +172,7 @@ class TrainResultsArea(tk.Frame):
       self.parent.us.userSelections.updateSearch(self.parent.resultsHeadingArea.getSearchNum(), deepcopy(self.savedSegmentsIndices))
       try: self.parent.itineraryWindow.updateItinerary()
       except: pass
+    
     if self.isSegmentSaved == False:
       doSave()
     else:
@@ -173,7 +185,7 @@ class TrainResultsArea(tk.Frame):
         else:
           pass
 
-  def getSelection(self, iid='', *args):
+  def getSelection(self, iid: str='', *args) -> dict:
     """
     Gets the currently selected item from the results table.
 
@@ -192,15 +204,16 @@ class TrainResultsArea(tk.Frame):
     for col in self.columns:
       print(self.results.column(col))
 
-  def __resetWidgets(self):
+  def __resetWidgets(self) -> None:
     """Removes progress bar, updates status, and enables search button."""
     self.progressBar.pack_forget()
     self.findTrainsBtn.config(state='normal')
     self.parent.statusMessage.set("Ready")
     self.isSegmentSaved = (True if (len(self.savedSegmentsIndices) > 0) else False)
+    self.saveButton.configure(state=tk.DISABLED)
     self.parent.update_idletasks()
 
-  def __clearTree(self, wipeout=True):
+  def __clearTree(self, wipeout: bool=True) -> None:
     """Wipes out all tree elements."""
     for item in self.results.get_children():
       self.results.delete(item)
@@ -208,13 +221,13 @@ class TrainResultsArea(tk.Frame):
       self.inViewSegmentResults.clear()
       self.savedSegmentsIndices.clear()
 
-  def __makeHeadings(self):
+  def __makeHeadings(self) -> None:
     for index, col in enumerate(self.headerCols):
       self.results.heading(self.columns[index], text=col, anchor='w')
       self.results.column(self.columns[index], minwidth=10, width=self.headerCols[col], stretch=True, anchor='w')
     self.results["displaycolumns"] = self.dispCols
 
-  def startSearch(self):
+  def startSearch(self) -> None:
     """
     Prepares the application to search by changing states and updating variables.
 
@@ -264,7 +277,7 @@ class TrainResultsArea(tk.Frame):
         messagebox.showerror(cfg.APP_NAME, message="Unable to search right now. The automated browser has not loaded. Try again in a few seconds.")
         self.__resetWidgets()
 
-  def __doSearchCall(self, dev=False):
+  def __doSearchCall(self, dev: bool=False) -> None:
     if dev == False: response = self.parent.searcher.oneWaySearch()
     if dev == True:
       oldWay = False
@@ -284,7 +297,7 @@ class TrainResultsArea(tk.Frame):
     
     self.__searchHandler(response)
 
-  def refreshHandler(self, response, saved):
+  def refreshHandler(self, response: dict, saved: list) -> None:
     """
     Refreshes the table with existing results.
 
@@ -303,7 +316,7 @@ class TrainResultsArea(tk.Frame):
     self.__resetWidgets()
     self.update()
 
-  def __searchHandler(self, response):
+  def __searchHandler(self, response: dict=None) -> None:
     if type(response) == dict: # Trains returned
       self.inViewSegmentResults = deepcopy(response)
       self.parent.us.userSelections.addSearch(self.parent.us.getOrigin(), self.parent.us.getDestination(), self.parent.us.getDate(), deepcopy(response))
@@ -313,7 +326,7 @@ class TrainResultsArea(tk.Frame):
       messagebox.showerror(cfg.APP_NAME, message=response)
     self.__resetWidgets()
 
-  def __populateTreeview(self, _trains):
+  def __populateTreeview(self, _trains: dict) -> None:
     """
     Populates the Treeview object with a list of trains.
 

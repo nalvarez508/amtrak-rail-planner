@@ -9,7 +9,37 @@ from easygui import filesavebox
 from views.config import BACKGROUND, ICON
 
 class DetailWindow(tk.Toplevel):
-  def __init__(self, parent, data, *args, **kwargs):
+  """
+  A class to create a JSON viewer window.
+
+  Parameters
+  ----------
+  tk : Toplevel
+  
+  Attributes
+  ----------
+  parent : tk.Tk
+  data : dict
+  dataView : tk.Frame
+  buttonsArea : tk.Frame
+  texto : tk.Text
+
+  Methods
+  -------
+  exportData
+      Saves a txt or json file with the extra data.
+  """
+  def __init__(self, parent: tk.Tk, data: dict, *args, **kwargs) -> None:
+    """
+    Initializes a detail view window.
+
+    Parameters
+    ----------
+    parent : tk.Tk
+        Owner of the window, can be a frame or Toplevel.
+    data : dict
+        Train object organizational unit.
+    """
     tk.Toplevel.__init__(self, parent, *args, **kwargs)
     self.parent = parent
     self.data = data
@@ -44,18 +74,9 @@ class DetailWindow(tk.Toplevel):
 
     self.wm_protocol('WM_DELETE_WINDOW', self.destroy)
   
-  def _dataClean(self, data) -> dict:
-    _t = {}
-    d = deepcopy(data)
-    for key in d["Segment Info"]:
-      try:
-        _t["Segment Info"][f"Segment {int(key)+1}"] = d["Segment Info"][key]
-      except ValueError:
-        _t[key] = d[key]
-    return _t
-  
-  def _thatsPrettyBold(self):
-    def findKeys(k, before):
+  def _thatsPrettyBold(self) -> None:
+    """Makes dictionary keys **BOLD.**"""
+    def findKeys(k: str, before: dict):
       nonlocal _pos
       try:
         for key in before[k].keys():
@@ -74,7 +95,10 @@ class DetailWindow(tk.Toplevel):
       findKeys(key, self.data)
     self.texto.tag_config("bold", font=("Arial", 14, "bold"))
 
-  def exportData(self):
+  def exportData(self) -> None:
+    """
+    Saves the JSON data to a text or json file.
+    """
     _def = os.path.expanduser("~")
     path = filesavebox(msg="Data can be saved in JSON or TXT formats.", title="Export Train Data", default=f"{_def}/data.json", filetypes=["*.json, *.txt"])
     if path != None:

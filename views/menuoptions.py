@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, ttk
 
 import webbrowser
 import json
@@ -17,8 +17,7 @@ class MenuOptions(tk.Menu):
 
   Parameters
   ----------
-  tk : Tk
-      The parent frame.
+  tk : Menu
 
   Attributes
   ----------
@@ -67,7 +66,7 @@ class MenuOptions(tk.Menu):
     self.viewmenu = tk.Menu(self, tearoff=0)
     self.viewmenu.add_command(label="Itinerary", command=lambda: self.parent.openItinerary())
     self.viewmenu.add_command(label="Current Journey", command=self.parent.openMap)
-    self.viewmenu.add_command(label="Route Map", command=lambda: self.openLink("https://www.amtrak.com/content/dam/projects/dotcom/english/public/documents/Maps/Amtrak-System-Map-1018.pdf"))
+    self.viewmenu.add_command(label="System Map", command=lambda: self.openLink("https://www.amtrak.com/content/dam/projects/dotcom/english/public/documents/Maps/Amtrak-System-Map-1018.pdf"))
     
     self.otpmenu = tk.Menu(self, tearoff=0)
     self.otpmenu.add_command(label="via Amtrak", command=lambda: self.openLink("https://www.amtrak.com/on-time-performance"))
@@ -84,13 +83,13 @@ class MenuOptions(tk.Menu):
     # Open station list
     # Column selection for treeview
 
-  def __openItineraryWithExport(self):
+  def __openItineraryWithExport(self) -> None:
     try:
       self.parent.itineraryWindow.doExport()
     except: # Itinerary window not open
       self.parent.openItinerary(True)
 
-  def openLink(self, l):
+  def openLink(self, l: str) -> None:
     """
     Opens a link in the default web browser.
 
@@ -101,7 +100,7 @@ class MenuOptions(tk.Menu):
     """
     webbrowser.open(l, new=1, autoraise=True)
   
-  def openBox(self, m):
+  def openBox(self, m: str) -> None:
     """
     Displays an information messagebox.
 
@@ -110,9 +109,9 @@ class MenuOptions(tk.Menu):
     m : str
         The message to display.
     """
-    tk.messagebox.showinfo(cfg.APP_NAME, message=m)
+    messagebox.showinfo(cfg.APP_NAME, message=m)
   
-  def _loadTimetables(self):
+  def _loadTimetables(self) -> None:
     # Get some data from session storage
     # For each of the datas, create a menu item
     traincodes = None
@@ -139,7 +138,7 @@ class MenuOptions(tk.Menu):
     
     self._createTimetableMenu()
       
-  def _createTimetableMenu(self):
+  def _createTimetableMenu(self) -> None:
     timetablesMenu = tk.Menu(self, tearoff=0)
     for train in self.timetableUrls:
       timetablesMenu.add_command(label=train, command=lambda url=self.timetableUrls[train]: self.openLink((url)))
@@ -148,7 +147,43 @@ class MenuOptions(tk.Menu):
     self.parent.update()
 
 class TrainMenu(tk.Menu):
-  def __init__(self, parent, tree, inview, save=None, *args, **kwargs):
+  """
+  A class for right-click context menu in train results or itinerary.
+
+  Parameters
+  ----------
+  tk : Menu
+  
+  Attributes
+  ----------
+  selectedIID : str
+  tree : ttk.Treeview
+  inview : list
+  
+  Methods
+  -------
+  openTimetable
+  openTrainLink
+  openDetailView
+  openResults
+  singleRouteUpdate
+      Map update for non-journey (all) routes.
+  """
+  def __init__(self, parent, tree: ttk.Treeview, inview: dict, save=None, *args, **kwargs) -> None:
+    """
+    Initializes the right-click context menu.
+
+    Parameters
+    ----------
+    parent : tk.Tk, tk.Frame, tk.Toplevel
+        Parent window.
+    tree : ttk.Treeview
+        Tree object from the parent.
+    inview : dict
+        Visible results dictionary from the parent.
+    save : function, optional
+        Function to save results, by default None
+    """
     tk.Menu.__init__(self, parent, tearoff=0)
     self.parent = parent
     self.selectedIID = ''
@@ -165,7 +200,8 @@ class TrainMenu(tk.Menu):
     self.add_command(label="Online Info", command=self.openTrainLink)
     self.add_command(label="Timetable", command=self.openTimetable)
   
-  def openTimetable(self):
+  def openTimetable(self) -> None:
+    """Opens a timetable(s) for the selected result."""
     item = self.tree.item(self.selectedIID)
     trainName = self.inview[item['text']].name.lower()
 
@@ -178,7 +214,8 @@ class TrainMenu(tk.Menu):
       elif trainName == 'NA':
         messagebox.showwarning(title=cfg.APP_NAME, message="Cannot view information about multiple segments.")
   
-  def openTrainLink(self):
+  def openTrainLink(self) -> None:
+    """Opens Amtrak train site(s) for the selected result."""
     item = self.tree.item(self.selectedIID)
     segmentInfo = self.inview[item['text']].segmentInfo
     for segment in segmentInfo:
@@ -190,18 +227,21 @@ class TrainMenu(tk.Menu):
             url = f"https://www.amtrak.com/{trainName}-train"
             webbrowser.open(url, new=1, autoraise=True)
   
-  def openDetailView(self):
+  def openDetailView(self) -> None:
+    """Spawns a DetailWindow with the item's info."""
     item = self.tree.item(self.selectedIID)
     _train = self.inview[item['text']]
 
     self.parent.parent.startThread(DetailWindow, [self.parent.parent, _train.organizationalUnit])
   
-  def openResults(self):
+  def openResults(self) -> None:
+    """Pulls up search results in the main window from this item's original search."""
     item = self.parent.getSelection()
     num = self.parent.parent.us.userSelections.getSegmentSearchNum(item["Index"])
     self.parent.parent.resultsHeadingArea.changeSearchView(num)
   
-  def singleRouteUpdate(self):
+  def singleRouteUpdate(self) -> None:
+    """Draws a train route on the map with intermediate stops shown."""
     _thisSelect = self.parent.getSelection(self.selectedIID)
     _name = _thisSelect["Train"].name
     self.parent.parent.openMap()

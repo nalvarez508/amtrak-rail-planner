@@ -4,7 +4,7 @@ from copy import deepcopy
 from tkinter import messagebox
 
 from views.config import APP_NAME
-from traintracks.train import RailPass
+from traintracks.train import RailPass, Train
 
 class UserSelections:
   """
@@ -42,7 +42,7 @@ class UserSelections:
       Returns `departDate` as a pretty string.
   And plenty of other fun get/set methods...
   """
-  def __init__(self):
+  def __init__(self) -> None:
     self.origin = None
     self.destination = None
     self.departDate = datetime.date.today()
@@ -63,7 +63,7 @@ class UserSelections:
     }
     self.exportColumns = deepcopy(self.columns)
 
-  def setColumns(self, vals):
+  def setColumns(self, vals: dict) -> None:
     """
     Updates the dictionary of selected columns.
 
@@ -75,7 +75,7 @@ class UserSelections:
     for col in vals:
       self.columns[col]["Selected"] = vals[col]
 
-  def getColumns(self):
+  def getColumns(self) -> dict[dict]:
     """
     Gets the column settings, in the form {Train Column: {Display Name, Header, Width, Selected}}
 
@@ -86,7 +86,7 @@ class UserSelections:
     """
     return self.columns
   
-  def setExportColumns(self, vals):
+  def setExportColumns(self, vals: dict):
     """
     Updates the columns to be used when exporting a spreadsheet. Date columns are turned into datetime objects.
 
@@ -105,7 +105,7 @@ class UserSelections:
       except ValueError:
         pass
 
-  def getDisplayColumns(self):
+  def getDisplayColumns(self) -> list:
     """
     Creates elements for a treeview object.
 
@@ -124,7 +124,7 @@ class UserSelections:
         dispCols.append(col) # Creates mapping so we can retrieve Train objects later
     return [columns, headerCols, dispCols]
 
-  def isSearchOkay(self):
+  def isSearchOkay(self) -> bool:
     """
     Performs validations at search time for station selections and departure date.
 
@@ -145,7 +145,7 @@ class UserSelections:
     else:
       return True
 
-  def __beforeSearch_isSameDateOkay(self, mostRecent):
+  def __beforeSearch_isSameDateOkay(self, mostRecent: Train) -> bool:
     if mostRecent.arrival.date() == self.departDate:
       return messagebox.askyesno(title=APP_NAME, message=f"The selected departure date for this search is the same as the most recent segment's arrival date, scheduled at {mostRecent.arrival.strftime('%I:%M %p')}. Ensure that there is ample time for a transfer.\nContinue with the search?")
     elif mostRecent.arrival.date() > self.departDate:
@@ -153,7 +153,7 @@ class UserSelections:
     else:
       return True
   
-  def __beforeSearch_isSameStationOkay(self, mostRecent):
+  def __beforeSearch_isSameStationOkay(self, mostRecent: Train) -> bool:
     # Patchwork
     origin = self.origin[self.origin.find("(")+1:self.origin.find(")")]
     destination = self.destination[self.destination.find("(")+1:self.destination.find(")")]
@@ -166,7 +166,7 @@ class UserSelections:
     else:
       return True
 
-  def getPrettyDate(self):
+  def getPrettyDate(self) -> str:
     """
     Formats `departDate` for display in the date selection area.
 
@@ -190,7 +190,7 @@ class UserSelections:
       else: return "%d"
     return datetime.datetime.strftime(self.departDate, f"%A, %b. {dayCheck()}{getSuffix()}, %Y")
 
-  def getDate(self):
+  def getDate(self) -> datetime.date:
     """
     Returns the departure date.
 
@@ -201,7 +201,7 @@ class UserSelections:
     """
     return self.departDate
   
-  def getSearchDate(self):
+  def getSearchDate(self) -> str:
     """
     Returns the search date as a string.
 
@@ -212,7 +212,7 @@ class UserSelections:
     """
     return datetime.datetime.strftime(self.departDate, "%m/%d/%Y")
   
-  def setDate(self, d):
+  def setDate(self, d: datetime.date) -> None:
     """
     Sets the departure date to d.
 
@@ -223,7 +223,7 @@ class UserSelections:
     """
     self.departDate = d
   
-  def incrementDate(self, i):
+  def incrementDate(self, i: int) -> None:
     """
     Increments the departure date by some number.
 
@@ -232,9 +232,14 @@ class UserSelections:
     i : int
         Amount to increment. Can be negative.
     """
-    self.departDate += datetime.timedelta(days=i)
+    _today = datetime.datetime.now()
+    if i < 0:
+      if self.departDate > _today.date():
+        self.departDate += datetime.timedelta(days=i)
+    elif i > 0:
+      self.departDate += datetime.timedelta(days=i)
 
-  def set(self, city, side):
+  def set(self, city: str, side: int) -> None:
     """
     Generalized set city method.
 
@@ -250,7 +255,7 @@ class UserSelections:
     elif side == 2:
       self.setDestination(city)
 
-  def setOrigin(self, o):
+  def setOrigin(self, o: str) -> None:
     """
     Sets the origin key.
 
@@ -260,7 +265,7 @@ class UserSelections:
         'Name, State (Code)'
     """
     self.origin = o
-  def getOrigin(self):
+  def getOrigin(self) -> str:
     """
     Returns the origin key.
 
@@ -271,7 +276,7 @@ class UserSelections:
     """
     return self.origin
   
-  def setDestination(self, d):
+  def setDestination(self, d: str) -> None:
     """
     Sets the destination key.
 
@@ -281,7 +286,7 @@ class UserSelections:
         'Name, State (Code)'
     """
     self.destination = d
-  def getDestination(self):
+  def getDestination(self) -> str:
     """
     Returns the destination key.
 
@@ -292,7 +297,7 @@ class UserSelections:
     """
     return self.destination
   
-  def addSegment(self, t):
+  def addSegment(self, t: Train) -> None:
     """
     Adds a segment to the railpass.
     

@@ -25,9 +25,10 @@ class Driver:
 
   Attributes
   ----------
+  chrome_options = Options
   driver : WebDriver
   """
-  def __init__(self, url="about:blank", undetected=False):
+  def __init__(self, url: str="about:blank", undetected: bool=False) -> None:
     """
     Initializes the webdriver and downloads one if necessary.
 

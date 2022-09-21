@@ -26,7 +26,17 @@ class ColumnSettings(tk.Toplevel):
   hasCheckedOne
       Spawns the window.
   """
-  def __init__(self, parent, isExport=False, *args, **kwargs):
+  def __init__(self, parent: tk.Tk, isExport: bool=False, *args, **kwargs) -> None:
+    """
+    Initializes the column selection window.
+
+    Parameters
+    ----------
+    parent : tk.Tk
+        Parent window.
+    isExport : bool, optional
+        True if the user is exporting the file and not just changing settings, by default False
+    """
     tk.Toplevel.__init__(self, parent, *args, **kwargs)
     self.parent = parent
     self.title("Column Settings")
@@ -47,17 +57,17 @@ class ColumnSettings(tk.Toplevel):
 
     self.wm_protocol("WM_DELETE_WINDOW", self.destroy)
 
-  def hasCheckedOne(self):
+  def hasCheckedOne(self) -> bool:
     """Spawns the window and returns True if at least one item is checked."""
     self.wait_window()
     return self.hasAtLeastOneChecked
 
-  def __createCheckbuttons(self):
+  def __createCheckbuttons(self) -> None:
     for index, col in enumerate(self.availableCols):
       self.checkbuttonVals.append(tk.BooleanVar(self, value=self.availableCols[col]["Selected"]))
       ttk.Checkbutton(self, text=self.availableCols[col]["Display Name"], variable=self.checkbuttonVals[index]).pack(anchor=tk.W, padx=4)
 
-  def __updateSelections(self):
+  def __updateSelections(self) -> None:
     newValues = dict()
     for index, col in enumerate(self.availableCols):
       newValues[col] = self.checkbuttonVals[index].get()

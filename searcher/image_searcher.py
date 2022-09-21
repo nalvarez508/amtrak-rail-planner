@@ -1,4 +1,5 @@
 import PIL.Image, PIL.ImageTk, PIL.ImageFile
+from tkinter import PhotoImage
 from io import BytesIO
 import base64
 import urllib.parse
@@ -37,7 +38,7 @@ class ImageSearch:
   getCityPhoto(cityNo)
       Returns a city's photo object.
   """
-  def __init__(self):
+  def __init__(self) -> None:
     self.driver = Driver().driver
     PIL.ImageFile.LOAD_TRUNCATED_IMAGES = True
 
@@ -46,7 +47,7 @@ class ImageSearch:
     self.name_city1 = None
     self.name_city2 = None
 
-  def __returnCityPhoto(self, c):
+  def __returnCityPhoto(self, c: str) -> list:
     """
     Searches Google for the first image of a city and saves it.
 
@@ -64,14 +65,14 @@ class ImageSearch:
     self.driver.get(URL)
     image = WebDriverWait(self.driver,5).until(EC.presence_of_element_located((By.XPATH, "//img[@class='rg_i Q4LuWd']")))
 
-    def checkIfB64(src):
+    def checkIfB64(src: str) -> str:
       header = src.split(',')[0]
       if header.startswith('data') and ';base64' in header:
         imgType = header.replace('data:image/', '').replace(';base64', '')
         return imgType
       return None
     
-    def getHiDef(): # Try and get image from URL and not base64 preview from google
+    def getHiDef() -> list: # Try and get image from URL and not base64 preview from google
       try:
         self.driver.find_element(By.XPATH, "//div[@class='bRMDJf islir']").click()
         bigImageArea = WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, "//img[@class='n3VNCb']")))
@@ -92,7 +93,7 @@ class ImageSearch:
 
     return getHiDef()
 
-  def loadImage(self, c, no, dims):
+  def loadImage(self, c: str, no: int, dims: list[int]) -> None:
     """
     Finds an image for a given city and returns an image object with specified dimensions.
 
@@ -105,7 +106,7 @@ class ImageSearch:
     dims : list
         Width and height of output image.
     """
-    def crop_resize(image):
+    def crop_resize(image: PIL.Image) -> PIL.Image:
       ratio = Fraction(dims[0], dims[1])
       size = dims
       # crop to ratio, center
@@ -138,7 +139,7 @@ class ImageSearch:
     except TclError as e:
       print(e)
 
-  def doCitySwap(self):
+  def doCitySwap(self) -> None:
     """
     Swaps images and city names for the origin and destination.
     """
@@ -149,7 +150,7 @@ class ImageSearch:
     self.setCityPhoto(2, self.getCityPhoto(1))
     self.setCityPhoto(1, tempPhoto2)
 
-  def __setCityName(self, cityNo, data):
+  def __setCityName(self, cityNo: int, data: str) -> None:
     """
     Updates the stored city name.
 
@@ -165,7 +166,7 @@ class ImageSearch:
     elif cityNo == 2:
       self.name_city2 = data
   
-  def getCityName(self, cityNo):
+  def getCityName(self, cityNo: int) -> str:
     """
     Returns the selected city's name.
 
@@ -184,7 +185,7 @@ class ImageSearch:
     elif cityNo == 2:
       return self.name_city2
 
-  def setCityPhoto(self, cityNo, data):
+  def setCityPhoto(self, cityNo: int, data: PhotoImage=None) -> None:
     """
     Updates the city photo variable with new image data.
 
@@ -200,7 +201,7 @@ class ImageSearch:
     elif cityNo == 2:
       self.photo_city2 = data
 
-  def getCityPhoto(self, cityNo):
+  def getCityPhoto(self, cityNo: int) -> PhotoImage:
     """
     Returns the image data for a city.
 

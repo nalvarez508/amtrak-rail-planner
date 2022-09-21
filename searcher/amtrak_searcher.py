@@ -3,6 +3,7 @@ import json
 import traceback
 from datetime import datetime
 from math import trunc
+from tkinter import StringVar, Tk, Label, ttk
 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
@@ -43,7 +44,7 @@ class AmtrakSearch:
   oneWaySearch
       Performs a search for the requested journey.
   """
-  def __init__(self, root, driver, origin="WAS", destination="NYP", departDate="03/29/2022", status=None):
+  def __init__(self, root: Tk, driver: Driver, origin: str="WAS", destination: str="NYP", departDate: str="03/29/2022", status: Label=None) -> None:
     """
     Initializes a searcher.
 
@@ -78,7 +79,7 @@ class AmtrakSearch:
 
     self.returnedError = False
 
-  def __updateStatusMessage(self, message, amt=0):
+  def __updateStatusMessage(self, message: str, amt: int=0) -> None:
     """
     Updates the parent window's status bar.
 
@@ -94,7 +95,7 @@ class AmtrakSearch:
     #self.progressbar.step(amt)
     self.root.update_idletasks()
 
-  def __updateNumberTrainsLabel(self):
+  def __updateNumberTrainsLabel(self) -> None:
     """Updates the number of trains found in the main window."""
     if self.numberTrainsFound == 1:
       self.numberTrainsLabel.set(f"{self.numberTrainsFound} train found")
@@ -102,7 +103,7 @@ class AmtrakSearch:
       self.numberTrainsLabel.set(f"{self.numberTrainsFound} trains found")
     self.root.update_idletasks()
 
-  def preSearchSetup(self, origin, destination, departDate, pb, l):
+  def preSearchSetup(self, origin: str, destination: str, departDate: str, pb: ttk.Progressbar, l: StringVar) -> None:
     """
     Initializes variables to begin a search.
 
@@ -147,7 +148,7 @@ class AmtrakSearch:
     return self.thisSearchResultsAsTrain
 
   # Retrives price information from search page
-  def __findPrice(self, searcher, xpath):
+  def __findPrice(self, searcher, xpath: str) -> str:
     """
     Finds the value of a given element in the price area (coach, business, etc).
 
@@ -174,7 +175,7 @@ class AmtrakSearch:
     except NoSuchElementException:
       return None
   
-  def __isSoldOut(self, c, b, s):
+  def __isSoldOut(self, c: str=None, b: str=None, s: str=None) -> bool:
     """
     Determines if a certain fare bracket is sold out.
 
@@ -203,7 +204,7 @@ class AmtrakSearch:
     else:
       return False
   
-  def __checkTripDetails(self, xpath):
+  def __checkTripDetails(self, xpath) -> list[str]:
     try:
       xpath.find_element(By.XPATH, ".//button[@amt-auto-test-id='trip-details-link']").click()
       dropdown = xpath.find_element(By.XPATH, "//div[contains(@class, 'am-dropdown-content am-dropdown-content--bottom-right')]")
@@ -214,10 +215,11 @@ class AmtrakSearch:
         _names.append(_this.split(' ', 1)[1])
 
       dropdown.find_element(By.XPATH, "//button[@class='close pull-right']").click()
+      return _names
     except NoSuchElementException:
       return []
 
-  def __findTrainInfo(self, trains):
+  def __findTrainInfo(self, trains: list) -> None:
     """
     Finds information about each result on the search page.
 
@@ -302,7 +304,7 @@ class AmtrakSearch:
         print(traceback.format_exc())
         print(e) #Reached end of list but there is a second page
 
-  def __checkEveryPage(self, area, pages, isScrape=True):
+  def __checkEveryPage(self, area, pages: int, isScrape: bool=True) -> None:
     """
     Checks every page of search results. If there is one, it does not loop.
 
@@ -312,6 +314,8 @@ class AmtrakSearch:
         Search area at the bottom of the page where the page links are located.
     pages : int
         Number of pages of results.
+    isScrape: bool, Optional
+        Whether to use the old webscraping method (True) or the new JSON method (False), by default False
     """
     
     def scrapingMethod():
@@ -334,7 +338,20 @@ class AmtrakSearch:
       if self.__processTrainJson() != True:
         scrapingMethod()
 
-  def __processTrainJson(self, file=None) -> bool:
+  def __processTrainJson(self, file: dict=None) -> bool:
+    """
+    New method to get train search results from session storage JSON.
+
+    Parameters
+    ----------
+    file : dict, optional
+        For testing onlt, specify a results dictionary to use, by default None
+
+    Returns
+    -------
+    bool
+        True, if the data was able to be parsed.
+    """
     # Need error handling (service interruptions)
     try:
       if file == None:
@@ -348,7 +365,8 @@ class AmtrakSearch:
       for index, opt in enumerate(_journeyLegOptionsMultiple):
         self.__updateStatusMessage(f"Processing results", 22./len(_journeyLegOptionsMultiple))
         try:
-          if len(opt["reservableAccommodations"]) > 0:
+          if len(opt["reservableAccommodations"]) > 0: # Not sold out
+
             # Basic Data Gathering // Compare to __findTrainInfo()
             segmentType = len(opt["travelLegs"])
             if opt["isMultiSegment"] == True: #Multi-segment
@@ -445,7 +463,7 @@ class AmtrakSearch:
       return True
     else: return False
 
-  def __enterStationInfo(self, area):
+  def __enterStationInfo(self, area) -> None:
     """
     Fills in origin and destination fields.
 
@@ -470,7 +488,7 @@ class AmtrakSearch:
     inputField2.send_keys(self.destination)
     WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, "//button[contains(@aria-label,'To')]"))) # Station name autofilled
 
-  def __enterDepartDate(self, area):
+  def __enterDepartDate(self, area) -> None:
     """
     Fills in departure date.
 
@@ -486,7 +504,22 @@ class AmtrakSearch:
     inputField3.send_keys(f"{self.departDate}\t") #Depart Date
     #searchArea.find_element(by=By.XPATH, value="//input[@id='mat-input-4']").send_keys("03/27/2022") #Return Date
 
-  def _getSessionStorage(self, key, beCareful=False):
+  def _getSessionStorage(self, key: str, beCareful: bool=False) -> dict:
+    """
+    Retrieves an item from session storage.
+
+    Parameters
+    ----------
+    key : str
+        Item to retrieve.
+    beCareful : bool, optional
+        If True, do NOT refresh the page to get the results, by default False
+
+    Returns
+    -------
+    dict
+        Session storage item.
+    """
     time.sleep(1)
     _tc = self.driver.execute_script("return window.sessionStorage.getItem(arguments[0]);", key)
     if _tc == None and beCareful == False:
@@ -495,9 +528,14 @@ class AmtrakSearch:
       _tc = self.driver.execute_script("return window.sessionStorage.getItem(arguments[0]);", key)
     return _tc
 
-  def oneWaySearch(self, isScrape=True):
+  def oneWaySearch(self, isScrape: bool=True) -> dict:
     """
     Performs a search for Amtrak trains on a one-way journey.
+
+    Parameters
+    ----------
+    isScrape : bool
+        If True, use the old scraping method, otherwise use the JSON method.
 
     Returns
     -------

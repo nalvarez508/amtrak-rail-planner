@@ -43,6 +43,9 @@ class Itinerary(tk.Toplevel):
   exportButton : ttk.Button
   openResultsButton : ttk.Button
       Loads this segment's search results into the train results area.
+  mapButton : ttk.Button
+  trainMenu : TrainMenu
+      Right-click context menu.
   
   Methods
   -------
@@ -55,7 +58,17 @@ class Itinerary(tk.Toplevel):
   updateDisplayColumns
       Changes which columns are shown in the table.
   """
-  def __init__(self, parent, spawnExport=False, *args, **kwargs):
+  def __init__(self, parent: tk.Tk, spawnExport: bool=False, *args, **kwargs) -> None:
+    """
+    Initializes the itinerary window.
+
+    Parameters
+    ----------
+    parent : tk.Tk
+        Parent window.
+    spawnExport : bool, optional
+        Launch the export command on open (File -> Export), by default False
+    """
     tk.Toplevel.__init__(self, parent, *args, **kwargs)
     self.parent = parent
     self.geometry('800x330')
@@ -111,13 +124,18 @@ class Itinerary(tk.Toplevel):
     if spawnExport: self.doExport()
     self.wm_protocol("WM_DELETE_WINDOW", self.__onClose)
 
-  def __onClose(self):
+  def __onClose(self) -> None:
     self.parent.closeItinerary()
     self.destroy()
   
-  def getSelection(self, iid=''):
+  def getSelection(self, iid: str='') -> dict:
     """
     Gets the currently selected item from the results table.
+
+    Parameters
+    ----------
+    iid : str, Optional
+        IID to get info from, by default ''
 
     Returns
     -------
@@ -130,7 +148,8 @@ class Itinerary(tk.Toplevel):
       myTrain = (self.inViewSavedSegments[self.userSegments.item(item, "text")]) # Train object
       return {"Index": self.userSegments.item(item, "text"), "Train": myTrain}
   
-  def __trainContextMenu(self, event):
+  def __trainContextMenu(self, event) -> None:
+    """Opens the right-click context menu."""
     iid = self.userSegments.identify_row(event.y)
     if iid:
       self.userSegments.selection_set(iid)
@@ -142,7 +161,8 @@ class Itinerary(tk.Toplevel):
       finally:
         self.trainMenu.grab_release()
 
-  def _callJourneyMap(self):
+  def _callJourneyMap(self) -> None:
+    """Opens a map with all segments displayed, but no intermediate stops."""
     self.parent.openMap()
     _allSegmentInfo = []
     _allCitySegments = []
@@ -154,13 +174,14 @@ class Itinerary(tk.Toplevel):
     
     self.parent.mapWindow.drawTrainRoute(_allSegmentInfo, _allCitySegments)
 
-  def __openResults(self):
+  def __openResults(self) -> None:
     # Finds search results index for this segment
     item = self.getSelection()
     num = self.parent.us.userSelections.getSegmentSearchNum(item["Index"])
     self.parent.resultsHeadingArea.changeSearchView(num)
 
   def __openTrainLink(self):
+    # Moved to TrainMenu
     item = self.userSegments.item(self.userSegments.selection()[0])
     segmentInfo = self.inViewSavedSegments[item['text']].segmentInfo
     for segment in segmentInfo:
@@ -172,20 +193,21 @@ class Itinerary(tk.Toplevel):
             url = f"https://www.amtrak.com/{trainName}-train"
             webbrowser.open(url, new=1, autoraise=True)
 
-  def __move(self, item, dir, iid):
+  def __move(self, item: dict, dir: str, iid: str=None) -> None:
     """Moves an treeview `item` up or down."""
     self.parent.us.userSelections.swapSegment(item["Index"], dir)
     self.updateItinerary()
     #self.userSegments.focus(iid) # Can't find IID
     #self.userSegments.selection_set(iid)
-  def __moveUp(self):
+  def __moveUp(self) -> None:
     item = self.getSelection()
     self.__move(item, 'up', self.userSegments.selection()[0])
-  def __moveDown(self):
+  def __moveDown(self) -> None:
     item = self.getSelection()
     self.__move(item, 'down', self.userSegments.selection()[0])
 
-  def __doDelete(self):
+  def __doDelete(self) -> None:
+    """Deletes a saved segment."""
     item = self.getSelection()
     answer = messagebox.askyesno(title="Delete Segment", message=f"Are you sure you want to delete this {item['Train'].name} trip?")
     if answer == True:
@@ -194,10 +216,8 @@ class Itinerary(tk.Toplevel):
       # Refreshes treeview so we can save the segment again
       self.parent.resultsHeadingArea.changeSearchView(self.parent.resultsHeadingArea.searchNum)
 
-  def doExport(self): # Move to main window?
-    """
-    Prompts the user for a directory to save to, the desired attributes, and saves the itinerary.
-    """
+  def doExport(self) -> None: # Move to main window?
+    """Prompts the user for a directory to save to, the desired attributes, and saves the itinerary."""
     self.update()
     defaultPath = os.path.join(os.path.expanduser('~/'), 'My Itinerary.csv')
     exportPath = easygui.filesavebox(default=defaultPath, filetypes=['*.csv'])
@@ -216,10 +236,8 @@ class Itinerary(tk.Toplevel):
   def _test_getGeometry(self):
     print("Itinerary:", self.geometry(None))
 
-  def updateItinerary(self):
-    """
-    Refreshes the treeview object with new information from the Rail Pass object.
-    """
+  def updateItinerary(self) -> None:
+    """Refreshes the treeview object with new information from the Rail Pass object."""
     self.__clearTree()
     self.inViewSavedSegments = self.parent.us.userSelections.getSegments()
     self.__populateTreeview(self.inViewSavedSegments)
@@ -227,7 +245,7 @@ class Itinerary(tk.Toplevel):
     self.__buttonStateChanges()
     self.update_idletasks()
 
-  def __exportButtonCheck(self):
+  def __exportButtonCheck(self) -> None:
     """If there are no segments present, do not allow an export."""
     if self.userSegments.get_children() != ():
       self.exportButton.configure(state='normal')
@@ -236,8 +254,8 @@ class Itinerary(tk.Toplevel):
       self.exportButton.configure(state='disabled')
       self.mapButton.configure(state='disabled')
 
-  def __buttonStateChanges(self, enabled=False):
-    """Enables or disables every button besides Export."""
+  def __buttonStateChanges(self, enabled: bool=False) -> None:
+    """Enables or disables every button besides Export. For example, the topmost item cannot Move Up."""
     def doChanges():
       selectionBasedButtons = [self.deleteButton, self.moveDownButton, self.moveUpButton, self.openResultsButton, self.trainInfoButton]
 
@@ -261,16 +279,14 @@ class Itinerary(tk.Toplevel):
     
     self.parent.startThread(doChanges)
     
-  def __makeHeadings(self):
+  def __makeHeadings(self) -> None:
     for index, col in enumerate(self.headerCols):
       self.userSegments.heading(self.columns[index], text=col, anchor='w')
       self.userSegments.column(self.columns[index], minwidth=10, width=self.headerCols[col], stretch=True, anchor='w')
     self.userSegments["displaycolumns"] = self.dispCols
   
-  def updateDisplayColumns(self):
-    """
-    Changes which columns are currently shown in the table.
-    """
+  def updateDisplayColumns(self) -> None:
+    """Changes which columns are currently shown in the table."""
     self.__getDisplayColumns()
     self.userSegments["displaycolumns"] = self.dispCols
     if self.inViewSavedSegments != {}:
@@ -278,7 +294,7 @@ class Itinerary(tk.Toplevel):
       self.__populateTreeview(self.inViewSavedSegments)
     self.update_idletasks()
 
-  def __getDisplayColumns(self):
+  def __getDisplayColumns(self) -> None:
     self.dispCols.clear()
     self.columns.clear()
     self.headerCols.clear()
@@ -302,11 +318,11 @@ class Itinerary(tk.Toplevel):
       except ValueError:
         pass
   
-  def __clearTree(self):
+  def __clearTree(self) -> None:
     for item in self.userSegments.get_children():
       self.userSegments.delete(item)
 
-  def __populateTreeview(self, trains):
+  def __populateTreeview(self, trains: dict) -> None:
     """
     Populates the Treeview object with a list of trains.
 

@@ -13,8 +13,7 @@ class StationsArea(tk.Frame):
   
   Parameters
   ----------
-  tk : Tk
-      The parent frame.
+  tk : Frame
       
   Attributes
   ----------
@@ -29,7 +28,15 @@ class StationsArea(tk.Frame):
   destination : ttk.Combobox
   swapButton : ttk.Button
   """
-  def __init__(self, parent, *args, **kwargs):
+  def __init__(self, parent: tk.Tk, *args, **kwargs) -> None:
+    """
+    Initializes this area.
+
+    Parameters
+    ----------
+    parent : tk.Tk
+        Parent window.
+    """
     tk.Frame.__init__(self, parent, *args, **kwargs)
     self.parent = parent
     self.stations = Stations()
@@ -54,7 +61,7 @@ class StationsArea(tk.Frame):
     #self.parent.startThread(self.parent.doRefresh, [self.stations.returnCityState(self.origin.get()), 1])
     #elif os.name == 'nt': self.parent.startThread(self.parent.imageArea.doRefresh, [self.stations.returnCityState(self.destination.get()), 2])
 
-  def __swapStations(self):
+  def __swapStations(self) -> None:
     """Swaps the origin and destination, both Combobox objects and ImageArea labels."""
     newOriginCity = self.destination.current()
     newDestinationCity = self.origin.current()
@@ -69,7 +76,7 @@ class StationsArea(tk.Frame):
     #self.origin.xview_scroll(0*(event.delta/120), "units")
     #self.destination.xview_scroll(0*(event.delta/120), "units")
 
-  def __autocomplete(self, event):
+  def __autocomplete(self, event) -> None:
     """If the user types in the combobox and presses Enter, results with from that query will be displayed."""
     val = event.widget.get()
 
@@ -82,7 +89,7 @@ class StationsArea(tk.Frame):
           data.append(item)
       event.widget['values'] = data
 
-  def __createCombobox(self, side):
+  def __createCombobox(self, side: int) -> ttk.Combobox:
     """
     Creates a Combobox widget with all stations and a random initial selection.
 
@@ -111,7 +118,7 @@ class StationsArea(tk.Frame):
     self.parent.us.set(temp.get(), side)
     return temp
 
-  def __selectionChangedCallback(self, widget, side, isSwap=False, e=None):
+  def __selectionChangedCallback(self, widget: ttk.Combobox, side: int, isSwap: bool=False, e=None) -> None:
     """
     Event handler for item selections in the Combobox.
 

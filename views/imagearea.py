@@ -13,8 +13,7 @@ class ImageArea(tk.Frame):
   
   Parameters
   ----------
-  tk : Tk
-      The parent frame.
+  tk : Frame
       
   Attributes
   ----------
@@ -34,7 +33,15 @@ class ImageArea(tk.Frame):
   updateImage(side)
       Refreshes the selected image Label.
   """
-  def __init__(self, parent, *args, **kwargs):
+  def __init__(self, parent: tk.Tk, *args, **kwargs) -> None:
+    """
+    One time initialization of an Image Searcher, should be persistent throughout app usage due to cost of launching webdriver.
+
+    Parameters
+    ----------
+    parent : tk.Tk
+        Parent window.
+    """
     tk.Frame.__init__(self, parent, *args, **kwargs)
     self.parent = parent
     self.imageCatcher = ImageSearch()
@@ -52,13 +59,14 @@ class ImageArea(tk.Frame):
     self.leftInfo.config(text=f"{self.leftImage.winfo_width()}x{self.leftImage.winfo_height()}")
     self.rightInfo.config(text=f"{self.leftImage.winfo_width()}x{self.leftImage.winfo_height()}")
 
-  def __photoClickCallback(self, side):
+  def __photoClickCallback(self, side: int) -> None:
+    """Opens a tourism link to a selected photo."""
     myCity = self.imageCatcher.getCityName(side)
     baseUrl = "https://duckduckgo.com/?q=!ducky+"
     myCityUrlSuffix = quote((myCity + " tourism official"))
     webbrowser.open(baseUrl + myCityUrlSuffix) # "I'm Feeling Lucky" result
 
-  def doRefresh(self, city, side, isSwap=False):
+  def doRefresh(self, city: str, side: int, isSwap: bool=False) -> None:
     """
     Refreshes the ImageArea labels with new cities.
 
@@ -90,7 +98,7 @@ class ImageArea(tk.Frame):
       self.updateImage(side)
     self.update_idletasks()
 
-  def updateImage(self, side):
+  def updateImage(self, side: int) -> None:
     """
     Gets the new image to be displayed on the appropriate side.
 

@@ -42,14 +42,14 @@ class RailPass:
   getMostRecentSegment
       Returns the most recent segment.
   """
-  def __init__(self):
+  def __init__(self) -> None:
     self.numSegments = 1
     self.numSearches = 0
     self.segments = dict()
     self.segmentResults = dict()
     self.allResults = dict()
   
-  def updateSearch(self, num, saved):
+  def updateSearch(self, num: int, saved: list) -> None:
     """
     Updates a `allResults` key dict with any new saved segments.
 
@@ -64,7 +64,7 @@ class RailPass:
     else: self.allResults[num]["Has Segment Saved"] = True
     self.allResults[num]["Saved Index"] = saved
 
-  def addSearch(self, origin, destination, date, s):
+  def addSearch(self, origin: str, destination: str, date: datetime.date, s: dict) -> None:
     """
     Adds search results to `allResults`.
 
@@ -82,7 +82,7 @@ class RailPass:
     self.numSearches += 1
     self.allResults[self.numSearches] = {"Origin": origin, "Destination": destination, "Date": date, "Has Segment Saved": False, "Results": s, "Saved Index": []}
   
-  def getSearch(self, num):
+  def getSearch(self, num: int) -> dict[dict]:
     """
     Gets a dictionary at search number.
 
@@ -97,7 +97,7 @@ class RailPass:
         Dictionary including "Results" key.
     """
     return self.allResults[num]
-  def getSegmentSearchNum(self, segment):
+  def getSegmentSearchNum(self, segment: int) -> int:
     """
     Returns a search number for the given segment.
 
@@ -113,7 +113,7 @@ class RailPass:
     """
     return self.segmentResults[segment]
 
-  def getSegments(self):
+  def getSegments(self) -> dict:
     """
     Returns all saved segments.
 
@@ -124,13 +124,13 @@ class RailPass:
     """
     return self.segments
 
-  def createCsv(self, path, cols):
+  def createCsv(self, path: str, cols: dict) -> bool:
     """
     Writes data to a CSV file.
 
     Parameters
     ----------
-    path : os.path
+    path : str
         Path to save the file at, including file name.
     cols : dict
         Columns as returned by `UserSelections.getExportColumns()`
@@ -171,7 +171,7 @@ class RailPass:
       print(e)
       return False
 
-  def createSegment(self, segment, searchNum):
+  def createSegment(self, segment, searchNum: int) -> None:
     """
     Creates a saved Rail Pass segment.
 
@@ -186,7 +186,7 @@ class RailPass:
     self.segmentResults[self.numSegments] = searchNum
     self.numSegments += segment.numberOfSegments
   
-  def __adjust(self, segment):
+  def __adjust(self, segment: int) -> list:
     """Finds segments around (left or right) a given segment number."""
     keys = list(self.segments.keys())
     removing = keys.index(segment)
@@ -197,7 +197,7 @@ class RailPass:
     except (IndexError, ValueError, KeyError): _next=0
     return [_prev, _curr, _next]
 
-  def deleteSegment(self, segment):
+  def deleteSegment(self, segment: int) -> int:
     """
     Deletes a segment from `segments` and reorders the dictionary.
 
@@ -244,7 +244,7 @@ class RailPass:
     self.numSegments -= cutBy
     return affectedSearch
 
-  def swapSegment(self, segment, direction):
+  def swapSegment(self, segment: int, direction: str) -> None:
     """
     Moves a segment "up" or "down" in the itinerary.
 
@@ -331,6 +331,10 @@ class Train:
       Information about segment (direct, multiple)
   numberOfSegments : int
       Total trip segments, defaults to 1 unless other info is available.
+  segmentInfo : dict
+      Contains information about all segments.
+  citySegments : list[str]
+      Stores station codes for all origin/destination.
   organizationalUnit : dict
       Structured representation of the Train object for use in a Treeview object.
 
@@ -339,7 +343,7 @@ class Train:
   returnSelectedElements(cols)
       Gets a list of elements that match certain attributes in the `organizationalUnit`.
   """
-  def __init__(self, key):
+  def __init__(self, key: dict) -> None:
     """
     Initializes the Train object,
 
@@ -399,10 +403,10 @@ class Train:
       "City Segments":self.citySegments
     }
 
-  def __str__(self):
+  def __str__(self) -> str:
     return f"{json.dumps(self.organizationalUnit, indent=2)}"
   
-  def __eq__(self, other):
+  def __eq__(self, other) -> bool:
     if other != None:
       if self.number == other.number:
         if self.departure == other.departure:
@@ -411,15 +415,15 @@ class Train:
       else: return False
     else: return False
   
-  def __lt__(self, other):
+  def __lt__(self, other) -> bool:
     if self.departure < other.arrival: return True
     else: return False
   
-  def __gt__(self, other):
+  def __gt__(self, other) -> bool:
     if self.departure > other.arrival: return True
     else: return False
 
-  def __findSegments(self):
+  def __findSegments(self) -> int:
     """
     Tries to find out how many segments this journey has.
 
@@ -454,7 +458,7 @@ class Train:
     elif compare == False:
       return doDayStringPrettification()
   
-  def _makePrettyDates(self, obj=None, forcePretty=False):
+  def _makePrettyDates(self, obj: datetime.datetime=None, forcePretty: bool=False) -> list[str]:
     """
     Removes leading zeroes, potentially fixes the year, and adds a suffix to the date display string.
 
@@ -486,7 +490,7 @@ class Train:
     elif self.departure < self.arrival: # Return day of week, date, time
       return [doDayStringPrettification(self.departure, "%a. %d"), doDayStringPrettification(self.arrival, "%a. %d")]
 
-  def returnSelectedElements(self, cols):
+  def returnSelectedElements(self, cols: list) -> list:
     """
     Given a list of attributes, return the corresponding values from `organizationalUnit`.
 
@@ -514,7 +518,7 @@ class Train:
         print(f"Attribute {col} is not recognized.")
     return temp
 
-  def __convertToDatetime(self, d, t):
+  def __convertToDatetime(self, d: str, t: str) -> datetime.datetime:
     """
     Takes in strings of date and time and creates an object.
 

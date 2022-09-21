@@ -21,12 +21,14 @@ class Stations:
       Returns a 'Station name, State' string from a key.
   getStationCode(key)
       Returns an Amtrak station code from a key.
+  returnCityStateFromCode(code)
+      Returns 'City, State' string from a station code.
   """
-  def __init__(self):
+  def __init__(self) -> None:
     self.stations = dict()
     self.__getAmtrakStations()
   
-  def __getAmtrakStations(self):
+  def __getAmtrakStations(self) -> None:
     """
     Populates the Station object's active Amtrak station dictionary from a Wikipedia list.
     
@@ -48,7 +50,7 @@ class Stations:
         state = rowData[3].text.strip() # State, as an abbreviation
         self.stations[f"{name}, {state} ({code})"] = {"Code":code, "Name":name, "City":city, "State":state}
 
-  def returnStationKeys(self):
+  def returnStationKeys(self) -> list[str]:
     """
     Returns a list of stations in the form 'Name, State (Code)' for use in a Combobox.
     
@@ -59,7 +61,7 @@ class Stations:
     """
     return list(self.stations.keys())
   
-  def returnCityState(self, key):
+  def returnCityState(self, key: str) -> str:
     """
     Returns a city-state string for a friendly display of location, regardless of station name. Used for image searches.
 
@@ -75,7 +77,7 @@ class Stations:
     """
     return f"{self.stations[key]['City']}, {self.stations[key]['State']}"
   
-  def returnStationNameAndState(self, key):
+  def returnStationNameAndState(self, key: str) -> str:
     """
     Returns the station name and state to provide context to location, regardless of station name. Used for results header.
     
@@ -91,7 +93,7 @@ class Stations:
     """
     return f"{self.stations[key]['Name']}, {self.stations[key]['State']}"
   
-  def getStationCode(self, key):
+  def getStationCode(self, key: str) -> str:
     """
     Returns the Amtrak-defined station code.
 
@@ -106,7 +108,20 @@ class Stations:
     """
     return self.stations[key]["Code"]
 
-  def returnCityStateByCode(self, code):
+  def returnCityStateByCode(self, code: str) -> str:
+    """
+    Returns a 'City, State' string from a station code.
+
+    Parameters
+    ----------
+    code : str
+        Amtrak station code, three letters.
+
+    Returns
+    -------
+    str
+        'City, State'
+    """
     _key = ''
     for name in self.stations:
       if code == self.stations[name]["Code"]:

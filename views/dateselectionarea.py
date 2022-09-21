@@ -15,7 +15,6 @@ class DateSelectionArea(tk.Frame):
   Parameters
   ----------
   tk : Tk
-      The parent frame.
       
   Attributes
   ----------
@@ -31,7 +30,15 @@ class DateSelectionArea(tk.Frame):
       Displays currently selected date.
   calendar : tkcalendar.Calendar
   """
-  def __init__(self, parent, *args, **kwargs):
+  def __init__(self, parent: tk.Tk, *args, **kwargs) -> None:
+    """
+    Initializes the date selection frame.
+
+    Parameters
+    ----------
+    parent : tk.Tk
+        Parent window.
+    """
     tk.Frame.__init__(self, parent, *args, **kwargs)
     self.parent = parent
     self.isCalendarShown = False
@@ -50,7 +57,7 @@ class DateSelectionArea(tk.Frame):
 
     self.currentDate.bind("<Button-1>", lambda e: self.__showCalendar())
 
-  def __changeDate(self, d):
+  def __changeDate(self, d) -> None:
     """
     Changes the departure date and updates the display.
 
@@ -66,18 +73,18 @@ class DateSelectionArea(tk.Frame):
     self.dateDisplay.set(self.parent.us.getPrettyDate())
     self.update_idletasks()
   
-  def __callbackCalendar(self, e=None):
+  def __callbackCalendar(self, e=None) -> None:
     """Gets selected date and removes calendar from view."""
     self.__changeDate(self.calendar.selection_get())
     self.__removeCal()
   
-  def __removeCal(self):
+  def __removeCal(self) -> None:
     time.sleep(0.15)
     self.calendar.grid_remove()
     self.isCalendarShown = False
     self.update_idletasks()
 
-  def __showCalendar(self):
+  def __showCalendar(self) -> None:
     """Shows the calendar if it isn't showing already, otherwise removes it."""
     if self.isCalendarShown == False:
       self.calendar.grid(row=1, column=0, columnspan=4, pady=8)
@@ -86,7 +93,7 @@ class DateSelectionArea(tk.Frame):
       self.__removeCal()
     self.update_idletasks()
 
-  def __createCalendarArea(self):
+  def __createCalendarArea(self) -> Cal:
     rightNow = self.parent.us.getDate()
     cal = Cal(self, selectmode='day', year=rightNow.year, month=rightNow.month, day=rightNow.day, firstweekday="sunday", mindate=rightNow, date_pattern="m/d/y")
     if os.name == 'posix': cal.configure(font='TkDefaultFont 14', background='seashell3', selectforeground='red', foreground='black')

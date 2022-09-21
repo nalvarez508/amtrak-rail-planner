@@ -7,7 +7,20 @@ from tkintermapview import convert_address_to_coordinates
 
 from traintracks.route import Route
 
-def amtrakAddressRequest(stationCode):
+def amtrakAddressRequest(stationCode: str) -> list[str]:
+  """
+  Given a station code, returns address of the station from a web request to Amtrak.
+
+  Parameters
+  ----------
+  stationCode : str
+      Amtrak station code (three letter string)
+
+  Returns
+  -------
+  list[str]
+      [Street number and name, City/State/Zip] or None if nothing was found.
+  """
   # Find station page
   # Parse for address
   try:
@@ -24,7 +37,20 @@ def amtrakAddressRequest(stationCode):
   except:
     return None
 
-def getCoords(code) -> list:
+def getCoords(code: str) -> list[float]:
+  """
+  Finds coordinates of an Amtrak station.
+
+  Parameters
+  ----------
+  code : str
+      Amtrak station code, three letter string.
+
+  Returns
+  -------
+  list[float]
+      [Latitude, Longitude] or None.
+  """
   address = amtrakAddressRequest(code)
   try: coords = convert_address_to_coordinates(f"{address[0].strip()}, {address[1].strip()}")
   except (TypeError, IndexError):
@@ -49,23 +75,8 @@ def getCoords(code) -> list:
       print(f"Could not find coordinates for station {code}: {address}")
   return coords
 
-def _coordinatesRequest(address):
-  # Make a request to API
-  # Parse the JSON
-  # Return lat/lon
-  data = f"locate={address}, United States&region=US&geoit=JSON&strictmode=1"
-  print(address)
-  response = requests.get("https://geocode.xyz", data=data)
-  print(data)
-  try:
-    apiJsonData = response.json()
-    try:
-      return [apiJsonData["latt"], apiJsonData["longt"]]
-    except:
-      return None
-  except json.JSONDecodeError: return None
-
-def _loadAllRoutes() -> dict:
+def _loadAllRoutes() -> dict[Route]:
+  """Finds the routes folder in the project directory and returns a dict of the route geojson data."""
   cwd = os.path.dirname(os.path.realpath(__file__))
   _folder = os.path.join(cwd, "routes")
 
