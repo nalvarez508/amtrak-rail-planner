@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 
 import webbrowser
 import json
@@ -7,6 +8,7 @@ from copy import deepcopy
 from time import sleep
 
 from views.columnsettings import ColumnSettings
+from views.details import DetailWindow
 from . import config as cfg
 
 class MenuOptions(tk.Menu):
@@ -144,3 +146,69 @@ class MenuOptions(tk.Menu):
     self.viewmenu.add_cascade(label="Timetables", menu=timetablesMenu)
     self.update()
     self.parent.update()
+
+class TrainMenu(tk.Menu):
+  def __init__(self, parent, tree, inview, save=None, *args, **kwargs):
+    tk.Menu.__init__(self, parent, tearoff=0)
+    self.parent = parent
+    self.selectedIID = ''
+    self.tree = tree
+    self.inview = inview
+
+    if save != None:
+      self.add_command(label="Save Segment", command=save)
+      self.add_separator()
+    self.add_command(label="Route Map", command=self.singleRouteUpdate)
+    self.add_command(label="More Details", command=self.openDetailView)
+    self.add_separator()
+    if save == None: self.add_command(label="Search Results", command=self.openResults)
+    self.add_command(label="Online Info", command=self.openTrainLink)
+    self.add_command(label="Timetable", command=self.openTimetable)
+  
+  def openTimetable(self):
+    item = self.tree.item(self.selectedIID)
+    trainName = self.inview[item['text']].name.lower()
+
+    segmentInfo = self.inview[item['text']].segmentInfo
+    for segment in segmentInfo:
+      if segmentInfo[segment]["Type"].upper() == "TRAIN":
+        baseUrl = "https://duckduckgo.com/?q=!ducky+"
+        trainSuffix = quote((segmentInfo[segment]["Name"] + " train timetable schedule Amtrak filetype:pdf"))
+        webbrowser.open((baseUrl + trainSuffix), new=1, autoraise=True)
+      elif trainName == 'NA':
+        messagebox.showwarning(title=cfg.APP_NAME, message="Cannot view information about multiple segments.")
+  
+  def openTrainLink(self):
+    item = self.tree.item(self.selectedIID)
+    segmentInfo = self.inview[item['text']].segmentInfo
+    for segment in segmentInfo:
+      if segmentInfo[segment]["Type"].upper() == "TRAIN":
+        trainName = segmentInfo[segment]["Name"].lower()
+        trainName = trainName.replace(' ', '-')
+        if ' ' not in trainName:
+          if trainName != "NA":
+            url = f"https://www.amtrak.com/{trainName}-train"
+            webbrowser.open(url, new=1, autoraise=True)
+  
+  def openDetailView(self):
+    item = self.tree.item(self.selectedIID)
+    _train = self.inview[item['text']]
+
+    self.parent.parent.startThread(DetailWindow, [self.parent.parent, _train.organizationalUnit])
+  
+  def openResults(self):
+    item = self.parent.getSelection()
+    num = self.parent.parent.us.userSelections.getSegmentSearchNum(item["Index"])
+    self.parent.parent.resultsHeadingArea.changeSearchView(num)
+  
+  def singleRouteUpdate(self):
+    _thisSelect = self.parent.getSelection(self.selectedIID)
+    _name = _thisSelect["Train"].name
+    self.parent.parent.openMap()
+    if _thisSelect["Train"].numberOfSegments > 1:
+      if _thisSelect["Train"].segmentInfo != {}:
+        self.parent.parent.mapWindow.drawTrainRoute(_thisSelect["Train"].segmentInfo, _thisSelect["Train"].citySegments)
+      else:
+        self.parent.parent.mapWindow.drawTrainRoute(_name, [_thisSelect["Train"].origin, _thisSelect["Train"].destination])
+    else:
+      self.parent.parent.mapWindow.drawTrainRoute(_name, [_thisSelect["Train"].origin, _thisSelect["Train"].destination])
