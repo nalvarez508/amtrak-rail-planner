@@ -9,6 +9,8 @@ import os
 from urllib.parse import quote
 
 from . import config as cfg
+from views.details import DetailWindow
+from views.menuoptions import TrainMenu
 
 class TrainResultsArea(tk.Frame):
   """
@@ -65,10 +67,8 @@ class TrainResultsArea(tk.Frame):
     self.config(background=self.background)
     self.resultsArea = tk.Frame(self)
     self.buttonsArea = tk.Frame(self, background=self.background)
-    self.trainMenu = tk.Menu(self, tearoff=0)
-    self.trainMenu.add_command(label="Save Segment", command=lambda: self.__saveSelection(self.selectedIID))
-    self.trainMenu.add_command(label="Train Info", command=self.__openTrainLink)
-    self.trainMenu.add_command(label="Timetable", command=self.__openTimetable)
+    self.infoArea = tk.Frame(self, background=self.background)
+    
     self.isSegmentSaved = False
     self.selectedIID = ''
     self.savedSegmentsIndices = list()
@@ -85,25 +85,27 @@ class TrainResultsArea(tk.Frame):
     self.tvScrollHoriz = ttk.Scrollbar(self.resultsArea, orient='horizontal', command=self.results.xview)
     self.results.configure(yscrollcommand=self.tvScroll.set, xscrollcommand=self.tvScrollHoriz.set)
     self.results.bind("<Button-1>", lambda e: self.toggleSaveButton(True))
-    self.results.bind("<Double-Button-1>", lambda e: self.__saveSelection)
-    self.results.bind("<Return>", lambda e: self.__saveSelection)
+    self.results.bind("<Double-1>", lambda e: self.saveSelection)
+    self.results.bind("<Return>", lambda e: self.saveSelection)
     if os.name == 'nt': self.results.bind("<Button-3>", self.__trainContextMenu)
     elif os.name == 'posix': self.results.bind("<Button-2>", self.__trainContextMenu)
 
-    self.saveButton = ttk.Button(self.buttonsArea, text="Save Segment", state='disabled', command=self.__saveSelection)
+    self.saveButton = ttk.Button(self.buttonsArea, text="Save Segment", state='disabled', command=self.saveSelection)
     self.saveButton.pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
     self.findTrainsBtn = ttk.Button(self.buttonsArea, text="Find Trains", command=self.startSearch)
     self.findTrainsBtn.pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
     ttk.Button(self.buttonsArea, text="View Itinerary", command=self.parent.openItinerary).pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
-    self.mapBtn = ttk.Button(self.buttonsArea, text="Route Map", command=self._callMapUpdate)
-    self.mapBtn.pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
+    tk.Label(self.infoArea, text="Right-click any result for route maps, timetables, and more.", background=self.background).pack(anchor=tk.CENTER, padx=4, pady=4)
     
     self.progressBar = ttk.Progressbar(self, orient='horizontal', length=200, maximum=100, mode='determinate')
     self.tvScrollHoriz.pack(side=tk.BOTTOM, fill=tk.BOTH)
     self.results.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
     self.tvScroll.pack(side=tk.RIGHT, fill=tk.BOTH)
     self.buttonsArea.pack(side=tk.TOP, padx=8, expand=False)
+    self.infoArea.pack(side=tk.TOP, padx=8, expand=False)
     self.resultsArea.pack(side=tk.BOTTOM, fill=tk.BOTH, padx=8, pady=4, expand=True)
+
+    self.trainMenu = TrainMenu(self, self.results, self.inViewSegmentResults, self.saveSelection)
 
   def toggleSaveButton(self, enabled=False):
     """
@@ -116,18 +118,6 @@ class TrainResultsArea(tk.Frame):
     """
     if enabled: self.saveButton.config(state='normal')
     else: self.saveButton.config(state='disabled')
-
-  def _callMapUpdate(self):
-    _thisSelect = self.getSelection()
-    _name = _thisSelect["Train"].name
-    self.parent.openMap()
-    if _thisSelect["Train"].numberOfSegments > 1:
-      if _thisSelect["Train"].segmentInfo != []:
-        self.parent.mapWindow.drawTrainRoute(_thisSelect["Train"].segmentInfo, [_thisSelect["Train"].origin, _thisSelect["Train"].destination])
-      else:
-        self.parent.mapWindow.drawTrainRoute(_name, [_thisSelect["Train"].origin, _thisSelect["Train"].destination])
-    else:
-      self.parent.mapWindow.drawTrainRoute(_name, [_thisSelect["Train"].origin, _thisSelect["Train"].destination])
 
   def updateDisplayColumns(self):
     """
@@ -152,35 +142,15 @@ class TrainResultsArea(tk.Frame):
     if iid:
       self.results.selection_set(iid)
       self.selectedIID = iid
+      self.trainMenu.selectedIID = iid
+      self.trainMenu.inview = self.inViewSegmentResults
       self.update_idletasks()
       try:
         self.trainMenu.tk_popup(event.x_root, event.y_root)
       finally:
         self.trainMenu.grab_release()
-  
-  def __openTrainLink(self):
-    item = self.results.item(self.selectedIID)
-    trainName = self.inViewSegmentResults[item['text']].name.lower()
-    trainName = trainName.replace(' ', '-')
-    if ' ' not in trainName:
-      if trainName != "NA":
-        url = f"https://www.amtrak.com/{trainName}-train"
-        webbrowser.open(url, new=1, autoraise=True)
-      elif trainName == 'NA':
-        messagebox.showwarning(title=cfg.APP_NAME, message="Cannot view information about multiple segments.")
-  
-  def __openTimetable(self):
-    item = self.results.item(self.selectedIID)
-    trainName = self.inViewSegmentResults[item['text']].name.lower()
 
-    if trainName != "NA":
-      baseUrl = "https://duckduckgo.com/?q=!ducky+"
-      trainSuffix = quote((trainName + " train timetable schedule Amtrak filetype:pdf"))
-      webbrowser.open((baseUrl + trainSuffix), new=1, autoraise=True)
-    elif trainName == 'NA':
-      messagebox.showwarning(title=cfg.APP_NAME, message="Cannot view information about multiple segments.")
-
-  def __saveSelection(self, iid='', *args):
+  def saveSelection(self, iid='', *args):
     """Performs some validation for segments before saving them to the Rail Pass."""
     if iid == '': segment = self.getSelection()
     else: segment = self.getSelection(iid)
@@ -213,7 +183,7 @@ class TrainResultsArea(tk.Frame):
         Index (int): Train (Train)
     """
     if iid != '': item = iid # Right click menu
-    else: item = self.results.focus() # Single click
+    else: item = self.results.selection()[0] # Single click
     if item != "":
       myTrain = (self.inViewSegmentResults[self.results.item(item, "text")]) # Train object
       return {"Index": self.results.item(item, "text"), "Train": myTrain}
@@ -288,7 +258,7 @@ class TrainResultsArea(tk.Frame):
       try:
         # Starting search thread
         self.parent.searcher.preSearchSetup(self.parent.stationsArea.stations.getStationCode(origin), self.parent.stationsArea.stations.getStationCode(dest), date, self.progressBar, self.parent.resultsHeadingArea.numberOfTrains)
-        self.parent.startThread(self.__doSearchCall, [False])
+        self.parent.startThread(self.__doSearchCall, [True])
       except Exception as e:
         print(e)
         messagebox.showerror(cfg.APP_NAME, message="Unable to search right now. The automated browser has not loaded. Try again in a few seconds.")
@@ -297,16 +267,20 @@ class TrainResultsArea(tk.Frame):
   def __doSearchCall(self, dev=False):
     if dev == False: response = self.parent.searcher.oneWaySearch()
     if dev == True:
-      response = dict()
-      import json
-      from traintracks.train import Train
+      oldWay = False
+      if oldWay == True:
+        response = dict()
+        import json
+        from traintracks.train import Train
 
-      # DEVELOPMENT
-      fileToUse = trunc(datetime.now().timestamp()) % 3
-      with open(f"_retrieved/TestTrainSearch{fileToUse}.json", "r") as f:
-        temp = json.loads(f.read())
-        for num in temp:
-          response[int(num)] = Train(temp[num])
+        # DEVELOPMENT
+        fileToUse = trunc(datetime.now().timestamp()) % 3
+        with open(f"_retrieved/TestTrainSearch{fileToUse}.json", "r") as f:
+          temp = json.loads(f.read())
+          for num in temp:
+            response[int(num)] = Train(temp[num])
+      else:
+        response = self.parent.searcher._test_search()
     
     self.__searchHandler(response)
 
@@ -332,7 +306,7 @@ class TrainResultsArea(tk.Frame):
   def __searchHandler(self, response):
     if type(response) == dict: # Trains returned
       self.inViewSegmentResults = deepcopy(response)
-      self.parent.us.userSelections.addSearch(self.parent.us.getOrigin(), self.parent.us.getDestination(), self.parent.us.getDate(), response)
+      self.parent.us.userSelections.addSearch(self.parent.us.getOrigin(), self.parent.us.getDestination(), self.parent.us.getDate(), deepcopy(response))
       self.__populateTreeview(response)
       self.parent.resultsHeadingArea.changeSearchView(-1)
     elif response != None: # Error returned
