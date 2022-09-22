@@ -137,11 +137,7 @@ class TrainResultsArea(tk.Frame):
     _def = os.path.expanduser("~")
     filepath = filesavebox(title="Export Search Results", default=f"{_def}/results{_thisNum}.csv", filetypes=['*.csv'])
     if filepath != None:
-      success = self.parent.us.userSelections.createSearchResultsCsv(filepath, _thisNum)
-      if success == True:
-        messagebox.showinfo(title="Export Search Results", message=f"Saved results to {filepath}")
-      else:
-        messagebox.showerror(title="Export Search Results", message="There was an issue saving the search results.")
+      self.parent.us.userSelections.createSearchResultsCsv(filepath, _thisNum)
 
   def updateDisplayColumns(self) -> None:
     """

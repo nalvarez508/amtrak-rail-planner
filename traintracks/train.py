@@ -2,6 +2,8 @@ import datetime
 import json
 from copy import deepcopy
 
+from tkinter import messagebox
+
 class RailPass:
   """
   A class to hold each user-selected segment of their journey.
@@ -124,33 +126,37 @@ class RailPass:
     """
     return self.segments
 
-  def createSearchResultsCsv(self, path: str, searchNum: int) -> bool:
+  def _createCsv(self, path: str, data: dict, isItinerary: bool=True) -> bool:
     """
-    Creates a CSV file of some search results.
+    Writes data to a CSV file.
 
     Parameters
     ----------
     path : str
-        Export filepath and name.
-    searchNum : int
-        Search number to get results from.
+        Path to save the file at, including file name.
+    data : dict
+        Data to get train information from.
+    isItinerary : bool, Optional
+        If True, use 'Leg' instead of 'Result' as first header item, by default True
 
     Returns
     -------
     bool
-        Success if True.
+        Success of failure of writing the file.
     """
     output = str()
-    headerRow = "Result,"
+    headerRow = ("Leg," if isItinerary else "Result,")
     hasWrittenHeaders = False
     try:
-      for result in (self.allResults[searchNum]["Results"]): # For every result
-        thisTrain = self.allResults[searchNum]["Results"][result].organizationalUnit # Get its dictionary
-        output += str(str(result) + ',')
+      for segment in data: # For every train
+        thisTrain = data[segment].organizationalUnit # Get its dictionary
+        output += str(str(segment) + ',')
 
         for col in thisTrain: # For every attribute
           if not hasWrittenHeaders: headerRow += str(str(col) + ',') # Add it to header row
           item = thisTrain[col]
+          # if type(item) == datetime.datetime:
+          #   item = self.segments[segment]._makePrettyDates(obj=item, forcePretty=True)
           output += str(str(item).replace(',', ';') + ',') # Add train attribute
 
         hasWrittenHeaders = True
@@ -168,52 +174,38 @@ class RailPass:
       print(e)
       return False
 
-  def createCsv(self, path: str, cols: dict) -> bool:
+  def _exportStatusMessage(self, path: str, success: bool) -> None:
+    if success:
+      messagebox.showinfo(title='File Export', message=f'Saved to {path}')
+    else:
+      messagebox.showerror(title='File Export', message='Could not save the file.')
+
+  def createSearchResultsCsv(self, path: str, searchNum: int) -> None:
     """
-    Writes data to a CSV file.
+    Creates a search results file.
 
     Parameters
     ----------
     path : str
-        Path to save the file at, including file name.
-    cols : dict
-        Columns as returned by `UserSelections.getExportColumns()`
-
-    Returns
-    -------
-    bool
-        Success of failure of writing the file.
+        Filepath and name.
+    searchNum : int
+        Search number to get results from.
     """
-    output = str()
-    headerRow = "Leg,"
-    hasWrittenHeaders = False
-    try:
-      for segment in (self.segments): # For every train
-        thisTrain = self.segments[segment].organizationalUnit # Get its dictionary
-        output += str(str(segment) + ',')
+    success = self._createCsv(path, self.allResults[searchNum]["Results"], False)
+    self._exportStatusMessage(path, success)
 
-        for col in cols: # For every attribute
-          if cols[col]["Selected"] == True: # Check if it is selected
-            if not hasWrittenHeaders: headerRow += str(str(cols[col]["Header"]) + ',') # Add it to header row
-            item = thisTrain[col]
-            # if type(item) == datetime.datetime:
-            #   item = self.segments[segment]._makePrettyDates(obj=item, forcePretty=True)
-            output += str(str(item).replace(',', ';') + ',') # Add train attribute
+  def createItineraryCsv(self, path: str) -> None:
+    """
+    Creates an itinerary file.
 
-        hasWrittenHeaders = True
-        output += '\n'
+    Parameters
+    ----------
+    path : str
+        Filepath and name.
+    """
+    success = self._createCsv(path, self.segments, True)
+    self._exportStatusMessage(path, success)
 
-      try:
-        headerRow += '\n'
-        with open(path, 'w') as f:
-          f.write(headerRow+output)
-        return True
-      except Exception as e:
-        print(e)
-        return False
-    except Exception as e:
-      print(e)
-      return False
 
   def createSegment(self, segment, searchNum: int) -> None:
     """

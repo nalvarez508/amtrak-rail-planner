@@ -226,13 +226,9 @@ class Itinerary(tk.Toplevel):
         if not exportPath.endswith('.csv'):
           exportPath += '.csv'
 
-        cs = ColumnSettings(self.parent, isExport=True)
-        if cs.hasCheckedOne():
-          didSucceed = self.parent.us.userSelections.createCsv(exportPath, self.parent.us.exportColumns)
-          if didSucceed:
-            messagebox.showinfo(title='File Export', message=f'Saved to {exportPath}')
-          else:
-            messagebox.showwarning(title='File Export', message='Could not save the file.')
+        # cs = ColumnSettings(self.parent, isExport=True)
+        # if cs.hasCheckedOne():
+        self.parent.us.userSelections.createItineraryCsv(exportPath)
 
   def _test_getGeometry(self):
     print("Itinerary:", self.geometry(None))
