@@ -218,20 +218,21 @@ class Itinerary(tk.Toplevel):
 
   def doExport(self) -> None: # Move to main window?
     """Prompts the user for a directory to save to, the desired attributes, and saves the itinerary."""
-    self.update()
-    defaultPath = os.path.join(os.path.expanduser('~/'), 'My Itinerary.csv')
-    exportPath = easygui.filesavebox(default=defaultPath, filetypes=['*.csv'])
-    if exportPath != None:
-      if not exportPath.endswith('.csv'):
-        exportPath += '.csv'
+    if self.userSegments.get_children() != ():
+      self.update()
+      defaultPath = os.path.join(os.path.expanduser('~/'), 'My Itinerary.csv')
+      exportPath = easygui.filesavebox(default=defaultPath, filetypes=['*.csv'])
+      if exportPath != None:
+        if not exportPath.endswith('.csv'):
+          exportPath += '.csv'
 
-      cs = ColumnSettings(self.parent, isExport=True)
-      if cs.hasCheckedOne():
-        didSucceed = self.parent.us.userSelections.createCsv(exportPath, self.parent.us.exportColumns)
-        if didSucceed:
-          messagebox.showinfo(title='File Export', message=f'Saved to {exportPath}')
-        else:
-          messagebox.showwarning(title='File Export', message='Could not save the file.')
+        cs = ColumnSettings(self.parent, isExport=True)
+        if cs.hasCheckedOne():
+          didSucceed = self.parent.us.userSelections.createCsv(exportPath, self.parent.us.exportColumns)
+          if didSucceed:
+            messagebox.showinfo(title='File Export', message=f'Saved to {exportPath}')
+          else:
+            messagebox.showwarning(title='File Export', message='Could not save the file.')
 
   def _test_getGeometry(self):
     print("Itinerary:", self.geometry(None))

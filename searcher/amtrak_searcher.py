@@ -403,8 +403,8 @@ class AmtrakSearch:
               "Business Price":businessPrice,
               "Sleeper Price":sleeperPrice,
               "Segments":segmentType,
-              #"Segment Info":segmentInfo,
-              "Raw":opt}
+              "Raw":opt
+            }
 
             # Advanced Data Gathering
             try:
@@ -423,7 +423,7 @@ class AmtrakSearch:
                 _thisOrigin = seg["travelLeg"]["origin"]["code"]
                 _thisDepart = seg["travelLeg"]["origin"]["schedule"]["departureDateTime"]
 
-                _thisDuration = seg["travelLeg"]["elapsedTime"]
+                _thisDuration = seg["travelLeg"]["elapsedTime"].replace('P','').replace('T',' ').replace('H', 'H ')
                 _thisSeatsAvailable = opt["seatCapacityInfo"]["seatCapacityTravelClasses"][index]["availableInventory"]
 
                 extra[seg["travelLegIndex"]] = {
@@ -435,8 +435,9 @@ class AmtrakSearch:
                   "Departure":_thisDepart,
                   "Arrival":_thisArrive,
                   "Duration":_thisDuration,
-                  "Amenities":_thisAmenities,
-                  "Available Seats":_thisSeatsAvailable}
+                  "Available Seats":_thisSeatsAvailable,
+                  "Amenities":_thisAmenities
+                }
               
               citySegments = opt["citySegments"]
 

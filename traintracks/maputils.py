@@ -70,7 +70,7 @@ def getCoords(code: str) -> list[float]:
         coords = convert_address_to_coordinates(f"{address[0]}, {address[1]}, Canada")
       else:
         coords = convert_address_to_coordinates(f"{address[1]}, United States")
-    except IndexError:
+    except (IndexError, TypeError):
       coords = None
       print(f"Could not find coordinates for station {code}: {address}")
   return coords
