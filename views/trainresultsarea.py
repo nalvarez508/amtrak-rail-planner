@@ -134,7 +134,8 @@ class TrainResultsArea(tk.Frame):
   def __exportResultsHelper(self) -> None:
     """Calls RailPass function to export search results."""
     _thisNum = self.parent.resultsHeadingArea.getSearchNum()
-    filepath = filesavebox(title="Export Search Results", default=f"~/results{_thisNum}.csv", filetypes=['*.csv'])
+    _def = os.path.expanduser("~")
+    filepath = filesavebox(title="Export Search Results", default=f"{_def}/results{_thisNum}.csv", filetypes=['*.csv'])
     if filepath != None:
       success = self.parent.us.userSelections.createSearchResultsCsv(filepath, _thisNum)
       if success == True:
@@ -286,7 +287,7 @@ class TrainResultsArea(tk.Frame):
       try:
         # Starting search thread
         self.parent.searcher.preSearchSetup(self.parent.stationsArea.stations.getStationCode(origin), self.parent.stationsArea.stations.getStationCode(dest), date, self.progressBar, self.parent.resultsHeadingArea.numberOfTrains)
-        self.parent.startThread(self.__doSearchCall, [True])
+        self.parent.startThread(self.__doSearchCall, [False])
       except Exception as e:
         print(e)
         messagebox.showerror(cfg.APP_NAME, message="Unable to search right now. The automated browser has not loaded. Try again in a few seconds.")
