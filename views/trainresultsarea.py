@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+from easygui import filesavebox
 
 from copy import deepcopy
 from datetime import datetime
@@ -105,6 +106,8 @@ class TrainResultsArea(tk.Frame):
     self.findTrainsBtn.pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
     ttk.Button(self.buttonsArea, text="View Itinerary", command=self.parent.openItinerary).pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
     tk.Label(self.infoArea, text="Right-click any result for route maps, timetables, and more.", background=self.background).pack(anchor=tk.CENTER, padx=4, pady=4)
+    self.exportResultsButton = ttk.Button(self.buttonsArea, text="Export Results", command=self.__exportResultsHelper, state=tk.DISABLED)
+    self.exportResultsButton.pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
     
     self.progressBar = ttk.Progressbar(self, orient='horizontal', length=200, maximum=100, mode='determinate')
     self.tvScrollHoriz.pack(side=tk.BOTTOM, fill=tk.BOTH)
@@ -127,6 +130,17 @@ class TrainResultsArea(tk.Frame):
     """
     if enabled: self.saveButton.config(state='normal')
     else: self.saveButton.config(state='disabled')
+
+  def __exportResultsHelper(self) -> None:
+    """Calls RailPass function to export search results."""
+    _thisNum = self.parent.resultsHeadingArea.getSearchNum()
+    filepath = filesavebox(title="Export Search Results", default=f"~/results{_thisNum}.csv", filetypes=['*.csv'])
+    if filepath != None:
+      success = self.parent.us.userSelections.createSearchResultsCsv(filepath, _thisNum)
+      if success == True:
+        messagebox.showinfo(title="Export Search Results", message=f"Saved results to {filepath}")
+      else:
+        messagebox.showerror(title="Export Search Results", message="There was an issue saving the search results.")
 
   def updateDisplayColumns(self) -> None:
     """
@@ -211,6 +225,7 @@ class TrainResultsArea(tk.Frame):
     self.parent.statusMessage.set("Ready")
     self.isSegmentSaved = (True if (len(self.savedSegmentsIndices) > 0) else False)
     self.saveButton.configure(state=tk.DISABLED)
+    self.exportResultsButton.configure(state=tk.NORMAL)
     self.parent.update_idletasks()
 
   def __clearTree(self, wipeout: bool=True) -> None:

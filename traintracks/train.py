@@ -124,6 +124,50 @@ class RailPass:
     """
     return self.segments
 
+  def createSearchResultsCsv(self, path: str, searchNum: int) -> bool:
+    """
+    Creates a CSV file of some search results.
+
+    Parameters
+    ----------
+    path : str
+        Export filepath and name.
+    searchNum : int
+        Search number to get results from.
+
+    Returns
+    -------
+    bool
+        Success if True.
+    """
+    output = str()
+    headerRow = "Result,"
+    hasWrittenHeaders = False
+    try:
+      for result in (self.allResults[searchNum]["Results"]): # For every result
+        thisTrain = self.allResults[searchNum]["Results"][result].organizationalUnit # Get its dictionary
+        output += str(str(result) + ',')
+
+        for col in thisTrain: # For every attribute
+          if not hasWrittenHeaders: headerRow += str(str(col) + ',') # Add it to header row
+          item = thisTrain[col]
+          output += str(str(item).replace(',', ';') + ',') # Add train attribute
+
+        hasWrittenHeaders = True
+        output += '\n'
+
+      try:
+        headerRow += '\n'
+        with open(path, 'w') as f:
+          f.write(headerRow+output)
+        return True
+      except Exception as e:
+        print(e)
+        return False
+    except Exception as e:
+      print(e)
+      return False
+
   def createCsv(self, path: str, cols: dict) -> bool:
     """
     Writes data to a CSV file.
@@ -152,8 +196,8 @@ class RailPass:
           if cols[col]["Selected"] == True: # Check if it is selected
             if not hasWrittenHeaders: headerRow += str(str(cols[col]["Header"]) + ',') # Add it to header row
             item = thisTrain[col]
-            if type(item) == datetime.datetime:
-              item = self.segments[segment]._makePrettyDates(obj=item, forcePretty=True)
+            # if type(item) == datetime.datetime:
+            #   item = self.segments[segment]._makePrettyDates(obj=item, forcePretty=True)
             output += str(str(item).replace(',', ';') + ',') # Add train attribute
 
         hasWrittenHeaders = True
@@ -399,8 +443,8 @@ class Train:
       "Business Price":self.businessPrice,
       "Sleeper Price":self.sleeperPrice,
       "Number of Segments":self.numberOfSegments,
-      "Segment Info":self.segmentInfo,
-      "City Segments":self.citySegments
+      "City Segments":self.citySegments,
+      "Segment Info":self.segmentInfo
     }
 
   def __str__(self) -> str:
