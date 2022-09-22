@@ -6,7 +6,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from easygui import filesavebox
 
-from views.config import BACKGROUND, ICON
+from views.config import BACKGROUND, ICON, SYSTEM_FONT
 
 class DetailWindow(tk.Toplevel):
   """
@@ -43,7 +43,7 @@ class DetailWindow(tk.Toplevel):
     tk.Toplevel.__init__(self, parent, *args, **kwargs)
     self.parent = parent
     self.data = data
-    self.geometry('400x600')
+    self.geometry('450x600')
     self.title(f"Detail View - {self.data['Name']}")
     if os.name == 'nt': self.iconbitmap(ICON)
     self.config(background=BACKGROUND)
@@ -54,18 +54,13 @@ class DetailWindow(tk.Toplevel):
     ttk.Button(self.buttonsArea, text="Export", command=self.exportData).pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
     ttk.Button(self.buttonsArea, text="Close", command=self.destroy).pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
 
-    self.texto = tk.Text(self.dataView, font=("Arial", 14, tk.NORMAL))
-    self.yScr = tk.Scrollbar(self.dataView, command=self.texto.yview, orient=tk.VERTICAL)#.grid(row=0, column=1, sticky='ns')
+    self.texto = tk.Text(self.dataView, font=(SYSTEM_FONT, 14, tk.NORMAL))
+    self.yScr = tk.Scrollbar(self.dataView, command=self.texto.yview, orient=tk.VERTICAL)
     self.yScr.pack(side=tk.RIGHT, fill=tk.Y)
-    # self.xScr = tk.Scrollbar(self.dataView, command=self.texto.xview, orient=tk.HORIZONTAL)#.grid(row=1, column=0, columnspan=2, sticky='ew')
-    # self.xScr.pack(side=tk.BOTTOM, fill=tk.X)
-    self.texto.configure(yscrollcommand=self.yScr.set)#, xscrollcommand=self.xScr.set)
+    self.texto.configure(yscrollcommand=self.yScr.set)
     self.texto.pack(expand=True, fill=tk.BOTH)
-    
 
-    _data = json.dumps(self.data, indent=4)
-    _data = _data.replace('"', '')
-    self.texto.insert('end', _data)
+    self.texto.insert('end', self._dataClean())
     self._thatsPrettyBold()
     self.texto.configure(state=tk.DISABLED)
 
@@ -74,6 +69,19 @@ class DetailWindow(tk.Toplevel):
 
     self.wm_protocol('WM_DELETE_WINDOW', self.destroy)
   
+  def _dataClean(self) -> str:
+    _data = json.dumps(self.data, indent=0)
+    _data = _data.replace('"', '').replace(',', '')
+    _data = _data.replace('{', '').replace('}', '')
+    _data = _data.replace('[', '').replace('\n]', '')
+    _data = _data.replace('Segment Info:', '\n\nSegment Info')
+    _data = _data.replace('\n\n', '\n').replace('\n      ', '\n')
+    _data = _data.replace('\n      ', '\n')
+    _data = _data.replace(': ', ':  ')
+    _data = _data.replace('null', 'N/A')
+    _data = _data.strip()
+    return _data
+
   def _thatsPrettyBold(self) -> None:
     """Makes dictionary keys **BOLD.**"""
     def findKeys(k: str, before: dict):
@@ -81,6 +89,11 @@ class DetailWindow(tk.Toplevel):
       try:
         for key in before[k].keys():
           _pos = self.texto.search(str(key), _pos, stopindex="end", count=count)
+          if k == "Segment Info":
+            self.texto.delete(_pos, f"{_pos} + {int(count.get())+1}c")
+            self.texto.insert(_pos, f"\nSegment {int(key)+1}")
+            _pos = self.texto.search(f"\nSegment {int(key)+1}", _pos, stopindex="end", count=count)
+            self.texto.tag_add("blue", _pos, f"{_pos} + {int(count.get())+1}c")
           self.texto.tag_add("bold", _pos, f"{_pos} + {int(count.get())+1}c")
           #_pos = str(float(_pos)+1)
           findKeys(key, before[k])
@@ -93,7 +106,13 @@ class DetailWindow(tk.Toplevel):
       self.texto.tag_add("bold", _pos, f"{_pos} + {int(count.get())+1}c")
       #_pos = str(float(_pos)+1)
       findKeys(key, self.data)
-    self.texto.tag_config("bold", font=("Arial", 14, "bold"))
+
+    _pos = self.texto.search("Segment Info", '1.0', stopindex="end", count=count)
+    self.texto.tag_add("underline", _pos, f"{_pos} + {int(count.get())+1}c")
+
+    self.texto.tag_config("bold", font=(SYSTEM_FONT, 14, "bold"))
+    self.texto.tag_config("blue", font=(SYSTEM_FONT, 14, 'bold', 'italic'), foreground='blue')
+    self.texto.tag_config("underline", font=(SYSTEM_FONT, 16, 'bold', 'underline'))
 
   def exportData(self) -> None:
     """
