@@ -3,6 +3,7 @@ import json
 import traceback
 from datetime import datetime
 from math import trunc
+from random import randint
 from tkinter import StringVar, Tk, Label, ttk
 
 from selenium.webdriver.support import expected_conditions as EC
@@ -320,7 +321,7 @@ class AmtrakSearch:
     
     def scrapingMethod():
       for page in range(1,pages+1): # Starts at 1 (page 1) and goes up to pages
-        self.__updateStatusMessage(f"Searching - checking page {page}", 22./pages)
+        self.__updateStatusMessage(f"Searching - checking page {page}", 29./pages)
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight)") # Puts page links in view
         
         # Loads next page and waits until elements load
@@ -363,7 +364,7 @@ class AmtrakSearch:
       _journeyLegOptionsMultiple = _journeyLegs["journeyLegOptions"] #All segments
 
       for index, opt in enumerate(_journeyLegOptionsMultiple):
-        self.__updateStatusMessage(f"Processing results", 22./len(_journeyLegOptionsMultiple))
+        self.__updateStatusMessage(f"Processing results", 29./len(_journeyLegOptionsMultiple))
         try:
           if len(opt["reservableAccommodations"]) > 0: # Not sold out
 
@@ -480,6 +481,7 @@ class AmtrakSearch:
     inputField1.clear()
     inputField1.send_keys(self.origin)
     WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, "//button[contains(@aria-label,'From')]"))) # Station name autofilled
+    time.sleep(randint(5,100)/100.)
 
     # Entering destination station info
     toStationSearchArea = self.driver.find_element(By.XPATH, "//div[@class='to-station flex-grow-1']")
@@ -488,6 +490,7 @@ class AmtrakSearch:
     inputField2.clear()
     inputField2.send_keys(self.destination)
     WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, "//button[contains(@aria-label,'To')]"))) # Station name autofilled
+    time.sleep(randint(5,100)/100.)
 
   def __enterDepartDate(self, area) -> None:
     """
@@ -504,6 +507,7 @@ class AmtrakSearch:
     inputField3.clear()
     inputField3.send_keys(f"{self.departDate}\t") #Depart Date
     #searchArea.find_element(by=By.XPATH, value="//input[@id='mat-input-4']").send_keys("03/27/2022") #Return Date
+    time.sleep(randint(5,100)/100.)
 
   def _getSessionStorage(self, key: str, beCareful: bool=False) -> dict:
     """
@@ -529,7 +533,7 @@ class AmtrakSearch:
       _tc = self.driver.execute_script("return window.sessionStorage.getItem(arguments[0]);", key)
     return _tc
 
-  def oneWaySearch(self, isScrape: bool=True) -> dict:
+  def oneWaySearch(self, isScrape: bool=False) -> dict:
     """
     Performs a search for Amtrak trains on a one-way journey.
 
@@ -584,13 +588,14 @@ class AmtrakSearch:
             self.__updateStatusMessage("Searching - retrieving results", 2)
             WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, "//button[@aria-label='FIND TRAINS' and @aria-disabled='false']")))
             searchArea.find_element(By.XPATH, "//div[starts-with(@class, 'amtrak-ff-body')]").click() # Get calendar popup out of the way
+            time.sleep(randint(5,100)/100.)
             searchArea.find_element(by=By.XPATH, value="//button[@aria-label='FIND TRAINS' and @aria-disabled='false']").click() # Click search button
 
             # Search has been completed, but there is no service
             try:
               self.__updateStatusMessage("Searching - loading results", 2)
               time.sleep(2)
-              self.__updateStatusMessage("Searching - checking results", 10)
+              self.__updateStatusMessage("Searching - checking results", 5)
               potentialError = self.driver.find_element(By.XPATH, "//div[starts-with(@class, 'alert-yellow-text')]").text
               print(potentialError)
               self.returnedError = True
@@ -617,7 +622,7 @@ class AmtrakSearch:
                   nextPage = searchResultsTable.find_element(By.XPATH, ".//ul[starts-with(@class, 'pagination paginator__pagination')]") # Page links area
                   numberSearchPages = int((len(nextPage.find_elements(By.XPATH, ".//*"))-4)/2) # Find out how many pages exist
                   self.__checkEveryPage(nextPage, numberSearchPages, isScrape)
-                  self.__updateStatusMessage("Done", 100)
+                  self.__updateStatusMessage("Done", 50)
                   
                   #print(json.dumps(self.thisSearchResults, indent=4))
                   return self.thisSearchResultsAsTrain
