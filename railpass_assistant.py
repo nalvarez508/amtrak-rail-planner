@@ -31,7 +31,6 @@ class MainWindow(tk.Tk):
   Parameters
   ----------
   tk : Tk
-      Root object. Initialized in `__init__()`.
   
   Attributes
   ----------
@@ -96,7 +95,7 @@ class MainWindow(tk.Tk):
     self.statusBar.pack(side=tk.BOTTOM, fill=tk.BOTH)
     self.statusBar.lift
 
-    self.titleArea.pack()
+    #self.titleArea.pack()
     self.imageArea.pack()
     self.stationsArea.pack()
     self.dateSelectionArea.pack(pady=4)
@@ -105,7 +104,15 @@ class MainWindow(tk.Tk):
 
     self.update()
 
-  def openItinerary(self, spawnExport=False) -> None:
+  def openItinerary(self, spawnExport: bool=False) -> None:
+    """
+    Opens the itinerary window. If it is already open, bring it to the front.
+
+    Parameters
+    ----------
+    spawnExport : bool, optional
+        If True, open the window and start the export process, by default False
+    """
     if self.itineraryWindow == None:
       self.itineraryWindow = Itinerary(self, spawnExport)
     else:
@@ -115,6 +122,7 @@ class MainWindow(tk.Tk):
     self.itineraryWindow = None
   
   def openMap(self) -> None:
+    """Opens the map. If already open, bring it to the front."""
     if self.mapWindow == None:
       self.mapWindow = Map(self)
     else:
@@ -123,7 +131,7 @@ class MainWindow(tk.Tk):
   def closeMap(self) -> None:
     self.mapWindow = None
 
-  def __setBackground(self, f=None):
+  def __setBackground(self, f=None) -> None:
     """Sets the background to `cfg.BACKGROUND` for all non-results and non-ttk elements."""
     DONOTCHANGETHESE = [ttk.Button, ttk.Combobox, ttk.Treeview, ttk.Progressbar, ttk.Label, ttk.Frame, ttk.Scrollbar, Calendar]
     if f == None:
@@ -150,7 +158,7 @@ class MainWindow(tk.Tk):
     bg = s1.lookup("TButton", "background")
     print(bg)
 
-  def startThread(self, function, args=None) -> None:
+  def startThread(self, function, args: list=None) -> None:
     """
     Starts a thread to run the given function.
 
@@ -166,7 +174,7 @@ class MainWindow(tk.Tk):
     else:
       Thread(target=function).start()
 
-  def onClose(self):
+  def onClose(self) -> None:
     """Closes webdrivers and any windows."""
     try: self.devTools.destroy()
     except: pass
@@ -178,8 +186,11 @@ class MainWindow(tk.Tk):
     self.searcher.driver.quit()
     sys.exit()
 
-  def __startup(self):
-    self.searcher = AmtrakSearch(self, Driver(cfg.SEARCH_URL, undetected=True).driver, status=self.statusMessage)
+  def __startup(self) -> None:
+    """Launches startup tasks: creating Amtrak searcher, loading routes, loading timetables."""
+    _dev = False
+    if not _dev: self.searcher = AmtrakSearch(self, Driver(cfg.SEARCH_URL, undetected=True).driver, status=self.statusMessage)
+    else: self.searcher = AmtrakSearch(self, None, status=self.statusMessage)
     self.routes = _loadAllRoutes()
     self.menuOptions._loadTimetables()
 
