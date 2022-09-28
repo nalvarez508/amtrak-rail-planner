@@ -179,6 +179,8 @@ class TrainResultsArea(tk.Frame):
     def doSave():
       self.parent.us.userSelections.createSegment(segment["Train"], self.parent.resultsHeadingArea.getSearchNum())
       self.isSegmentSaved = True
+      self.parent.isSaved = False
+      self.parent.title(f"*{cfg.APP_NAME}")
       self.savedSegmentsIndices.append(segment["Index"])
       self.parent.us.userSelections.updateSearch(self.parent.resultsHeadingArea.getSearchNum(), deepcopy(self.savedSegmentsIndices))
       try: self.parent.itineraryWindow.updateItinerary()
@@ -283,7 +285,7 @@ class TrainResultsArea(tk.Frame):
       try:
         # Starting search thread
         self.parent.searcher.preSearchSetup(self.parent.stationsArea.stations.getStationCode(origin), self.parent.stationsArea.stations.getStationCode(dest), date, self.progressBar, self.parent.resultsHeadingArea.numberOfTrains)
-        self.parent.startThread(self.__doSearchCall, [False])
+        self.parent.startThread(self.__doSearchCall, [cfg.DEV_MODE])
       except Exception as e:
         print(e)
         messagebox.showerror(cfg.APP_NAME, message="Unable to search right now. The automated browser has not loaded. Try again in a few seconds.")
