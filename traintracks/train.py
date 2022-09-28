@@ -436,6 +436,7 @@ class Train:
       "Sleeper Price":self.sleeperPrice,
       "Number of Segments":self.numberOfSegments,
       "City Segments":self.citySegments,
+      "Train Segments":[self.segmentInfo[t]["Name"] for t in self.segmentInfo],
       "Segment Info":self.segmentInfo
     }
 
