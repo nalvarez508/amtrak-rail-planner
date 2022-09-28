@@ -53,5 +53,5 @@ class Driver:
       self.driver.get(url)
     except WebDriverException as e:
       messagebox.showerror(title=APP_NAME, message=e)
-      messagebox.showinfo(title=APP_NAME, message="Looks like your Chrome version does not match what the program is trying to use.\nPlease update your Chrome browser.\n\n1. Click the three dots at the top right of the browser.\n2. In the Help menu, click \"About Google Chrome.\"\nUpdates should begin installing automatically.")
+      messagebox.showinfo(title=APP_NAME, message="Looks like your Chrome version does not match what the program is trying to use.\nPlease update your Chrome browser.\n\n1. Click the three dots at the top right of the browser.\n2. In the Help menu near the bottom, click \"About Google Chrome.\"\nUpdates should begin installing automatically.")
       sys.exit(1)
