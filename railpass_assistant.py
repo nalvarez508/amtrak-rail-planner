@@ -1,10 +1,13 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from tkcalendar import Calendar
+from easygui import fileopenbox, filesavebox
 
 import sys
 from threading import Thread
 import os
+import pickle
+from copy import deepcopy
 
 from traintracks.maputils import _loadAllRoutes
 
@@ -72,6 +75,8 @@ class MainWindow(tk.Tk):
     self.config(background=cfg.BACKGROUND)
     self.title(cfg.APP_NAME)
     if os.name == 'nt': self.iconbitmap(cfg.ICON)
+    self.isSaved = True
+
     self.us = UserSelections()
     self.searcher = None
     self.statusMessage = tk.StringVar(self, "Ready")
@@ -103,6 +108,75 @@ class MainWindow(tk.Tk):
     self.trainResultsArea.pack(fill=tk.BOTH, expand=True)
 
     self.update()
+
+  def newRailFile(self) -> None:
+    """
+    Wipes out current rail plan, prompting the user to save if necessary.
+    """
+    def updateElements():
+      """Resets widgets and data."""
+      self.us.reset()
+      self.resultsHeadingArea.changeSearchView(self.us.userSelections.numSearches)
+      self.resultsHeadingArea.titleToAndFrom.set("Click \"Find Trains\" to start a search!")
+      self.itineraryWindow.updateItinerary()
+      self.isSaved = True
+      self.title(cfg.APP_NAME)
+
+    if self.isSaved:
+      updateElements()
+    else:
+      ans = messagebox.askyesnocancel(cfg.APP_NAME, "There are unsaved changes. Do you want to save them before starting a new plan?")
+      if ans == True:
+        if self.saveRailFile():
+          updateElements()
+      elif ans == False:
+        updateElements()
+      else: pass
+
+  def openRailFile(self) -> None:
+    """
+    Opens a railplan file and populates widget info.
+    """
+    _inpath = fileopenbox(title="Open Rail Planner File", default=os.path.expanduser('~/'), filetypes=['*.railplan', 'Rail Planner Files'])
+    if _inpath != None:
+      if _inpath.endswith('.railplan'):
+        try:
+          with open(_inpath, 'rb') as infile:
+            _data = pickle.load(infile)
+            self.us.userSelections = deepcopy(_data)
+            self.resultsHeadingArea.changeSearchView(self.us.userSelections.numSearches)
+            self.itineraryWindow.updateItinerary()
+            self.isSaved = True
+            self.title(cfg.APP_NAME)
+        except (FileNotFoundError, OSError):
+          messagebox.showerror("Import Rail Plan", "There was an issue reading the file.")
+      else:
+        messagebox.showerror("Import Rail Plan", "Unsupported file type.")
+  
+  def saveRailFile(self) -> bool:
+    """
+    Saves the current rail plan.
+
+    Returns
+    -------
+    bool
+        Sucess in file saving.
+    """
+    defaultPath = os.path.join(os.path.expanduser('~/'), 'My Plan.railplan')
+    _outpath = filesavebox(title="Save Rail Planner File", default=defaultPath, filetypes=['*.railplan', 'Rail Planner Files'])
+    if _outpath != None:
+      if not _outpath.endswith('.railplan'):
+        _outpath += ".railplan"
+      try:
+        with open(_outpath, 'wb') as outfile:
+          pickle.dump(self.us.userSelections, outfile, protocol=pickle.HIGHEST_PROTOCOL)
+          self.isSaved = True
+          self.title(cfg.APP_NAME)
+          return True
+      except (FileNotFoundError, OSError):
+        messagebox.showerror("Import Rail Plan", "There was an issue writing the file.")
+        return False
+    else: return False
 
   def openItinerary(self, spawnExport: bool=False) -> None:
     """
@@ -175,16 +249,28 @@ class MainWindow(tk.Tk):
       Thread(target=function).start()
 
   def onClose(self) -> None:
-    """Closes webdrivers and any windows."""
-    try: self.devTools.destroy()
-    except: pass
-    self.destroy()
-    # Close webdrivers
-    self.imageArea.imageCatcher.driver.close()
-    self.imageArea.imageCatcher.driver.quit()
-    self.searcher.driver.close()
-    self.searcher.driver.quit()
-    sys.exit()
+    """Closes webdrivers and any windows, if the user has no unsaved changes."""
+
+    def cleanup():
+      """Closes application."""
+      try: self.devTools.destroy()
+      except: pass
+      self.destroy()
+      # Close webdrivers
+      self.imageArea.imageCatcher.driver.close()
+      self.imageArea.imageCatcher.driver.quit()
+      self.searcher.driver.close()
+      self.searcher.driver.quit()
+      sys.exit()
+
+    if not self.isSaved:
+      ans = messagebox.askyesnocancel(cfg.APP_NAME, message="There are unsaved changes. Do you want to save them before exiting?")
+      if ans == True:
+        if self.saveRailFile():
+          cleanup()
+      elif ans == False:
+        cleanup()
+      else: pass
 
   def __startup(self) -> None:
     """Launches startup tasks: creating Amtrak searcher, loading routes, loading timetables."""

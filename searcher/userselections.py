@@ -63,6 +63,11 @@ class UserSelections:
     }
     self.exportColumns = deepcopy(self.columns)
 
+  def reset(self) -> None:
+    """Deletes the user selections object and makes a new RailPass object (read: a new plan with no saved segments or searches)."""
+    del self.userSelections
+    self.userSelections = RailPass()
+
   def setColumns(self, vals: dict) -> None:
     """
     Updates the dictionary of selected columns.

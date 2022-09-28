@@ -328,6 +328,14 @@ class TrainResultsArea(tk.Frame):
     self.__resetWidgets()
     self.update()
 
+  def clearHandler(self) -> None:
+    """Wipes out treeview and does not expect any new data."""
+    self.__clearTree()
+    self.update_idletasks()
+    self.__resetWidgets()
+    self.exportResultsButton.configure(state=tk.DISABLED)
+    self.update()
+  
   def __searchHandler(self, response: dict=None) -> None:
     if type(response) == dict: # Trains returned
       self.inViewSegmentResults = deepcopy(response)

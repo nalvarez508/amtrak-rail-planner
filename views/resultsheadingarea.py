@@ -89,23 +89,32 @@ class ResultsHeadingArea(tk.Frame):
     self.__searchButtonToggle()
 
     # Get updated values
-    thisPreviousSearch = deepcopy(self.parent.us.userSelections.getSearch(self.searchNum))
-    o = thisPreviousSearch["Origin"]
-    d = thisPreviousSearch["Destination"]
-    t = thisPreviousSearch["Date"]
-    r = thisPreviousSearch["Results"]
-    i = thisPreviousSearch["Saved Index"]
+    try:
+      thisPreviousSearch = deepcopy(self.parent.us.userSelections.getSearch(self.searchNum))
+      o = thisPreviousSearch["Origin"]
+      d = thisPreviousSearch["Destination"]
+      t = thisPreviousSearch["Date"]
+      r = thisPreviousSearch["Results"]
+      i = thisPreviousSearch["Saved Index"]
 
-    # Set updated values
-    self.parent.us.setOrigin(o)
-    self.parent.us.setDestination(d)
-    self.parent.us.setDate(t)
+      # Set updated values
+      self.parent.us.setOrigin(o)
+      self.parent.us.setDestination(d)
+      self.parent.us.setDate(t)
 
-    # Redraw widgets
-    self.titleToAndFrom.set(f"{self.parent.stationsArea.stations.returnStationNameAndState(o)} to {self.parent.stationsArea.stations.returnStationNameAndState(d)}")
-    self.searchDate.set(self.parent.us.getPrettyDate())
-    self.searchNumVar.set(f"Search {self.searchNum}")
-    if doTreeviewRefresh: self.parent.trainResultsArea.refreshHandler(r, i)
+      # Redraw widgets
+      self.titleToAndFrom.set(f"{self.parent.stationsArea.stations.returnStationNameAndState(o)} to {self.parent.stationsArea.stations.returnStationNameAndState(d)}")
+      self.searchDate.set(self.parent.us.getPrettyDate())
+      self.searchNumVar.set(f"Search {self.searchNum}")
+      if doTreeviewRefresh: self.parent.trainResultsArea.refreshHandler(r, i)
+    except KeyError:
+      self.titleToAndFrom.set("Click \"Find Trains\" to start a search!")
+      self.parent.trainResultsArea.clearHandler()
+      self.searchNum = 1
+      self.searchDate.set("")
+      self.numberOfTrains.set("")
+      self.searchNumVar.set("")
+      self.__searchButtonToggle()
 
   def getSearchNum(self) -> int:
     """

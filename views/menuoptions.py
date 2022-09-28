@@ -57,8 +57,11 @@ class MenuOptions(tk.Menu):
     self.statusmenu.add_command(label="California", command=lambda: self.openLink("http://dixielandsoftware.net/cgi-bin/getmap.pl?mapname=Cal"))
 
     self.filemenu = tk.Menu(self, tearoff=0)
-    self.filemenu.add_command(label="Import")
-    self.filemenu.add_command(label="Export", command=self.__openItineraryWithExport)
+    self.filemenu.add_command(label="New", command=self.parent.newRailFile)
+    self.filemenu.add_command(label="Open", command=self.parent.openRailFile)
+    self.filemenu.add_command(label="Save", command=self.parent.saveRailFile)
+    self.filemenu.add_separator()
+    self.filemenu.add_command(label="Export Itinerary", command=self.__openItineraryWithExport)
 
     self.editmenu = tk.Menu(self, tearoff=0)
     self.editmenu.add_command(label="Display Columns", command=lambda: ColumnSettings(self.parent))

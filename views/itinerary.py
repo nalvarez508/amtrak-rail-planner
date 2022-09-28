@@ -8,7 +8,7 @@ from time import sleep
 import webbrowser
 
 from views.columnsettings import ColumnSettings
-from views.config import ICON, WIDTH_DIV, BACKGROUND
+from views.config import APP_NAME, ICON, WIDTH_DIV, BACKGROUND
 from views.menuoptions import TrainMenu
 
 class Itinerary(tk.Toplevel):
@@ -240,6 +240,8 @@ class Itinerary(tk.Toplevel):
     self.__populateTreeview(self.inViewSavedSegments)
     self.__exportButtonCheck()
     self.__buttonStateChanges()
+    self.parent.isSaved = False
+    self.parent.title(f"*{APP_NAME}")
     self.update_idletasks()
 
   def __exportButtonCheck(self) -> None:
