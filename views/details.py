@@ -3,7 +3,7 @@ import json
 from copy import deepcopy
 
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import TclError, ttk, messagebox
 from easygui import filesavebox
 
 from views.config import BACKGROUND, ICON, SYSTEM_FONT
@@ -73,7 +73,7 @@ class DetailWindow(tk.Toplevel):
     _data = json.dumps(self.data, indent=0)
     _data = _data.replace('"', '').replace(',', '')
     _data = _data.replace('{', '').replace('}', '')
-    _data = _data.replace('[', '').replace('\n]', '')
+    _data = _data.replace('[', '').replace('\n]', '').replace(']', '')
     _data = _data.replace('Segment Info:', '\n\nSegment Info')
     _data = _data.replace('\n\n', '\n').replace('\n      ', '\n')
     _data = _data.replace('\n      ', '\n')
@@ -95,6 +95,7 @@ class DetailWindow(tk.Toplevel):
             _pos = self.texto.search(f"\nSegment {int(key)+1}", _pos, stopindex="end", count=count)
             self.texto.tag_add("blue", _pos, f"{_pos} + {int(count.get())+1}c")
           self.texto.tag_add("bold", _pos, f"{_pos} + {int(count.get())+1}c")
+          _pos = str(int(float(_pos))+1)+".0"
           #_pos = str(float(_pos)+1)
           findKeys(key, before[k])
       except AttributeError:
@@ -104,11 +105,15 @@ class DetailWindow(tk.Toplevel):
     for key in self.data.keys():
       _pos = self.texto.search(str(key), _pos, stopindex="end", count=count)
       self.texto.tag_add("bold", _pos, f"{_pos} + {int(count.get())+1}c")
+      _pos = str(int(float(_pos))+1)+".0"
       #_pos = str(float(_pos)+1)
       findKeys(key, self.data)
 
-    _pos = self.texto.search("Segment Info", '1.0', stopindex="end", count=count)
-    self.texto.tag_add("underline", _pos, f"{_pos} + {int(count.get())+1}c")
+    try:
+      _pos = self.texto.search("Segment Info", '1.0', stopindex="end", count=count)
+      self.texto.tag_add("underline", _pos, f"{_pos} + {int(count.get())+1}c")
+    except TclError:
+      pass
 
     self.texto.tag_config("bold", font=(SYSTEM_FONT, 14, "bold"))
     self.texto.tag_config("blue", font=(SYSTEM_FONT, 14, 'bold', 'italic'), foreground='blue')
