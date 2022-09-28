@@ -271,10 +271,11 @@ class MainWindow(tk.Tk):
       elif ans == False:
         cleanup()
       else: pass
+    else: cleanup()
 
   def __startup(self) -> None:
     """Launches startup tasks: creating Amtrak searcher, loading routes, loading timetables."""
-    _dev = False
+    _dev = cfg.DEV_MODE
     if not _dev: self.searcher = AmtrakSearch(self, Driver(cfg.SEARCH_URL, undetected=True).driver, status=self.statusMessage)
     else: self.searcher = AmtrakSearch(self, None, status=self.statusMessage)
     self.routes = _loadAllRoutes()
