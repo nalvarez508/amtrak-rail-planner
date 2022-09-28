@@ -1,13 +1,14 @@
 import os
 
-APP_NAME = "Amtrak Rail Planner"
-APP_VERSION = "0.9.0"
+APP_NAME = "USA Rail Planner"
+APP_VERSION = "0.9.5"
 SEARCH_URL = "https://www.amtrak.com/tickets/departure.html"
 IMAGE_DIMENSIONS = [300,225]
+DEV_MODE = True
 if os.name == 'nt':
   SYSTEM_FONT = "Segoe UI"
   GEOMETRY = "700x875+50+50"
-  MINSIZE = [635, 730]
+  MINSIZE = [650, 730]
   BACKGROUND = "SystemButtonFace"
   WIDTH_DIV = 1
   ICON = "Amtrak_square.ico"
