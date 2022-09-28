@@ -1,9 +1,10 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import PhotoImage, ttk
 
 import random
 import os
 
+from views.details import DetailWindow
 from traintracks.stations import Stations
 from . import config as cfg
 
@@ -42,24 +43,37 @@ class StationsArea(tk.Frame):
     self.stations = Stations()
     self.stationKeys = self.stations.returnStationKeys()
     self.lengthOfList = len(self.stations.returnStationKeys())
-    self.boxWidth = int(30/cfg.WIDTH_DIV)
+    self.boxWidth = int(35/cfg.WIDTH_DIV)
+    self.infoIcon = PhotoImage(file="info.png")
+    self.infoIcon = self.infoIcon.zoom(2)
+    self.infoIcon = self.infoIcon.subsample(64)
     
-    tk.Label(self, text="Origin").grid(row=0, column=0, pady=1)
-    tk.Label(self, text="Destination").grid(row=0, column=2, pady=1)
+    tk.Label(self, text="Origin").grid(row=0, column=1, pady=1)
+    tk.Label(self, text="Destination").grid(row=0, column=3, pady=1)
 
+    tk.Button(self, image=self.infoIcon, relief=tk.FLAT, command=lambda: self.__openDetailView(1)).grid(row=1, column=0)
     self.origin = self.__createCombobox(1)
-    self.origin.grid(row=1, column=0, padx=4)
+    self.origin.grid(row=1, column=1, padx=4)
     self.destination = self.__createCombobox(2)
-    self.destination.grid(row=1, column=2, padx=4)
+    self.destination.grid(row=1, column=3, padx=4)
+    tk.Button(self, image=self.infoIcon, relief=tk.FLAT, command=lambda: self.__openDetailView(2)).grid(row=1, column=4)
 
     self.swapButton = ttk.Button(self, text="<- Swap ->", command=self.__swapStations)
-    self.swapButton.grid(row=1, column=1, padx=12)
+    self.swapButton.grid(row=1, column=2, padx=12)
 
     self.parent.imageArea.doRefresh(self.stations.returnCityState(self.origin.get()), 1)
     self.parent.imageArea.doRefresh(self.stations.returnCityState(self.destination.get()), 2)
     #if os.name == 'posix': self.parent.imageArea.doRefresh(self.stations.returnCityState(self.destination.get()), 2)
     #self.parent.startThread(self.parent.doRefresh, [self.stations.returnCityState(self.origin.get()), 1])
     #elif os.name == 'nt': self.parent.startThread(self.parent.imageArea.doRefresh, [self.stations.returnCityState(self.destination.get()), 2])
+
+  def __openDetailView(self, side: int):
+    if side == 1: _key = self.origin.get()
+    elif side == 2: _key = self.destination.get()
+    else: _key = {}
+
+    if _key != {}:
+      self.parent.startThread(DetailWindow, [self.parent, self.stations.returnStationData(_key)])
 
   def __swapStations(self) -> None:
     """Swaps the origin and destination, both Combobox objects and ImageArea labels."""
