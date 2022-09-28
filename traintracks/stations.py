@@ -48,7 +48,34 @@ class Stations:
         code = rowData[1].text.strip() # Amtrak-defined station code
         city = rowData[2].text.strip() # City where the station is located
         state = rowData[3].text.strip() # State, as an abbreviation
-        self.stations[f"{name}, {state} ({code})"] = {"Code":code, "Name":name, "City":city, "State":state}
+
+        routes = []
+        _locals = []
+        try:
+          for route in rowData[4].find_all('a'):
+            routes.append(route.text) # Amtrak connections
+          for _local in rowData[7].find_all('a'):
+            if _local.text != '':
+              _locals.append(_local.text) # Local connections (train/lightrail)
+        except IndexError:
+          pass # Wikipedia formatting issue
+        self.stations[f"{name}, {state} ({code})"] = {"Code":code, "Name":name, "City":city, "State":state, "Served By":routes, "Local Transfers":_locals}
+
+  def returnStationData(self, key: str) -> dict:
+    """
+    Returns the dictionary object associated with each station.
+
+    Parameters
+    ----------
+    key : str
+        City, State (Code)
+
+    Returns
+    -------
+    dict
+        Station information.
+    """
+    return self.stations[key]
 
   def returnStationKeys(self) -> list[str]:
     """
@@ -132,3 +159,6 @@ class Stations:
   def __test_writeToFile(self):
     with open("Stations.json", "w") as f:
       f.write(json.dumps(self.stations, indent=4))
+
+if __name__ == "__main__":
+  Stations()
