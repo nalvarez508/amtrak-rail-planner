@@ -109,6 +109,26 @@ class MainWindow(tk.Tk):
 
     self.update()
 
+  def _isSavedCheck(self) -> bool:
+    """
+    Checks if the user wants to save their changes before losing them.
+
+    Returns
+    -------
+    bool
+        True if the user saves the file or opts not to, otherwise False (canceled).
+    """
+    if self.isSaved:
+      return True
+    else:
+      ans = messagebox.askyesnocancel(cfg.APP_NAME, "There are unsaved changes. Do you want to save them?")
+      if ans == True:
+        if self.saveRailFile():
+          return True
+      elif ans == False:
+        return True
+      else: return False
+
   def newRailFile(self) -> None:
     """
     Wipes out current rail plan, prompting the user to save if necessary.
@@ -122,36 +142,32 @@ class MainWindow(tk.Tk):
       self.isSaved = True
       self.title(cfg.APP_NAME)
 
-    if self.isSaved:
+    if self._isSavedCheck():
       updateElements()
-    else:
-      ans = messagebox.askyesnocancel(cfg.APP_NAME, "There are unsaved changes. Do you want to save them before starting a new plan?")
-      if ans == True:
-        if self.saveRailFile():
-          updateElements()
-      elif ans == False:
-        updateElements()
-      else: pass
 
   def openRailFile(self) -> None:
     """
     Opens a railplan file and populates widget info.
     """
-    _inpath = fileopenbox(title="Open Rail Planner File", default=os.path.expanduser('~/'), filetypes=['*.railplan', 'Rail Planner Files'])
-    if _inpath != None:
-      if _inpath.endswith('.railplan'):
-        try:
-          with open(_inpath, 'rb') as infile:
-            _data = pickle.load(infile)
-            self.us.userSelections = deepcopy(_data)
-            self.resultsHeadingArea.changeSearchView(self.us.userSelections.numSearches)
-            self.itineraryWindow.updateItinerary()
-            self.isSaved = True
-            self.title(cfg.APP_NAME)
-        except (FileNotFoundError, OSError):
-          messagebox.showerror("Import Rail Plan", "There was an issue reading the file.")
-      else:
-        messagebox.showerror("Import Rail Plan", "Unsupported file type.")
+    def open() -> None:
+      _inpath = fileopenbox(title="Open Rail Planner File", default=os.path.expanduser('~/'), filetypes=['*.railplan', 'Rail Planner Files'])
+      if _inpath != None:
+        if _inpath.endswith('.railplan'):
+          try:
+            with open(_inpath, 'rb') as infile:
+              _data = pickle.load(infile)
+              self.us.userSelections = deepcopy(_data)
+              self.resultsHeadingArea.changeSearchView(self.us.userSelections.numSearches)
+              self.itineraryWindow.updateItinerary()
+              self.isSaved = True
+              self.title(cfg.APP_NAME)
+          except (FileNotFoundError, OSError):
+            messagebox.showerror("Import Rail Plan", "There was an issue reading the file.")
+        else:
+          messagebox.showerror("Import Rail Plan", "Unsupported file type.")
+    
+    if self._isSavedCheck():
+      open()
   
   def saveRailFile(self) -> bool:
     """
@@ -263,15 +279,8 @@ class MainWindow(tk.Tk):
       self.searcher.driver.quit()
       sys.exit()
 
-    if not self.isSaved:
-      ans = messagebox.askyesnocancel(cfg.APP_NAME, message="There are unsaved changes. Do you want to save them before exiting?")
-      if ans == True:
-        if self.saveRailFile():
-          cleanup()
-      elif ans == False:
-        cleanup()
-      else: pass
-    else: cleanup()
+    if self._isSavedCheck():
+      cleanup()
 
   def __startup(self) -> None:
     """Launches startup tasks: creating Amtrak searcher, loading routes, loading timetables."""
