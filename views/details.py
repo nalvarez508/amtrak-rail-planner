@@ -122,7 +122,7 @@ class DetailWindow(tk.Toplevel):
   def exportData(self) -> None:
     """Saves the JSON data to a text or json file."""
     _def = os.path.expanduser("~")
-    path = filesavebox(msg="Data can be saved in JSON or TXT formats.", title="Export Train Data", default=f"{_def}/data - {self.data['Name']}.json", filetypes=["*.json, *.txt"])
+    path = filesavebox(msg="Data can be saved in HTML, JSON or TXT formats.", title="Export Train Data", default=f"{_def}/data - {self.data['Name']}.json", filetypes=["*.html, *.json, *.txt"])
     if path != None:
       try:
         with open(path, "w") as f:
