@@ -94,7 +94,7 @@ class TrainResultsArea(tk.Frame):
     self.tvScroll = ttk.Scrollbar(self.resultsArea, orient='vertical', command=self.results.yview)
     self.tvScrollHoriz = ttk.Scrollbar(self.resultsArea, orient='horizontal', command=self.results.xview)
     self.results.configure(yscrollcommand=self.tvScroll.set, xscrollcommand=self.tvScrollHoriz.set)
-    self.results.bind("<Button-1>", lambda e: self.toggleSaveButton(True))
+    self.results.bind("<<TreeviewSelect>>", lambda e: self.toggleSaveButton(True))
     self.results.bind("<Double-1>", lambda e: self.saveSelection)
     self.results.bind("<Return>", lambda e: self.saveSelection)
     if os.name == 'nt': self.results.bind("<Button-3>", self.__trainContextMenu)
@@ -105,7 +105,7 @@ class TrainResultsArea(tk.Frame):
     self.findTrainsBtn = ttk.Button(self.buttonsArea, text="Find Trains", command=self.startSearch)
     self.findTrainsBtn.pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
     ttk.Button(self.buttonsArea, text="View Itinerary", command=self.parent.openItinerary).pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
-    tk.Label(self.infoArea, text="Right-click any result for route maps, timetables, and more.", background=self.background).pack(anchor=tk.CENTER, padx=4, pady=4)
+    tk.Label(self.infoArea, text="Right-click any result for route maps, timetables, amenities, and more.", background=self.background).pack(anchor=tk.CENTER, padx=4, pady=4)
     self.exportResultsButton = ttk.Button(self.buttonsArea, text="Export Results", command=self.__exportResultsHelper, state=tk.DISABLED)
     self.exportResultsButton.pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
     
@@ -343,6 +343,8 @@ class TrainResultsArea(tk.Frame):
       self.inViewSegmentResults = deepcopy(response)
       self.parent.us.userSelections.addSearch(self.parent.us.getOrigin(), self.parent.us.getDestination(), self.parent.us.getDate(), deepcopy(response))
       self.__populateTreeview(response)
+      self.parent.isSaved = False
+      self.parent.title(f"*{cfg.APP_NAME}")
       self.parent.resultsHeadingArea.changeSearchView(-1)
     elif response != None: # Error returned
       messagebox.showerror(cfg.APP_NAME, message=response)
