@@ -1636,6 +1636,8 @@
       "code": "DHM",
       "city": "Durham",
       "stationName32": "Durham, NH",
+      "facilityName32": "University of New Hampshire",
+      "facilityName64": "University of New Hampshire",
       "autoFillName": "Durham, NH (DHM)",
       "timezone": "E"
     },
@@ -2043,9 +2045,9 @@
       "name": "Essex Junction, VT",
       "code": "ESX",
       "city": "Essex Junction",
-      "stationName32": "Essex Junction-Burlington, VT",
-      "facilityName32": "Rail Station",
-      "facilityName64": "Rail Station",
+      "stationName32": "Essex Junction, VT",
+      "facilityName32": "Amtrak Station",
+      "facilityName64": "Amtrak Station",
       "autoFillName": "Essex Junction-Burlington, VT (ESX)",
       "timezone": "E"
     },
@@ -5176,10 +5178,11 @@
       "timezone": "E"
     },
     {
+      "stationAlias": "raleigh,fair,state fair,nc state fair",
       "state": "NC",
-      "name": "North Carolina State Fair, NC",
+      "name": "Raleigh, NC",
       "code": "NSF",
-      "city": "North Carolina State Fair",
+      "city": "Raleigh",
       "stationName32": "North Carolina State Fair, NC",
       "autoFillName": "North Carolina State Fair, NC (NSF)",
       "timezone": "E"
@@ -5233,7 +5236,7 @@
       "timezone": "E"
     },
     {
-      "stationAlias": "nyc,Penn Station,Moynihan Train Hall",
+      "stationAlias": "nyc,Penn Station,Moynihan Train Hall,new york city,newyork",
       "state": "NY",
       "name": "New York, NY",
       "code": "NYP",
@@ -5615,17 +5618,6 @@
       "city": "Palm Desert",
       "stationName32": "Palm Desert, CA",
       "autoFillName": "Palm Desert, CA (PDC)",
-      "timezone": "P"
-    },
-    {
-      "state": "OR",
-      "name": "Portland, OR",
-      "code": "PDG",
-      "city": "Portland",
-      "stationName32": "Portland, OR",
-      "facilityName32": "Greyhound bus stop",
-      "facilityName64": "Greyhound bus stop",
-      "autoFillName": "Portland, OR - Greyhound Station (PDG)",
       "timezone": "P"
     },
     {
@@ -6195,6 +6187,15 @@
       "facilityName64": "Amtrak Station",
       "autoFillName": "Redding, CA - Amtrak Station (RDD)",
       "timezone": "P"
+    },
+    {
+      "state": "PA",
+      "name": "Reading, PA",
+      "code": "RDI",
+      "city": "Reading",
+      "stationName32": "Reading, PA",
+      "autoFillName": "Reading, PA (RDI)",
+      "timezone": "E"
     },
     {
       "state": "OR",
@@ -6946,8 +6947,6 @@
       "code": "SLB",
       "city": "Salt Lake City",
       "stationName32": "Salt Lake City, UT",
-      "facilityName32": "Intermodal Transportation Hub",
-      "facilityName64": "Intermodal Transportation Hub",
       "autoFillName": "Salt Lake City, UT - Intermodal Trans. Hub (SLB)",
       "timezone": "M"
     },
@@ -6988,7 +6987,9 @@
       "code": "SLM",
       "city": "Salem",
       "stationName32": "Salem, OR",
-      "autoFillName": "Salem, OR (SLM)",
+      "facilityName32": "Amtrak Station",
+      "facilityName64": "Amtrak Station",
+      "autoFillName": "Salem, OR - Amtrak Station (SLM)",
       "timezone": "P"
     },
     {
@@ -7044,6 +7045,8 @@
       "code": "SLT",
       "city": "South Lake Tahoe",
       "stationName32": "South Lake Tahoe, CA",
+      "facilityName32": "South Y Transit Center",
+      "facilityName64": "South Y Transit Center",
       "autoFillName": "South Lake Tahoe, CA (SLT)",
       "timezone": "P"
     },
@@ -8332,15 +8335,6 @@
     },
     {
       "state": "WI",
-      "name": "Wisconsin Rapids, WI",
-      "code": "WIR",
-      "city": "Wisconsin Rapids",
-      "stationName32": "Wisconsin Rapids, WI",
-      "autoFillName": "Wisconsin Rapids, WI (WIR)",
-      "timezone": "C"
-    },
-    {
-      "state": "WI",
       "name": "Wittenberg, WI",
       "code": "WIT",
       "city": "Wittenberg",
@@ -9599,15 +9593,6 @@
     },
     {
       "state": "PA",
-      "name": "Blossburg, PA",
-      "code": "BSS",
-      "city": "Blossburg",
-      "stationName32": "Blossburg, PA",
-      "autoFillName": "Blossburg, PA (BSS)",
-      "timezone": "E"
-    },
-    {
-      "state": "PA",
       "name": "Clearfield, PA",
       "code": "CFD",
       "city": "Clearfield",
@@ -9635,15 +9620,6 @@
     },
     {
       "state": "PA",
-      "name": "Gillette, PA",
-      "code": "GLL",
-      "city": "Gillette",
-      "stationName32": "Gillette, PA",
-      "autoFillName": "Gillette, PA (GLL)",
-      "timezone": "E"
-    },
-    {
-      "state": "PA",
       "name": "Indiana, PA",
       "code": "INA",
       "city": "Indiana",
@@ -9651,15 +9627,6 @@
       "facilityName32": "Indiana University of Penn",
       "facilityName64": "Indiana University of Pennsylvania",
       "autoFillName": "Indiana, PA (INA)",
-      "timezone": "E"
-    },
-    {
-      "state": "PA",
-      "name": "Liberty, PA",
-      "code": "LBR",
-      "city": "Liberty",
-      "stationName32": "Liberty, PA",
-      "autoFillName": "Liberty, PA (LBR)",
       "timezone": "E"
     },
     {
@@ -9701,24 +9668,6 @@
       "city": "Mifflintown",
       "stationName32": "Mifflintown, PA",
       "autoFillName": "Mifflintown, PA (MIF)",
-      "timezone": "E"
-    },
-    {
-      "state": "PA",
-      "name": "Mainesburg, PA",
-      "code": "MNB",
-      "city": "Mainesburg",
-      "stationName32": "Mainesburg, PA",
-      "autoFillName": "Mainesburg, PA (MNB)",
-      "timezone": "E"
-    },
-    {
-      "state": "PA",
-      "name": "Mansfield, PA",
-      "code": "MNF",
-      "city": "Mansfield",
-      "stationName32": "Mansfield, PA",
-      "autoFillName": "Mansfield, PA (MNF)",
       "timezone": "E"
     },
     {
@@ -9810,15 +9759,6 @@
       "city": "Sylvania",
       "stationName32": "Sylvania, PA",
       "autoFillName": "Sylvania, PA (SYV)",
-      "timezone": "E"
-    },
-    {
-      "state": "PA",
-      "name": "Troy, PA",
-      "code": "TRP",
-      "city": "Troy",
-      "stationName32": "Troy, PA",
-      "autoFillName": "Troy, PA (TRP)",
       "timezone": "E"
     },
     {
@@ -10531,15 +10471,6 @@
     },
     {
       "state": "VT",
-      "name": "Ferrisburgh-Vergennes, VT",
-      "code": "VGN",
-      "city": "Ferrisburgh-Vergennes",
-      "stationName32": "Ferrisburgh-Vergennes, VT",
-      "autoFillName": "Ferrisburgh-Vergennes, VT (VGN)",
-      "timezone": "E"
-    },
-    {
-      "state": "VT",
       "name": "Wallingford, VT",
       "code": "WAG",
       "city": "Wallingford",
@@ -10565,8 +10496,8 @@
       "code": "HSU",
       "city": "Arcata",
       "stationName32": "Arcata, CA",
-      "facilityName32": "Humboldt State University",
-      "facilityName64": "Humboldt State University",
+      "facilityName32": "Cal Poly Humboldt",
+      "facilityName64": "Cal Poly Humboldt",
       "autoFillName": "Arcata, CA - Humboldt State University, CA (HSU)",
       "timezone": "P"
     },
@@ -10592,6 +10523,17 @@
       "timezone": "P"
     },
     {
+      "state": "VT",
+      "name": "Burlington, VT",
+      "code": "BTN",
+      "city": "Burlington",
+      "stationName32": "Burlington, VT",
+      "facilityName32": "Union Station",
+      "facilityName64": "Union Station",
+      "autoFillName": "Burlington, VT - Union Station (BTN)",
+      "timezone": "E"
+    },
+    {
       "state": "OR",
       "name": "Corvallis, OR",
       "code": "CVI",
@@ -10612,6 +10554,17 @@
       "facilityName64": "Oregon State University",
       "autoFillName": " Corvallis, OR - Oregon State University (CVO)",
       "timezone": "P"
+    },
+    {
+      "state": "VT",
+      "name": "Middlebury, VT",
+      "code": "MBY",
+      "city": "Middlebury",
+      "stationName32": "Middlebury, VT",
+      "facilityName32": "Amtrak Station",
+      "facilityName64": "Amtrak Station",
+      "autoFillName": "Middlebury, VT - Amtrak Station (MBY)",
+      "timezone": "E"
     },
     {
       "state": "OR",
@@ -10713,6 +10666,101 @@
       "stationName32": "Whitewater, WI",
       "autoFillName": "Whitewater, WI (WWT)",
       "timezone": "C"
+    },
+    {
+      "state": "CA",
+      "name": "Burbank, CA",
+      "code": "BBK",
+      "city": "Burbank",
+      "stationName32": "Burbank, CA",
+      "facilityName32": "Downtown",
+      "facilityName64": "Downtown",
+      "autoFillName": "Burbank, CA - Downtown (BBK)",
+      "timezone": "P"
+    },
+    {
+      "state": "CA",
+      "name": "Los Angeles, CA",
+      "code": "NRG",
+      "city": "Los Angeles",
+      "stationName32": "Northridge, CA",
+      "autoFillName": "Northridge, CA (NRG)",
+      "timezone": "P"
+    },
+    {
+      "state": "PA",
+      "name": "Pottstown, PA",
+      "code": "PWN",
+      "city": "Pottstown",
+      "stationName32": "Pottstown, PA",
+      "autoFillName": "Pottstown, PA (PWN)",
+      "timezone": "E"
+    },
+    {
+      "stationAlias": "vergennes",
+      "state": "VT",
+      "name": "Ferrisburgh, VT",
+      "code": "VRN",
+      "city": "Ferrisburgh",
+      "stationName32": "Ferrisburgh-Vergennes, VT",
+      "facilityName32": "Amtrak Station",
+      "facilityName64": "Amtrak Station",
+      "autoFillName": "Ferrisburgh-Vergennes, VT (VRN)",
+      "timezone": "E"
+    },
+    {
+      "state": "MI",
+      "name": "Cedar Springs, MI",
+      "code": "CDS",
+      "city": "Cedar Springs",
+      "stationName32": "Cedar Springs, MI",
+      "autoFillName": "Cedar Springs, MI (CDS)",
+      "timezone": "E"
+    },
+    {
+      "state": "MI",
+      "name": "Kinross Charter Twp, MI",
+      "code": "KNS",
+      "city": "Kinross Charter Twp",
+      "stationName32": "Kinross Charter Twp, MI",
+      "autoFillName": "Kinross Charter Twp, MI (KNS)",
+      "timezone": "E"
+    },
+    {
+      "state": "MI",
+      "name": "Morley, MI",
+      "code": "MOR",
+      "city": "Morley",
+      "stationName32": "Morley, MI",
+      "autoFillName": "Morley, MI (MOR)",
+      "timezone": "E"
+    },
+    {
+      "state": "MI",
+      "name": "Stanwood, MI",
+      "code": "SWD",
+      "city": "Stanwood",
+      "stationName32": "Stanwood, MI",
+      "autoFillName": "Stanwood, MI (SWD)",
+      "timezone": "E"
+    },
+    {
+      "state": "CO",
+      "name": "Crested Butte, CO",
+      "code": "CBC",
+      "city": "Crested Butte",
+      "stationName32": "Crested Butte, CO",
+      "autoFillName": "Crested Butte, CO (CBC)",
+      "timezone": "M"
+    },
+    {
+      "state": "CO",
+      "name": "Almont, CO",
+      "code": "ANT",
+      "city": "Almont",
+      "stationName32": "Almont, CO",
+      "autoFillName": "Almont, CO (ANT)",
+      "timezone": "M"
     }
   ]
 }
