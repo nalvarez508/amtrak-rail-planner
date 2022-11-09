@@ -66,8 +66,8 @@ class ResultsHeadingArea(tk.Frame):
     self.numberOfTrains = tk.StringVar(self)
 
     tk.Label(self.searchHeadingFrame, textvariable=self.searchNumVar, background=self.background).pack(side=tk.LEFT, anchor=tk.CENTER)
-    self.leftSegmentButton = ttk.Button(self.segmentSearchFrame, text='<', state='disabled', command=self.__goLeft)
-    self.rightSegmentButton = ttk.Button(self.segmentSearchFrame, text='>', state='disabled', command=self.__goRight)
+    self.leftSegmentButton = ttk.Button(self.segmentSearchFrame, text='< Previous', state='disabled', command=self.__goLeft)
+    self.rightSegmentButton = ttk.Button(self.segmentSearchFrame, text='Next >', state='disabled', command=self.__goRight)
 
     self.leftSegmentButton.pack(side=tk.LEFT, anchor=tk.NW, padx=8)
     #tk.Label(self.segmentSearchFrame, textvariable=self.searchNum, background=self.background).pack(side=tk.LEFT, anchor=tk.CENTER, fill=tk.X, padx=4, expand=True)
