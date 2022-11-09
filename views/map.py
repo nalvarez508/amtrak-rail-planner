@@ -1,11 +1,7 @@
 import tkinter as tk
-from attr import Attribute
 import railmapview as mapview
 
 import os
-import requests
-from bs4 import BeautifulSoup
-from lxml import etree
 
 from traintracks.route import RouteCollection
 from views.config import ICON
