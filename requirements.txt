@@ -1,6 +1,6 @@
 tkcalendar
-webdriver_manager
-undetected_chromedriver
+webdriver-manager
+undetected-chromedriver
 selenium
 bs4
 pillow
