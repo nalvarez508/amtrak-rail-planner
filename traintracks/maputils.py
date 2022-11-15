@@ -28,8 +28,8 @@ def amtrakAddressRequest(stationCode: str) -> list[str]:
     soup = BeautifulSoup(webinfo.content, "html.parser")
     dom = etree.HTML(str(soup))
     try:
-      addr1 = dom.xpath("//*[@class='hero-banner-and-info__card_block-address']")[0].text
-      _addr2 = dom.xpath("//*[@class='hero-banner-and-info__card_block-address']")[2].text
+      addr1 = dom.xpath("//*[@class='hero-banner-and-info__card_block-address']")[-2].text
+      _addr2 = dom.xpath("//*[@class='hero-banner-and-info__card_block-address']")[-1].text
     except IndexError:
       _addr2 = dom.xpath("//*[@class='hero-banner-and-info__card_block-address']")[1].text
     addr2 = _addr2.replace('  ','').replace('\r\n', ' ')
