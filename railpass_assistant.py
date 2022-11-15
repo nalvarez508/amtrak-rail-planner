@@ -149,7 +149,7 @@ class MainWindow(tk.Tk):
     """
     Opens a railplan file and populates widget info.
     """
-    def open() -> None:
+    def _open() -> None:
       _inpath = fileopenbox(title="Open Rail Planner File", default=os.path.expanduser('~/'), filetypes=['*.railplan', 'Rail Planner Files'])
       if _inpath != None:
         if _inpath.endswith('.railplan'):
@@ -167,7 +167,7 @@ class MainWindow(tk.Tk):
           messagebox.showerror("Import Rail Plan", "Unsupported file type.")
     
     if self._isSavedCheck():
-      open()
+      _open()
   
   def saveRailFile(self) -> bool:
     """
