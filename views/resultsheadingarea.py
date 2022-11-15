@@ -62,7 +62,7 @@ class ResultsHeadingArea(tk.Frame):
     self.searchDate = tk.StringVar(self)
 
     self.config(background=self.background)
-    self.boldItalic = font.Font(family=cfg.SYSTEM_FONT, size=14, weight=font.BOLD, slant=font.ITALIC)
+    self.boldItalic = font.Font(family=cfg.SYSTEM_FONT, size=14, weight=font.BOLD)#, slant=font.ITALIC)
     self.numberOfTrains = tk.StringVar(self)
 
     tk.Label(self.searchHeadingFrame, textvariable=self.searchNumVar, background=self.background).pack(side=tk.LEFT, anchor=tk.CENTER)
