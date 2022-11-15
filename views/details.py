@@ -43,7 +43,7 @@ class DetailWindow(tk.Toplevel):
     tk.Toplevel.__init__(self, parent, *args, **kwargs)
     self.parent = parent
     self.data = data
-    self.geometry('450x600')
+    self.geometry('450x650')
     self.title(f"Detail View - {self.data['Name']}")
     if os.name == 'nt': self.iconbitmap(ICON)
     self.config(background=BACKGROUND)
@@ -65,7 +65,7 @@ class DetailWindow(tk.Toplevel):
     self.texto.configure(state=tk.DISABLED)
 
     self.dataView.pack(side=tk.TOP, expand=True, fill=tk.BOTH)
-    self.buttonsArea.pack(side=tk.BOTTOM, expand=False, padx=4, pady=4)
+    self.buttonsArea.pack(side=tk.BOTTOM, expand=False, padx=4, pady=4, anchor=tk.S)
 
     self.wm_protocol('WM_DELETE_WINDOW', self.destroy)
   
@@ -119,14 +119,40 @@ class DetailWindow(tk.Toplevel):
     self.texto.tag_config("blue", font=(SYSTEM_FONT, 14, 'bold', 'italic'), foreground='blue')
     self.texto.tag_config("underline", font=(SYSTEM_FONT, 16, 'bold', 'underline'))
 
+  def _convertToHTML(self, data) -> str:
+    """Converts JSON data to a formatted HTML string."""
+    def findTypes(p, d):
+      nonlocal outStr
+      if type(p[d]) == list:
+        outStr += f"<b>{d}</b><br>\n"
+        for x in p[d]:
+          outStr += f"<li>{x}</li>\n"
+      elif type(p[d]) == dict:
+        outStr += f"<h2>{d}</h2>\n"
+        for key in p[d]:
+          outStr += f"{'<br>' if int(key) > 0 else ''}<u>Segment {int(key)+1}</u><br>"
+          for item2 in p[d][key]:
+            findTypes(p[d][key], item2)
+      else:
+        outStr += f"<b>{d}:</b> {p[d]}<br>\n"
+    outStr = ""
+    outStr += f"<h1>{data['Name']}</h1>\n"
+    for item in data:
+      findTypes(data, item)
+    return outStr
+
   def exportData(self) -> None:
     """Saves the JSON data to a text or json file."""
     _def = os.path.expanduser("~")
-    path = filesavebox(msg="Data can be saved in HTML, JSON or TXT formats.", title="Export Train Data", default=f"{_def}/data - {self.data['Name']}.json", filetypes=["*.html, *.json, *.txt"])
+    path = filesavebox(msg="Data can be saved in HTML, JSON or TXT formats.", title="Export Train Data", default=f"{_def}/data - {self.data['Name']}.html", filetypes=["*.html, *.json, *.txt"])
     if path != None:
+      if path.endswith('.html'):
+        dataToWrite = self._convertToHTML(self.data)
+      else:
+        dataToWrite = json.dumps(self.data, indent=2)
       try:
         with open(path, "w") as f:
-          f.write(json.dumps(self.data, indent=2))
+          f.write(dataToWrite)
       except FileNotFoundError:
         messagebox.showerror(title="Export Train Data", message="Unable to write this to a file.")
 
