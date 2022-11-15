@@ -2,6 +2,8 @@ import requests
 import json
 from bs4 import BeautifulSoup
 
+from traintracks.maputils import amtrakAddressRequest
+
 class Stations:
   """
   A class to represent all Amtrak stations.
@@ -75,7 +77,13 @@ class Stations:
     dict
         Station information.
     """
-    return self.stations[key]
+    _this = self.stations[key]
+    addr = amtrakAddressRequest(_this['Code'])
+    try:
+      _this['Address'] = addr
+    except KeyError:
+      pass
+    return _this
 
   def returnStationKeys(self) -> list[str]:
     """
@@ -161,4 +169,5 @@ class Stations:
       f.write(json.dumps(self.stations, indent=4))
 
 if __name__ == "__main__":
-  Stations()
+  x = Stations()
+  print(x.returnStationData('Washington Union, DC (WAS)'))
