@@ -105,7 +105,7 @@ class Itinerary(tk.Toplevel):
 
     self.tvScrollHoriz.pack(side=tk.BOTTOM, fill=tk.BOTH)
     self.userSegments.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-    self.tvScroll.pack(side=tk.RIGHT, fill=tk.BOTH)
+    self.tvScroll.pack(side=tk.RIGHT, fill=tk.BOTH, anchor=tk.E)
     self.segmentsArea.pack(fill=tk.BOTH, padx=8, pady=4, expand=True)
 
     self.exportButton.pack(side=tk.LEFT, fill=tk.X, anchor=tk.CENTER, padx=4)
