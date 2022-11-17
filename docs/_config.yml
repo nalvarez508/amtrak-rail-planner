@@ -1,10 +1,10 @@
 theme: jekyll-theme-minimal
-tagline: Amtrak Rail Planner
+tagline: USA Rail Planner
 description: >-
-  Amtrak Rail Planner intends to make multi-city trip planning easier. Meant for use with a Rail Pass.
-title: Amtrak Rail Planner
+  USA Rail Planner intends to make multi-city trip planning easier.
+title: USA Rail Planner
 logo: amtrak_header.png
-show_downloads: true
-app_version: 0.9.0
+show_downloads: false
+app_version: 0.9.5
 mac_url: https://nalvarez508.github.io/amtrak-rail-planner/
 win_url: https://nalvarez508.github.io/amtrak-rail-planner/
