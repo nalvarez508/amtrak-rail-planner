@@ -6,3 +6,5 @@ bs4
 pillow
 easygui
 urllib3
+lxml
+tkintermapview
