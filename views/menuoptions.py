@@ -42,7 +42,7 @@ class MenuOptions(tk.Menu):
     self.timetableUrls = {}
 
     self.helpmenu = tk.Menu(self, tearoff=0)
-    self.helpmenu.add_command(label="About", command=lambda: self.openBox(f"Amtrak Rail Pass Assistant\nv{cfg.APP_VERSION}"))
+    self.helpmenu.add_command(label="About", command=lambda: self.openBox(f"Amtrak Rail Pass Assistant\nv{cfg.APP_VERSION}\nCopyright 2022 Nick Alvarez\n\nRoute map data provided by Transitland."))
     self.helpmenu.add_command(label="Github", command=lambda: self.openLink("https://github.com/nalvarez508/amtrak-rail-planner"))
 
     self.statusmenu = tk.Menu(self, tearoff=0)
