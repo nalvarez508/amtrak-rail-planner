@@ -15,6 +15,8 @@ class Stations:
 
   Methods
   -------
+  returnStationData(key)
+      Returns dictionary object for a station.
   returnStationKeys()
       Returns a list of 'Code | Name, State' strings.
   returnCityState(key)
@@ -25,6 +27,8 @@ class Stations:
       Returns an Amtrak station code from a key.
   returnCityStateFromCode(code)
       Returns 'City, State' string from a station code.
+  returnKeyByCode(code)
+      Returns a 'Name, State (Code)' string from a station code.
   """
   def __init__(self) -> None:
     self.stations = dict()
@@ -142,7 +146,12 @@ class Stations:
         an Amtrak station code
     """
     return self.stations[key]["Code"]
-
+  
+  def _keyFinder(self, code: str) -> str:
+    for name in self.stations:
+      if code == self.stations[name]["Code"]:
+        return name
+  
   def returnCityStateByCode(self, code: str) -> str:
     """
     Returns a 'City, State' string from a station code.
@@ -157,16 +166,27 @@ class Stations:
     str
         'City, State'
     """
-    _key = ''
-    for name in self.stations:
-      if code == self.stations[name]["Code"]:
-        _key = name
-        break
-    return self.returnCityState(_key)
+    return self.returnCityState(self._keyFinder(code))
 
   def __test_writeToFile(self):
     with open("Stations.json", "w") as f:
       f.write(json.dumps(self.stations, indent=4))
+  
+  def returnKeyByCode(self, code: str) -> str:
+    """
+    Returns the friendly name for a station.
+
+    Parameters
+    ----------
+    code : str
+        Amtrak station code
+
+    Returns
+    -------
+    str
+        'Name, State (Code)'
+    """
+    return self._keyFinder(code)
 
 if __name__ == "__main__":
   x = Stations()
