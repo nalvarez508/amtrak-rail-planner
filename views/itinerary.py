@@ -266,8 +266,7 @@ class Itinerary(tk.Toplevel):
           widget.configure(state='normal')
         try:
           if idx == 0: self.moveUpButton.configure(state='disabled')
-          # elif mySelection["Index"] == len(self.inViewSavedSegments): self.moveDownButton.configure(state='disabled')
-          elif idx == len(self.userSegments.get_children())-1: self.moveDownButton.configure(state='disabled')
+          if idx == (len(self.userSegments.get_children())-1): self.moveDownButton.configure(state='disabled')
         except TypeError:
           self.moveUpButton.configure(state='disabled')
           self.moveDownButton.configure(state='disabled')
