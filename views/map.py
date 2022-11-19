@@ -2,9 +2,11 @@ import tkinter as tk
 import railmapview as mapview
 
 import os
+from copy import deepcopy
 
 from traintracks.route import RouteCollection
 from views.config import ICON
+from views.details import DetailWindow
 from traintracks.maputils import getCoords, amtrakAddressRequest
 
 class Map(tk.Toplevel):
@@ -84,7 +86,7 @@ class Map(tk.Toplevel):
     if coords != None:
       try: self.originMarker.delete()
       except AttributeError as e: print(e) # Object does not exist yet
-      self.originMarker = self.map.set_marker(coords[0], coords[1], text=name)
+      self.originMarker = self.map.set_marker(coords[0], coords[1], text=name, command=lambda e: self.parent.startThread(DetailWindow, [self.parent, self.parent.stationsArea.stations.returnStationData(name)]))
     self.__updatePath()
     self.update()
   
@@ -95,7 +97,7 @@ class Map(tk.Toplevel):
     if coords != None:
       try: self.destinationMarker.delete()
       except AttributeError as e: print(e) # Object does not exist yet
-      self.destinationMarker = self.map.set_marker(coords[0], coords[1], text=name)
+      self.destinationMarker = self.map.set_marker(coords[0], coords[1], text=name, command=lambda e: self.parent.startThread(DetailWindow, [self.parent, self.parent.stationsArea.stations.returnStationData(name)]))
     self.__updatePath()
     self.update()
 
@@ -145,6 +147,10 @@ class Map(tk.Toplevel):
     elif side == 2:
       self.updateDestination()
   
+  def _clickHelper(self, widget) -> None:
+    name = self.parent.stationsArea.stations.returnKeyByCode(widget.data)
+    self.parent.startThread(DetailWindow, [self.parent, self.parent.stationsArea.stations.returnStationData(name)])
+
   def drawTrainRoute(self, name, stops: list) -> None:
     """
     Creates a path of the train route and adds stops.
@@ -206,7 +212,9 @@ class Map(tk.Toplevel):
             marker_color_outside='red',
             marker_color_circle='red',
             font='Tahoma 18 bold',
-            text_color='blue'))
+            text_color='blue',
+            data=deepcopy(item),
+            command=self._clickHelper))
           self.subsidiaryStopMarkers.append(_newImportantMarker)
           self.importantStopMarkers.append(_newImportantMarker)
 
@@ -222,7 +230,9 @@ class Map(tk.Toplevel):
               marker_color_outside='red',
               marker_color_circle='red',
               font='Tahoma 18 bold',
-              text_color='blue'))
+              text_color='blue',
+              data=deepcopy(item),
+              command=self._clickHelper))
 
       self.currentStops = sorted(stops)
       self.__updateView(self.importantStopMarkers)
