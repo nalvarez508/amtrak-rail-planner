@@ -65,9 +65,9 @@ class ResultsHeadingArea(tk.Frame):
     self.boldItalic = font.Font(family=cfg.SYSTEM_FONT, size=14, weight=font.BOLD)#, slant=font.ITALIC)
     self.numberOfTrains = tk.StringVar(self)
 
-    tk.Label(self.searchHeadingFrame, textvariable=self.searchNumVar, background=self.background).pack(side=tk.LEFT, anchor=tk.CENTER)
-    self.leftSegmentButton = ttk.Button(self.segmentSearchFrame, text='< Previous', state='disabled', command=self.__goLeft)
-    self.rightSegmentButton = ttk.Button(self.segmentSearchFrame, text='Next >', state='disabled', command=self.__goRight)
+    tk.Label(self.searchHeadingFrame, textvariable=self.searchNumVar, background=self.background, font=(cfg.SYSTEM_FONT, 12)).pack(side=tk.LEFT, anchor=tk.CENTER)
+    self.leftSegmentButton = ttk.Button(self.segmentSearchFrame, text='< Previous Search', state='disabled', command=self.__goLeft)
+    self.rightSegmentButton = ttk.Button(self.segmentSearchFrame, text='Next Search >', state='disabled', command=self.__goRight)
 
     self.leftSegmentButton.pack(side=tk.LEFT, anchor=tk.NW, padx=8)
     #tk.Label(self.segmentSearchFrame, textvariable=self.searchNum, background=self.background).pack(side=tk.LEFT, anchor=tk.CENTER, fill=tk.X, padx=4, expand=True)
@@ -86,7 +86,7 @@ class ResultsHeadingArea(tk.Frame):
   
   def __updateResultsWidgets(self, doTreeviewRefresh: bool=True) -> None:
     """Changes heading title and refreshes results treeview. Updates state of left/right buttons."""
-    self.__searchButtonToggle()
+    self._searchButtonToggle()
 
     # Get updated values
     try:
@@ -114,7 +114,7 @@ class ResultsHeadingArea(tk.Frame):
       self.searchDate.set("")
       self.numberOfTrains.set("")
       self.searchNumVar.set("")
-      self.__searchButtonToggle()
+      self._searchButtonToggle()
 
   def getSearchNum(self) -> int:
     """
@@ -154,7 +154,7 @@ class ResultsHeadingArea(tk.Frame):
       self.searchNum += 1
       self.__updateResultsWidgets()
 
-  def __searchButtonToggle(self) -> None:
+  def _searchButtonToggle(self) -> None:
     """Ensures user cannot navigate left or right when they hit the end on either side."""
     currentView = self.searchNum
     totalSearches = self.parent.us.userSelections.numSearches

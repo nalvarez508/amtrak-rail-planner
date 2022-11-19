@@ -104,8 +104,8 @@ class TrainResultsArea(tk.Frame):
     self.saveButton.pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
     self.findTrainsBtn = ttk.Button(self.buttonsArea, text="Find Trains", command=self.startSearch)
     self.findTrainsBtn.pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
-    ttk.Button(self.buttonsArea, text="View Itinerary", command=self.parent.openItinerary).pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
-    tk.Label(self.infoArea, text="Right-click any result for route maps, timetables, amenities, and more.", background=self.background).pack(anchor=tk.CENTER, padx=4, pady=4)
+    ttk.Button(self.buttonsArea, text="Your Itinerary", command=self.parent.openItinerary).pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
+    tk.Label(self.infoArea, text="Right-click any result for route maps, train details, timetables, amenities, and more.", background=self.background, font=(cfg.SYSTEM_FONT, 9, 'bold')).pack(anchor=tk.CENTER, padx=4, pady=4)
     self.exportResultsButton = ttk.Button(self.buttonsArea, text="Export Results", command=self.__exportResultsHelper, state=tk.DISABLED)
     self.exportResultsButton.pack(side=tk.LEFT, anchor=tk.CENTER, padx=4)
     
@@ -225,6 +225,7 @@ class TrainResultsArea(tk.Frame):
     self.isSegmentSaved = (True if (len(self.savedSegmentsIndices) > 0) else False)
     self.saveButton.configure(state=tk.DISABLED)
     self.exportResultsButton.configure(state=tk.NORMAL)
+    self.parent.resultsHeadingArea._searchButtonToggle()
     self.parent.update_idletasks()
 
   def __clearTree(self, wipeout: bool=True) -> None:
@@ -264,6 +265,8 @@ class TrainResultsArea(tk.Frame):
       # Resetting search elements
       self.findTrainsBtn.config(state='disabled')
       self.toggleSaveButton()
+      self.parent.resultsHeadingArea.leftSegmentButton.configure(state=tk.DISABLED)
+      self.parent.resultsHeadingArea.rightSegmentButton.configure(state=tk.DISABLED)
       self.parent.statusMessage.set("Searching")
       self.resultsArea.pack_forget()
       self.progressBar.pack()

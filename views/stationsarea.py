@@ -44,7 +44,7 @@ class StationsArea(tk.Frame):
     self.stationKeys = self.stations.returnStationKeys()
     self.lengthOfList = len(self.stations.returnStationKeys())
     self.boxWidth = int(35/cfg.WIDTH_DIV)
-    self.infoIcon = PhotoImage(file="info.png")
+    self.infoIcon = PhotoImage(file="information.png")
     self.infoIcon = self.infoIcon.zoom(2)
     self.infoIcon = self.infoIcon.subsample(64)
     
