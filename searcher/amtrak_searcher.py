@@ -357,14 +357,16 @@ class AmtrakSearch:
     try:
       if file == None:
         j = json.loads(self._getSessionStorage("searchresults", True))
-      else: j = file
+      else:
+        j = file
+        self.__updateStatusMessage('Test', 22)
 
       _journeySolutionOption = j["journeySolutionOption"]
       _journeyLegs = _journeySolutionOption["journeyLegs"][0]
       _journeyLegOptionsMultiple = _journeyLegs["journeyLegOptions"] #All segments
 
       for index, opt in enumerate(_journeyLegOptionsMultiple):
-        self.__updateStatusMessage(f"Processing results", 29./len(_journeyLegOptionsMultiple))
+        self.__updateStatusMessage(f"Processing results", 28./len(_journeyLegOptionsMultiple))
         try:
           if len(opt["reservableAccommodations"]) > 0: # Not sold out
 
@@ -561,6 +563,7 @@ class AmtrakSearch:
     try: # Loading the page
       self.__updateStatusMessage("Searching - loading page", 0)
       if (self.driver.current_url != cfg.SEARCH_URL) or self.returnedError: # If not at the page or an error occurred last time, reload
+        self.driver.get('about:blank')
         self.driver.get(cfg.SEARCH_URL)
       self.returnedError = False
       self.driver.execute_script("window.scrollTo(document.body.scrollHeight, 0)") # Reset after previous search
