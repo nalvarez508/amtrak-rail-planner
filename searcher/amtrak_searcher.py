@@ -563,7 +563,6 @@ class AmtrakSearch:
     try: # Loading the page
       self.__updateStatusMessage("Searching - loading page", 0)
       if (self.driver.current_url != cfg.SEARCH_URL) or self.returnedError: # If not at the page or an error occurred last time, reload
-        self.driver.get('about:blank')
         self.driver.get(cfg.SEARCH_URL)
       self.returnedError = False
       self.driver.execute_script("window.scrollTo(document.body.scrollHeight, 0)") # Reset after previous search
