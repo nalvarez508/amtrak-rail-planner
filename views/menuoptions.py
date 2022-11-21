@@ -120,10 +120,10 @@ class MenuOptions(tk.Menu):
     traincodes = None
     while(traincodes == None):
       try:
-        traincodes = json.loads(self.parent.searcher._getSessionStorage('traincodes'))
+        traincodes = json.loads(self.parent.searcher._getSessionStorage('traincodes'), True)
       except TypeError:
         print("Tried to load train codes")
-        sleep(1)
+        sleep(5)
 
     trainnames = list(traincodes.values())
     trainnames_unique = []
@@ -197,7 +197,7 @@ class TrainMenu(tk.Menu):
       self.add_command(label="Save Segment", command=save)
       self.add_separator()
     self.add_command(label="Route Map", command=self.singleRouteUpdate)
-    self.add_command(label="More Details", command=self.openDetailView)
+    self.add_command(label="Train Details", command=self.openDetailView)
     self.add_separator()
     if save == None: self.add_command(label="Search Results", command=self.openResults)
     self.add_command(label="Online Info", command=self.openTrainLink)
