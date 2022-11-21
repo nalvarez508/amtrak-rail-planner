@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, PhotoImage
 from easygui import filesavebox
 
 from copy import deepcopy
@@ -88,9 +88,13 @@ class TrainResultsArea(tk.Frame):
     self.headerCols = dict()
     self.dispCols = list()
     self.__getDisplayColumns()
+    self.iconMixed = PhotoImage(file='mixed_service.png')
+    self.iconMulti = PhotoImage(file='multi_train.png')
+    self.iconSingle = PhotoImage(file='single_train.png')
 
-    self.results = ttk.Treeview(self.resultsArea, columns=self.columns, show='headings', cursor="hand2", selectmode='browse', height=12/cfg.WIDTH_DIV)
+    self.results = ttk.Treeview(self.resultsArea, columns=self.columns, selectmode='browse', height=12/cfg.WIDTH_DIV)
     self.__makeHeadings()
+    self.results.column('#0', width=60)
     self.tvScroll = ttk.Scrollbar(self.resultsArea, orient='vertical', command=self.results.yview)
     self.tvScrollHoriz = ttk.Scrollbar(self.resultsArea, orient='horizontal', command=self.results.xview)
     self.results.configure(yscrollcommand=self.tvScroll.set, xscrollcommand=self.tvScrollHoriz.set)
@@ -238,8 +242,8 @@ class TrainResultsArea(tk.Frame):
 
   def __makeHeadings(self) -> None:
     for index, col in enumerate(self.headerCols):
-      self.results.heading(self.columns[index], text=col, anchor='w')
       self.results.column(self.columns[index], minwidth=10, width=self.headerCols[col], stretch=True, anchor='w')
+      self.results.heading(self.columns[index], text=col, anchor='w')
     self.results["displaycolumns"] = self.dispCols
 
   def startSearch(self) -> None:
@@ -366,7 +370,12 @@ class TrainResultsArea(tk.Frame):
     for train in _trains: # Every element of returned train dict
       num = train+1 # Dict starts at zero
       vals = _trains[train].returnSelectedElements(self.columns)
-      self.results.insert('', tk.END, text=train, values=vals)
+      if _trains[train].name == 'Multiple Trains':
+        self.results.insert('', tk.END, text=train, image=self.iconMulti, values=vals)
+      elif _trains[train].name == 'Mixed Service':
+        self.results.insert('', tk.END, text=train, image=self.iconMixed, values=vals)
+      else:
+        self.results.insert('', tk.END, text=train, image=self.iconSingle, values=vals)
       if num == 1: # Display of s for plural elements
         self.parent.resultsHeadingArea.numberOfTrains.set(f"{num} train found")
       else:
