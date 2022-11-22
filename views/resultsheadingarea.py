@@ -98,9 +98,9 @@ class ResultsHeadingArea(tk.Frame):
       i = thisPreviousSearch["Saved Index"]
 
       # Set updated values
-      self.parent.us.setOrigin(o)
-      self.parent.us.setDestination(d)
-      self.parent.us.setDate(t)
+      # self.parent.us.setOrigin(o)
+      # self.parent.us.setDestination(d)
+      # self.parent.us.setDate(t)
 
       # Redraw widgets
       self.titleToAndFrom.set(f"{self.parent.stationsArea.stations.returnStationNameAndState(o)} to {self.parent.stationsArea.stations.returnStationNameAndState(d)}")
