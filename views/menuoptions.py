@@ -120,9 +120,9 @@ class MenuOptions(tk.Menu):
     traincodes = None
     while(traincodes == None):
       try:
-        traincodes = json.loads(self.parent.searcher._getSessionStorage('traincodes'), True)
-      except TypeError:
-        print("Tried to load train codes")
+        traincodes = json.loads(self.parent.searcher._getSessionStorage('traincodes', True))
+      except TypeError as e:
+        print("Tried to load train codes", e)
         sleep(5)
 
     trainnames = list(traincodes.values())
