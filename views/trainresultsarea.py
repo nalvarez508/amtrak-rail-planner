@@ -92,6 +92,7 @@ class TrainResultsArea(tk.Frame):
     self.iconMultiBus = PhotoImage(file='multi_bus.png')
     self.iconMultiTrain = PhotoImage(file='multi_train.png')
     self.iconSingleTrain = PhotoImage(file='single_train.png')
+    self.iconSingleBus = PhotoImage(file='single_bus.png')
 
     self.results = ttk.Treeview(self.resultsArea, columns=self.columns, selectmode='browse', height=12/cfg.WIDTH_DIV)
     self.__makeHeadings()
@@ -377,6 +378,8 @@ class TrainResultsArea(tk.Frame):
         self.results.insert('', tk.END, text=train, image=self.iconMixedService, values=vals)
       elif _trains[train].name == 'Multiple Buses':
         self.results.insert('', tk.END, text=train, image=self.iconMultiBus, values=vals)
+      elif _trains[train].name == 'Connecting Bus':
+        self.results.insert('', tk.END, text=train, image=self.iconSingleBus, values=vals)
       else:
         self.results.insert('', tk.END, text=train, image=self.iconSingleTrain, values=vals)
       if num == 1: # Display of s for plural elements
