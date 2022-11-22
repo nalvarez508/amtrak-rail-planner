@@ -568,7 +568,7 @@ class AmtrakSearch:
     self.thisSearchResultsAsDict.clear()
     
     try: # Loading the page
-      self.__updateStatusMessage("Searching - loading page", 0)
+      self.__updateStatusMessage("Searching - loading page", 1)
       if (self.driver.current_url != cfg.SEARCH_URL) or self.returnedError: # If not at the page or an error occurred last time, reload
         self.driver.get(cfg.SEARCH_URL)
       self.returnedError = False
@@ -578,23 +578,23 @@ class AmtrakSearch:
       WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, "//button[starts-with(@class, 'am-btn btn--secondary')]")))
 
       try: # Clicking the new search button
-        self.__updateStatusMessage("Searching - opening input fields", 5)
+        self.__updateStatusMessage("Searching - opening input fields", 4)
         newSearchButton = self.driver.find_element(By.XPATH, "//button[starts-with(@class, 'am-btn btn--secondary')]")
         newSearchButton.click()
         time.sleep(1)
 
         try: # Entering to/from stations
-          self.__updateStatusMessage("Searching - entering stations", 1)
+          self.__updateStatusMessage("Searching - entering stations", 2)
           searchArea = self.driver.find_element(By.XPATH, "//div[@id='refineSearch']")
           searchArea = searchArea.find_element(By.XPATH, "//div[starts-with(@class, 'row align-items-center')]")
           self.__enterStationInfo(searchArea)
 
           try: # Entering departure date
-            self.__updateStatusMessage("Searching - entering travel dates", 2)
+            self.__updateStatusMessage("Searching - entering travel dates", 1)
             self.__enterDepartDate(searchArea)
 
             # Wait until "Find Trains" button is enabled, then click it
-            self.__updateStatusMessage("Searching - retrieving results", 2)
+            self.__updateStatusMessage("Searching - starting search", 2)
             WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, "//button[@aria-label='FIND TRAINS' and @aria-disabled='false']")))
             searchArea.find_element(By.XPATH, "//div[starts-with(@class, 'amtrak-ff-body')]").click() # Get calendar popup out of the way
             time.sleep(randint(5,100)/100.)
@@ -602,9 +602,9 @@ class AmtrakSearch:
 
             # Search has been completed, but there is no service
             try:
-              self.__updateStatusMessage("Searching - loading results", 2)
+              self.__updateStatusMessage("Searching - starting search", 2)
               time.sleep(2)
-              self.__updateStatusMessage("Searching - checking results", 5)
+              self.__updateStatusMessage("Searching - loading results", 3)
               potentialError = self.driver.find_element(By.XPATH, "//div[starts-with(@class, 'alert-yellow-text')]").text
               print(potentialError)
               self.returnedError = True
@@ -625,7 +625,7 @@ class AmtrakSearch:
               # Search has been completed, and we found a train(s)
               except NoSuchElementException:
                 try:
-                  self.__updateStatusMessage("Searching - parsing results page", 3)
+                  self.__updateStatusMessage("Searching - parsing results page", 5)
                   WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, "//div[contains(@class, 'trigger-searchList')]")))
                   searchResultsTable = self.driver.find_element(By.XPATH, "//div[contains(@class, 'trigger-searchList')]") # Table of results
                   nextPage = searchResultsTable.find_element(By.XPATH, ".//ul[starts-with(@class, 'pagination paginator__pagination')]") # Page links area
