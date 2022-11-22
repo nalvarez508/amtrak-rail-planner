@@ -98,8 +98,10 @@ class StationsArea(tk.Frame):
       event.widget['values'] = self.stationKeys
     else:
       data = []
+      niceVal = val.lower().replace('.', '').replace('-', '')
       for item in self.stationKeys:
-        if val.lower() in item.lower():
+        niceItem = item.lower().replace('.', '').replace('-', '')
+        if niceVal in niceItem:
           data.append(item)
       event.widget['values'] = data
 
