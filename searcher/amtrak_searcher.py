@@ -353,7 +353,7 @@ class AmtrakSearch:
     bool
         True, if the data was able to be parsed.
     """
-    # Need error handling (service interruptions)
+    
     try:
       if file == None:
         j = json.loads(self._getSessionStorage("searchresults", True))
@@ -375,9 +375,16 @@ class AmtrakSearch:
             if opt["isMultiSegment"] == True: #Multi-segment
               number = "N/A"
               name = "Multiple Trains"
+              hasTrain = False
+              hasBus = False
               for leg in opt["travelLegs"]:
-                if leg["travelService"]["type"].upper() != "TRAIN":
-                  name = "Mixed Service"
+                if leg["travelService"]["type"].upper() == "TRAIN":
+                  hasTrain = True
+                elif leg["travelService"]["type"].upper() == "BUS":
+                  hasBus = True
+              if hasTrain and hasBus: name = "Mixed Service"
+              elif hasBus and not hasTrain: name = "Multiple Buses"
+              
             elif opt["isMultiSegment"] == False: #Single segment
               number = opt["travelLegs"][0]["travelService"]["number"]
               name = opt["travelLegs"][0]["travelService"]["name"]

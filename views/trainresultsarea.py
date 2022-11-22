@@ -88,9 +88,10 @@ class TrainResultsArea(tk.Frame):
     self.headerCols = dict()
     self.dispCols = list()
     self.__getDisplayColumns()
-    self.iconMixed = PhotoImage(file='mixed_service.png')
-    self.iconMulti = PhotoImage(file='multi_train.png')
-    self.iconSingle = PhotoImage(file='single_train.png')
+    self.iconMixedService = PhotoImage(file='mixed_service.png')
+    self.iconMultiBus = PhotoImage(file='multi_bus.png')
+    self.iconMultiTrain = PhotoImage(file='multi_train.png')
+    self.iconSingleTrain = PhotoImage(file='single_train.png')
 
     self.results = ttk.Treeview(self.resultsArea, columns=self.columns, selectmode='browse', height=12/cfg.WIDTH_DIV)
     self.__makeHeadings()
@@ -371,11 +372,13 @@ class TrainResultsArea(tk.Frame):
       num = train+1 # Dict starts at zero
       vals = _trains[train].returnSelectedElements(self.columns)
       if _trains[train].name == 'Multiple Trains':
-        self.results.insert('', tk.END, text=train, image=self.iconMulti, values=vals)
+        self.results.insert('', tk.END, text=train, image=self.iconMultiTrain, values=vals)
       elif _trains[train].name == 'Mixed Service':
-        self.results.insert('', tk.END, text=train, image=self.iconMixed, values=vals)
+        self.results.insert('', tk.END, text=train, image=self.iconMixedService, values=vals)
+      elif _trains[train].name == 'Multiple Buses':
+        self.results.insert('', tk.END, text=train, image=self.iconMultiBus, values=vals)
       else:
-        self.results.insert('', tk.END, text=train, image=self.iconSingle, values=vals)
+        self.results.insert('', tk.END, text=train, image=self.iconSingleTrain, values=vals)
       if num == 1: # Display of s for plural elements
         self.parent.resultsHeadingArea.numberOfTrains.set(f"{num} train found")
       else:
